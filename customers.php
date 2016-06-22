@@ -164,11 +164,12 @@
 						</div>
 						
 						<table>
-							<col width="">
-							<col width="">
-							<col width="">
-							<col width="20px">
-							<col width="20px">
+							<col width="170px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="150px">
+                            <col width="170px">
+							<col width="210px">
 							<tr>
 								<th style="border: 1px solid;">Name</th>
 								<th style="border: 1px solid;">Username</th>
