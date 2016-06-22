@@ -2,6 +2,7 @@
 
 	// Connect to database
 	include("config/connection.php");
+	include("config/ip_capture.php");
 	
 	// Valida si proviene del index
 	if (isset($_POST["loginBtn"])) {

@@ -67,7 +67,7 @@ ini_set('sendmail_from', "jbriceno@zephyrcloud.com");
 									$insert_result = mysql_query($insert_query);					
 									$subject="Login failed";
 									$body_message="Login Failed From IP address: ". $ip_capture->getRealIP() ;
-									$email->enviar_correo($subject,$body_message);
+									//$email->enviar_correo($subject,$body_message);
 								}
 
 							?>

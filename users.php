@@ -1,5 +1,5 @@
 ﻿<?php
-
+ini_set('display_errors',1);
 	// Connect to database
 	include("config/connection.php");
 	include("config/ip_capture.php");
@@ -15,11 +15,11 @@
 	}else{
 		if(isset($_POST["idlogin"])){
 			$id_user = $_POST["idlogin"];
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,12,4,".$id_user.")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',7,16,4,".$id_user.")";
 			$insert_result = mysql_query($insert_query);
 			//Message for login 
 			$field=$_POST["idUserFld"];
-			$email-> body_email_cus("Email user update",$ip_capture->getRealIP(),4,16,2,$field);
+			////$email-> body_email_cus("Email user update",$ip_capture->getRealIP(),4,16,2,$field);
 		}else{
 			if(isset($_POST["idUserLog"])){
 				$id_user = $_POST["idUserLog"];			
@@ -28,7 +28,7 @@
 				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,12,4,".$id_user.")";
 				$insert_result = mysql_query($insert_query);
 				//Message for login 
-				//$email-> body_email("Login Succesfully",$ip_capture->getRealIP(),1,12,4,$id_user);	
+				////$email-> body_email("Login Succesfully",$ip_capture->getRealIP(),1,12,4,$id_user);	
 			}		
 		}	
 	}
@@ -49,14 +49,14 @@
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,7,2,".$id_user.")";
 			$insert_result = mysql_query($insert_query);
 			
-			$email-> body_email($message,$ip_capture->getRealIP(),4,7,2,$id_user);
+			////$email-> body_email($message,$ip_capture->getRealIP(),4,7,2,$id_user);
 			
 		}else{
 			$message = "Failed action";
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$id_user.")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
-			$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
+			////$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
 		}
 		
 	}
@@ -72,13 +72,13 @@
 			$message = "User successfully updated";
 				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,8,2,".$id_user.")";
 			$insert_result = mysql_query($insert_query);
-			$email-> body_email($message,$ip_capture->getRealIP(),4,8,2,$id_user);
+			//$email-> body_email($message,$ip_capture->getRealIP(),4,8,2,$id_user);
 		}else{
 			$message = "Failed action";
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$id_user.")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
-			$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
+			//$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
 		}
 		
 	}
@@ -92,15 +92,15 @@
 		
 		if($delete_user_result){
 			$message = "User successfully deleted";
-				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,9,2,".$id_user.")";
+				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,9,2,".$id_user.")";
 			$insert_result = mysql_query($insert_query);
-			$email-> body_email($message,$ip_capture->getRealIP(),4,9,2,$id_user);
+			//$email-> body_email($message,$ip_capture->getRealIP(),4,9,2,$id_user);
 		}else{
 			$message = "Failed action";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$id_user.")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,10,2,".$id_user.")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
-			$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
+			//$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
 		}
 	}
 	
@@ -181,7 +181,7 @@
 		}
 		
 		$message = "Apps successfully assigned";
-		$email-> body_email_apps($message,$ip_capture->getRealIP(),2,14,5,$id_user,$selected,$not_selected);
+		//$email-> body_email_apps($message,$ip_capture->getRealIP(),2,14,5,$id_user,$selected,$not_selected);
 	}
 	
 	// Valida si proviene del boton de guardar emails
