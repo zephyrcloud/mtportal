@@ -15,6 +15,9 @@
 					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "users.php") { echo "current_page_item"; } ?>">
 						<a href="users.php">Users</a>
 					</li>
+					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "domainscustomers.php") { echo "current_page_item"; } ?>">
+						<a href="domainscustomers.php">Domains</a>
+					</li>
 									
 				</ul>
 			</div>					

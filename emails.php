@@ -65,8 +65,9 @@ function body_email($message,$logout_time_out,$user){
 		// it finds all that the user has made while he/she was in his/her account
 		//SELECT l.`ipAddress`,at.action_name ,tm.table_name ,r.result_name FROM `log` l, action_type at, table_modified tm, result r where l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$_POST["id_user"].' order by l.`timeStamp`			
 		$subject = $message. " from user ".$user_name;	
-		$body_message= " <br> The login of the user ".$user_name." was ". $last_login . " and the logout was ".$logout_time_out."<br>";
-		$body_message.= '<br> here is the activity report for the user '.$user_name .'<br>';
+		$now = date("F j, Y, g:i a");
+		$body_message= " <br> The login of the user ".$user_name." was <B>". $last_login . "</b> and the logout was <b>".$logout_time_out."</b><br>";
+		$body_message.= '<br> here is the activity report for the user <B>'.$user_name .'</b> today: <B>'.$now.'</B> <br>';
 		$body_message.= '<table>
                                                 <col width="170px">
                                                 <col width="150px">
@@ -75,21 +76,25 @@ function body_email($message,$logout_time_out,$user){
                                                 <col width="170px">
 												<col width="190px">
                                                 <tr>
+														<th style="border: 1px solid;">Hour</th>
                                                         <th style="border: 1px solid;">Ip Address</th>
                                                         <th style="border: 1px solid;">Action Type</th>
                                                         <th style="border: 1px solid;">Table modified</th>
                                                         <th style="border: 1px solid;">Result</th>
                                                 </tr>';
                                                 
-
-    $select_customers_query = 'SELECT l.`ipAddress` as ip ,at.action_name as ac_name ,tm.table_name as t_name ,r.result_name as r_name 
+	$now = date("Y-m-d");
+    $select_customers_query = 'SELECT l.`timeStamp` as time ,l.`ipAddress` as ip ,at.action_name as ac_name ,tm.table_name as t_name ,r.result_name as r_name 
 								FROM `log` l, action_type at, table_modified tm, result r 
-								WHERE l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$user.' order by l.`timeStamp` ';
-
+								WHERE l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$user.' 
+								AND l.`timeStamp` LIKE "%'.$now.'%" order by l.`timeStamp` ';
+	
     $select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 
     while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+		 $fecha = explode(" ", $line['time']);
 		 $body_message.= "<tr>";
+		 $body_message.= "<td style='border: 1px solid;'><span id='spanName'>" . $fecha[1] . "</span></td>";
 		 $body_message.= "<td style='border: 1px solid;'><span id='spanName'>" . $line['ip'] . "</span></td>";
 		 $body_message.= "<td style='border: 1px solid;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
 		 $body_message.= "<td style='border: 1px solid;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
@@ -105,34 +110,34 @@ function body_email($message,$logout_time_out,$user){
 
 /*function body_email($message,$ip,$action_type,$result, $table_modified, $id_user, $logout_time_out){
 		$subject = $message;
-		$body_message= $message." from IP address: ". $ip. "</b>";
+		$body_message= $message." from IP address: ". $ip. "</B>";
 		
 		$select_apps_query = 'SELECT `id`, `action_name` FROM `action_type` WHERE `id` = '.$action_type;
 		$select_apps_result = mysql_query($select_apps_query) or die('1 ' . mysql_error());
 		
 		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
-			$body_message.= "<br> The action type was:  <b>".$line['action_name']. "</b>";
+			$body_message.= "<br> The action type was:  <B>".$line['action_name']. "</B>";
 		}	
 		
 		$select_apps_query = 'SELECT `id`, `result_name` FROM `result` WHERE `id` = '.$result;
 		$select_apps_result = mysql_query($select_apps_query) or die('2 ' . mysql_error());
 		
 		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
-			$body_message.= "<br> The action type was:  <b> ".$line['result_name']. "</b>";
+			$body_message.= "<br> The action type was:  <B> ".$line['result_name']. "</B>";
 		}
 		
 		$select_apps_query = 'SELECT `id`, `table_name` FROM `table_modified` WHERE `id` = '.$table_modified;
 		$select_apps_result = mysql_query($select_apps_query) or die('3 ' . mysql_error());
 		
 		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
-			$body_message.= "<br> The table modified was:  <b> ".$line['table_name']. "</b>";
+			$body_message.= "<br> The table modified was:  <B> ".$line['table_name']. "</B>";
 		}
 		
 		$select_apps_query = 'SELECT  `username` FROM `customer` WHERE `id` = '.$id_user;
 		$select_apps_result = mysql_query($select_apps_query) or die('4 '. $message . " - " . mysql_error());
 		
 		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
-			$body_message.= "<br> The customer was:  <b>".$line['username'] . "</b>";
+			$body_message.= "<br> The customer was:  <B>".$line['username'] . "</B>";
 		}
 		// here ends the body of the event for email send
 		//$this-> enviar_correo($subject,$body_message);

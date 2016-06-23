@@ -32,32 +32,7 @@
 			<div class="wrapper" >
 				<div id="post">
 				
-					<div id="postitle">
-						<div class="floatleft"><h1>Domains Lookups</h1></div>
-						<div class="floatright righttext tpad"></div>
-						<div class="clear">&nbsp;</div>
-					</div>
 					
-					<div>
-						<form action="domains.php" method="POST">
-						  New Domain Lookup: <input type="text" name="fname">
-						  <input type="submit" value="Check Availability"><br><br>
-						  Languages: 
-						  <input type="checkbox" name="languages[]" value="1"> English
-						  <input type="checkbox" name="languages[]" value="2"> French
-						  <input type="checkbox" name="languages[]" value="3"> German
-						  <input type="checkbox" name="languages[]" value="4"> Italian
-						  <input type="checkbox" name="languages[]" value="5"> Spanish 
-						  <br><br>
-						  <input type="checkbox" name="display[]" value="1"> Display Suggested Names <br>
-						  <input type="checkbox" name="display[]" value="2"> Display Premium Domains <br>
-						  <input type="checkbox" name="display[]" value="3"> Display Premium Domains - Brokered Transfers <br>
-						  <input type="checkbox" name="display[]" value="4"> Display Premium Domains - Make Offer <br>
-						  <input type="checkbox" name="display[]" value="5"> Display Generic TLDs <br>
-						  <input type="checkbox" name="display[]" value="5"> Display ccTDLs <br>
-						  <input type="checkbox" name="display[]" value="5"> Display Personal Names <br>
-						</form>
-					</div>
 				</div>
 			</div>
 		</div>
