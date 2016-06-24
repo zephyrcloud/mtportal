@@ -26,6 +26,7 @@
 		<?php
 			include("header.php");
 			include("menucustomer.php");
+
 		?>
 		
 		<!-- Body of the form -->
@@ -43,6 +44,7 @@
 					
 					<div id="check_domain" >
 						<form action="domainscustomers.php" method="POST">
+						<input type="text" name="user_id" id="user_id" hidden >
 						  New Domain Lookup: <input type="text" name="fname">
 						  <input type="submit" value="Check Availability"><br><br>
 						  Languages: 
@@ -118,6 +120,7 @@
 						
 						<!-- First form action , with it , in the case that the client has a accout, he can log it and retreive the information-->
 						<form action="domainscustomers.php" method="POST">
+						<input type="text" name="user_id" id="user_id" hidden >
 						<input type="text" name="id_domain" id="id_domain" hidden >
 						
 						<table border="1">
@@ -176,7 +179,7 @@
 						
 						<table border="1">
 						<tr><th colspan="2">Admin Contact Information</th></tr>
-						<tr><td>Same As Owner Contact Information </td><td><input type="radio" id="aci" name="aci" value="aci" onclick="checked_aci();"> </td> </tr>
+						<tr><td>Same As Owner Contact Information </td><td><input type="radio" id="aci" name="aci" value="aci" onDblClick="uncheckRadio_aci(this)" onclick="checked_aci();"> </td> </tr>
 						<tr class="row"><td>First Name </td><td><input type="text" name="first_name_2"></td></tr>
 						<tr class="row"><td>Last Name </td><td><input type="text" name="last_name_2"></td></tr>
 						<tr class="row"><td>Organization Name </td><td><input type="text" name="organization_name_2"></td></tr>
@@ -194,8 +197,8 @@
 						
 						<table border="1">
 						<tr><th colspan="2">Billing Contact Information</th></tr>
-						<tr><td>Same As Admin Contact Information </td><td><input onclick="checked_bci();" type="radio" id="bci" name="bci" value="aci_1"></td></tr>
-						<tr><td>Same As Owner Contact Information </td><td><input onclick="checked_bci();" type="radio" id="bci_1" name="bci" value="oci_2"></td></tr>
+						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci" name="bci" value="aci_1"></td></tr>
+						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci_1" name="bci" value="oci_2"></td></tr>
 						<tr class="row_b"><td>First Name </td><td><input type="text" name="first_name_3"></td></tr>
 						<tr class="row_b"><td>Last Name </td><td><input type="text" name="last_name_3"></td></tr>
 						<tr class="row_b"><td>Organization Name </td><td><input type="text" name="organization_name_3"></td></tr>
@@ -213,9 +216,9 @@
 						
 						<table border="1">
 						<tr><th colspan="2">Technical Contact Information</th></tr>
-						<tr><td>Same As Billing Contact Information </td><td><input onclick="checked_tci();" type="radio" id="tci" name="tci" value="bci_1"></td></tr>
-						<tr><td>Same As Admin Contact Information </td><td><input onclick="checked_tci();" type="radio" id="tci_1" name="tci" value="aci_1"></td></tr>
-						<tr><td>Same As Owner Contact Information </td><td><input onclick="checked_tci();" type="radio" id="tci_2" name="tci" value="oci_2"></td></tr>
+						<tr><td>Same As Billing Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci" name="tci" value="bci_1"></td></tr>
+						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_1" name="tci" value="aci_1"></td></tr>
+						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_2" name="tci" value="oci_2"></td></tr>
 						<tr class="row_t"><td>First Name </td><td><input type="text" name="first_name_4"></td></tr>
 						<tr class="row_t"><td>Last Name </td><td><input type="text" name="last_name_4"></td></tr>
 						<tr class="row_t"><td>Organization Name </td><td><input type="text" name="organization_name_4"></td></tr>
@@ -276,6 +279,9 @@
 		?>
 		
 		<script>
+		var id=document.getElementById("id_user").value;
+		document.getElementById("user_id").value = id;
+		
 		$("a[id^='aRegistrer']").click(function(event) {			
 			$id = event.target.id.toString().split("aRegistrer")[1];
 			var domain = $id.split(",")
@@ -285,7 +291,6 @@
 			document.getElementById("domain_name").value = domain[1];
 			//alert($id);
 		});
-		
 		function checked_aci(){
 			var check = document.getElementById("aci").checked;
 			if(check==true){
@@ -301,7 +306,6 @@
 				//document.getElementById("row[]").style.display = 'none';
 			}
 		}	
-		
 		function checked_tci(){
 			var check = document.getElementById("tci").checked;
 			var check_1 = document.getElementById("tci_1").checked;
@@ -311,15 +315,49 @@
 				//document.getElementById("row[]").style.display = 'none';
 			}
 		}	
+		function uncheckRadio(rbutton) {
+			rbutton.checked=(rbutton.checked)?false:true;
+			var check = document.getElementById("tci").checked;
+			var check_1 = document.getElementById("tci_1").checked;
+			var check_2 = document.getElementById("tci_2").checked;
+			if(check==false && check_1==false  && check_2 == false){
+				$('tr.row_t').show();
+				//document.getElementById("row[]").style.display = 'none';
+			}			
+		}
+		function uncheckRadio_bci(rbutton) {
+			rbutton.checked=(rbutton.checked)?false:true;
+			var check = document.getElementById("bci").checked;
+			var check_1 = document.getElementById("bci_1").checked;
+			if(check==false && check_1==false ){
+				$('tr.row_b').show();
+				//document.getElementById("row[]").style.display = 'none';
+			}			
+		}
+		function uncheckRadio_aci(rbutton) {
+			rbutton.checked=(rbutton.checked)?false:true;
+			var check = document.getElementById("aci").checked;
+			if(check==false){
+				$('tr.row').show();
+				//document.getElementById("row[]").style.display = 'none';
+			}
+		}
 		</script>
 		
 		<?php
 		if(isset($_POST["renew"])){
-			
 			//echo nl2br($_POST["id_domain"]. "\n" .$_POST["domain_name"]. "\n" .$_POST["affiliate_id"]."\n".$_POST["year"]."\n".$_POST["language"]."\n".$_POST["renew"]."\n".$_POST["whois"]."\n". $_POST["lock_domain"]."\n". $_POST["EPP"]."\n".$_POST["comments"]."\n");
 			//echo nl2br("\n\n");
 			//echo nl2br($_POST["previous_domain"]."\n".$_POST["Registrant_Username"].$_POST["Registrant_Password"]."\n".$_POST["Confirm_Password"] ."\n");
-			echo nl2br($_POST["first_name_1"]."\n".$_POST["last_name_1"]."\n".$_POST["organization_name_1"]."\n".$_POST["street_1"]."\n".$_POST["street_1_1"]."\n".$_POST["street_1_1_2"]."\n".$_POST["city_1"]."\n".$_POST["state_1"]."\n".$_POST["country_1"]."\n".$_POST["postal_code_1"]."\n".$_POST["phone_number_1"]."\n".$_POST["fax_number_1"]."\n");
+			//echo nl2br($_POST["first_name_1"]."\n".$_POST["last_name_1"]."\n".$_POST["organization_name_1"]."\n".$_POST["street_1"]."\n".$_POST["street_1_1"]."\n".$_POST["street_1_1_2"]."\n".$_POST["city_1"]."\n".$_POST["state_1"]."\n".$_POST["country_1"]."\n".$_POST["postal_code_1"]."\n".$_POST["phone_number_1"]."\n".$_POST["fax_number_1"]."\n");
+			//INSERT INTO `profile_information`(`username`, `password`, `customer_id`) VALUES ()
+			
+			/*$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',5,13,4,".$_POST["id_user"].")";
+			$insert_result = mysql_query($insert_query);*/
+			
+			$insert_query = "INSERT INTO `profile_information`(`username`, `password`, `customer_id`) VALUES ('".$_POST["previous_domain"]."','".$_POST["Registrant_Password"]."',".$_POST["user_id"].")";
+			echo $insert_query;
+			//$insert_result = mysql_query($insert_query);
 		}
 		?>
 	</body>

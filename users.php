@@ -39,9 +39,19 @@ ini_set('display_errors',1);
 	}
 	// Valida si proviene del boton de add new user
 	if (isset($_POST["saveNewUserBtn"])) {
+		$count=0;
+		$select_users_query = 'SELECT U.extension FROM user U';
+		$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+		while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+			if($line['extension'] == $_POST['extension'] && $line['extension'] != 0){
+				$count++;
+			}
+		}
 		
-		// Inserta en la base de datos el nuevo user
-		$insert_user_query = 'INSERT INTO user (firstName, lastName, customer, email1, email2, email3) VALUES ("' . $_POST["firstNameNewUserFld"] . '","' . $_POST["lastNameNewUserFld"] . '", ' . $_SESSION['idUsuario'] . ', "' . $_POST['emailNewUserFld'] . '",NULL,NULL)';
+		if($count == 0){
+			
+			// Inserta en la base de datos el nuevo user
+		$insert_user_query = 'INSERT INTO user (firstName, lastName, customer, email1, email2, email3, extension) VALUES ("' . $_POST["firstNameNewUserFld"] . '","' . $_POST["lastNameNewUserFld"] . '", ' . $_SESSION['idUsuario'] . ', "' . $_POST['emailNewUserFld'] . '",NULL,NULL,'.$_POST['extension'].')';
 		$insert_user_result = mysql_query($insert_user_query);
 		
 		if($insert_user_result){
@@ -58,14 +68,17 @@ ini_set('display_errors',1);
 			//die('Invalid query: ' . mysql_error());
 			////$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
 		}
-		
+			
+		}else{
+			$message = "Error, the extension already exists, please use other number.";
+		}		
 	}
 	
 	// Valida si proviene del boton de edit user
 	if (isset($_POST["saveEditUserBtn"])) {
 		
 		// Edita en la base de datos el user 
-		$update_user_query = 'UPDATE user SET firstName = "' . $_POST["firstNameEditUserFld"] . '", lastName = "' . $_POST["lastNameEditUserFld"] . '" WHERE id = "' . $_POST["idEditUserFld"] . '"';
+		$update_user_query = 'UPDATE user SET firstName = "' . $_POST["firstNameEditUserFld"] . '", lastName = "' . $_POST["lastNameEditUserFld"] . '", extension= '.$_POST["extension"].' WHERE id = "' . $_POST["idEditUserFld"] . '"';
 		$update_user_result = mysql_query($update_user_query);
 		
 		if($update_user_result){
@@ -266,9 +279,11 @@ ini_set('display_errors',1);
 									First Name: <input id="firstNameNewUserFld" name="firstNameNewUserFld" type="text" required="required"><br />
 									Last Name: <input id="lastNameNewUserFld" name="lastNameNewUserFld" type="text" required="required"><br /><br />
 									Default Email: <input id="emailNewUserFld" name="emailNewUserFld" type="email" required="required"><br /><br />
+									Extension: <input onkeypress="return justNumbers(event);" id="extension" name="extension" type="text" required="required" maxlength="4"  ><br /><br />
 									<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Add">
 									<input id="cancelNewUserBtn" name="cancelNewUserBtn" type="button" value="Cancel">
-								    <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">'; ?>
+								    <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">';
+									?>
 								</form> 
 							</div>
 						</div>
@@ -280,6 +295,7 @@ ini_set('display_errors',1);
 									<input id="idEditUserFld" name="idEditUserFld" type="hidden" required="required">
 									First Name: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
 									Last Name: <input id="lastNameEditUserFld" name="lastNameEditUserFld" type="text" required="required"><br /><br />
+									Extension: <input onkeypress="return justNumbers(event);" id="extensionEditFld" name="extensionEditFld" type="text" required="required" maxlength="4"><br /><br />
 									<input id="saveEditUserBtn" name="saveEditUserBtn" type="submit" value="Edit">
 									<input id="cancelEditUserBtn" name="cancelEditUserBtn" type="button" value="Cancel">
 									   <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">'; ?>
@@ -310,13 +326,14 @@ ini_set('display_errors',1);
 							<tr>
 								<th style="border: 1px solid;">First Name</th>
 								<th style="border: 1px solid;">Last Name</th>
+								<th style="border: 1px solid;">Extension</th>
 								<th colspan="4" style="border: 1px solid;">Actions</th>
 							</tr>
 							
 							<?php 
 								
 								// Realizar una consulta MySQL
-								$select_users_query = 'SELECT U.id, U.firstName, U.lastName FROM user U, customer C WHERE C.id = U.customer AND C.name = "' . $_SESSION['usuario'] . '"';
+								$select_users_query = 'SELECT U.id, U.firstName, U.lastName , U.extension FROM user U, customer C WHERE C.id = U.customer AND C.name = "' . $_SESSION['usuario'] . '"';
 								$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
 								
 								while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
@@ -325,6 +342,7 @@ ini_set('display_errors',1);
 									
 									echo "<td style='border: 1px solid;'><span id='spanFirstName" . $line['id'] . "'>" . $line['firstName'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanLastName" . $line['id'] . "'>" . $line['lastName'] ."</span></td>";
+									echo "<td style='border: 1px solid;'><span id='spanExtension" . $line['id'] . "'>" . $line['extension'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'] . "' href='#'>Edit</a></td>";
 									echo "<td style='border: 1px solid;'><a id='aEmails" . $line['id'] . "' href='#'>Emails</a></td>";
 									echo "<td style='border: 1px solid;'><a id='aApps" . $line['id'] . "' href='#'>Apps</a></td>";
@@ -334,6 +352,7 @@ ini_set('display_errors',1);
 								}
 								
 								echo '<input hidden id="id_login" name="idtest" type="text" value="'.$id_user.'">';
+															
 							?>
 							
 						</table>
@@ -426,6 +445,8 @@ ini_set('display_errors',1);
 			$("#idEditUserFld").val($id);
 			$("#firstNameEditUserFld").val($("#spanFirstName".concat($id)).text());
 			$("#lastNameEditUserFld").val($("#spanLastName".concat($id)).text());
+			$("#extensionEditFld").val($("#spanExtension".concat($id)).text());
+			
 		});
 		
 		// Dialog edit user
@@ -533,4 +554,15 @@ ini_set('display_errors',1);
 		
 	});
 
+
+</script>
+
+<script>
+function justNumbers(e){
+        var keynum = window.event ? window.event.keyCode : e.which;
+        if ((keynum == 8) || (keynum == 46))
+        return true;
+         
+        return /\d/.test(String.fromCharCode(keynum));
+        }
 </script>
