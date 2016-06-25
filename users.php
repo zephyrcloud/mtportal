@@ -51,7 +51,7 @@ ini_set('display_errors',1);
 		if($count == 0){
 			
 			// Inserta en la base de datos el nuevo user
-		$insert_user_query = 'INSERT INTO user (firstName, lastName, customer, email1, email2, email3, extension) VALUES ("' . $_POST["firstNameNewUserFld"] . '","' . $_POST["lastNameNewUserFld"] . '", ' . $_SESSION['idUsuario'] . ', "' . $_POST['emailNewUserFld'] . '",NULL,NULL,'.$_POST['extension'].')';
+		$insert_user_query = 'INSERT INTO user (firstName, lastName, customer, email1, email2, email3, extension,outbound_did) VALUES ("' . $_POST["firstNameNewUserFld"] . '","' . $_POST["lastNameNewUserFld"] . '", ' . $_SESSION['idUsuario'] . ', "' . $_POST['emailNewUserFld'] . '",NULL,NULL,'.$_POST['extension'].','.$_POST['outbound'].')';
 		$insert_user_result = mysql_query($insert_user_query);
 		
 		if($insert_user_result){
@@ -78,16 +78,17 @@ ini_set('display_errors',1);
 	if (isset($_POST["saveEditUserBtn"])) {
 		
 		// Edita en la base de datos el user 
-		$update_user_query = 'UPDATE user SET firstName = "' . $_POST["firstNameEditUserFld"] . '", lastName = "' . $_POST["lastNameEditUserFld"] . '", extension= '.$_POST["extension"].' WHERE id = "' . $_POST["idEditUserFld"] . '"';
+		$update_user_query = 'UPDATE user SET firstName = "' . $_POST["firstNameEditUserFld"] . '", lastName = "' . $_POST["lastNameEditUserFld"] . '", extension= "'.$_POST["extensionEditFld"].'", outbound_did= "'.$_POST["outboundEditFld"].'" WHERE id = "' . $_POST["idEditUserFld"] . '"';
 		$update_user_result = mysql_query($update_user_query);
 		
 		if($update_user_result){
 			$message = "User successfully updated";
-				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,8,2,".$id_user.")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,8,2,".$id_user.")";
 			$insert_result = mysql_query($insert_query);
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,8,2,$id_user);
 		}else{
 			$message = "Failed action";
+			//$message = $update_user_query;
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$id_user.")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
@@ -279,6 +280,7 @@ ini_set('display_errors',1);
 									First Name: <input id="firstNameNewUserFld" name="firstNameNewUserFld" type="text" required="required"><br />
 									Last Name: <input id="lastNameNewUserFld" name="lastNameNewUserFld" type="text" required="required"><br /><br />
 									Default Email: <input id="emailNewUserFld" name="emailNewUserFld" type="email" required="required"><br /><br />
+									Outbound Did: <input onkeypress="return justNumbers(event);" id="outbound" name="outbound" type="text" required="required" ><br /><br />
 									Extension: <input onkeypress="return justNumbers(event);" id="extension" name="extension" type="text" required="required" maxlength="4"  ><br /><br />
 									<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Add">
 									<input id="cancelNewUserBtn" name="cancelNewUserBtn" type="button" value="Cancel">
@@ -295,6 +297,7 @@ ini_set('display_errors',1);
 									<input id="idEditUserFld" name="idEditUserFld" type="hidden" required="required">
 									First Name: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
 									Last Name: <input id="lastNameEditUserFld" name="lastNameEditUserFld" type="text" required="required"><br /><br />
+									Outbound Did: <input onkeypress="return justNumbers(event);" id="outboundEditFld" name="outboundEditFld" type="text" required="required" ><br /><br />
 									Extension: <input onkeypress="return justNumbers(event);" id="extensionEditFld" name="extensionEditFld" type="text" required="required" maxlength="4"><br /><br />
 									<input id="saveEditUserBtn" name="saveEditUserBtn" type="submit" value="Edit">
 									<input id="cancelEditUserBtn" name="cancelEditUserBtn" type="button" value="Cancel">
@@ -324,8 +327,8 @@ ini_set('display_errors',1);
 							<col width="20px">
 							<col width="20px">
 							<tr>
-								<th style="border: 1px solid;">First Name</th>
-								<th style="border: 1px solid;">Last Name</th>
+								<th style="border: 1px solid;">Name</th>
+								<th style="border: 1px solid;">Outbound DID</th>
 								<th style="border: 1px solid;">Extension</th>
 								<th colspan="4" style="border: 1px solid;">Actions</th>
 							</tr>
@@ -333,15 +336,16 @@ ini_set('display_errors',1);
 							<?php 
 								
 								// Realizar una consulta MySQL
-								$select_users_query = 'SELECT U.id, U.firstName, U.lastName , U.extension FROM user U, customer C WHERE C.id = U.customer AND C.name = "' . $_SESSION['usuario'] . '"';
+								$select_users_query = 'SELECT U.id, U.firstName, U.lastName , U.extension, U.outbound_did FROM user U, customer C WHERE C.id = U.customer AND C.name = "' . $_SESSION['usuario'] . '"';
 								$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
 								
 								while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
 									
 									echo "<tr id='" . $line['id'] . "'>";
 									
-									echo "<td style='border: 1px solid;'><span id='spanFirstName" . $line['id'] . "'>" . $line['firstName'] ."</span></td>";
-									echo "<td style='border: 1px solid;'><span id='spanLastName" . $line['id'] . "'>" . $line['lastName'] ."</span></td>";
+									echo "<td style='border: 1px solid;'><span id='spanFirstName" . $line['id'] . "'>" . $line['firstName']. " ". $line['lastName'] ."</span></td>";
+									echo "<td style='border: 1px solid;'><span id='spanOutboundDid" . $line['id'] . "'>" . $line['outbound_did'] ."</span></td>";
+									echo "<td hidden style='border: 1px solid;'><span id='spanLastName" . $line['id'] . "'>" . $line['lastName'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanExtension" . $line['id'] . "'>" . $line['extension'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'] . "' href='#'>Edit</a></td>";
 									echo "<td style='border: 1px solid;'><a id='aEmails" . $line['id'] . "' href='#'>Emails</a></td>";
@@ -446,6 +450,7 @@ ini_set('display_errors',1);
 			$("#firstNameEditUserFld").val($("#spanFirstName".concat($id)).text());
 			$("#lastNameEditUserFld").val($("#spanLastName".concat($id)).text());
 			$("#extensionEditFld").val($("#spanExtension".concat($id)).text());
+			$("#outboundEditFld").val($("#spanOutboundDid".concat($id)).text());
 			
 		});
 		

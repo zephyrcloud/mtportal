@@ -28,7 +28,7 @@
 			include("menucustomer.php");
 
 		?>
-		
+
 		<!-- Body of the form -->
 		<div id="pagecontents">
 			
@@ -44,7 +44,7 @@
 					
 					<div id="check_domain" >
 						<form action="domainscustomers.php" method="POST">
-						<input type="text" name="user_id" id="user_id" hidden >
+						<input type="text" name="user_id" id="user_id" hidden  >
 						  New Domain Lookup: <input type="text" name="fname">
 						  <input type="submit" value="Check Availability"><br><br>
 						  Languages: 
@@ -120,7 +120,7 @@
 						
 						<!-- First form action , with it , in the case that the client has a accout, he can log it and retreive the information-->
 						<form action="domainscustomers.php" method="POST">
-						<input type="text" name="user_id" id="user_id" hidden >
+						<input type="text" name="user_id_registrer" id="user_id_registrer" hidden >
 						<input type="text" name="id_domain" id="id_domain" hidden >
 						
 						<table border="1">
@@ -137,7 +137,7 @@
 						<!-- Here must be the second form for the information -->
 						
 						<form action="domainscustomers.php" method="POST">
-						
+						<input type="text" name="user_id_registrer_1" id="user_id_registrer_1" hidden >
 						<table border="1">
 						<tr><th colspan="2">Domain information</th></tr>
 						<tr><td>Domain Name</td><td><input type="text" name="domain_name" id="domain_name" readonly ></td>
@@ -179,7 +179,7 @@
 						
 						<table border="1">
 						<tr><th colspan="2">Admin Contact Information</th></tr>
-						<tr><td>Same As Owner Contact Information </td><td><input type="radio" id="aci" name="aci" value="aci" onDblClick="uncheckRadio_aci(this)" onclick="checked_aci();"> </td> </tr>
+						<tr><td>Same As Owner Contact Information </td><td><input type="radio" id="aci" name="aci"  onDblClick="uncheckRadio_aci(this)" onclick="checked_aci();"> </td> </tr>
 						<tr class="row"><td>First Name </td><td><input type="text" name="first_name_2"></td></tr>
 						<tr class="row"><td>Last Name </td><td><input type="text" name="last_name_2"></td></tr>
 						<tr class="row"><td>Organization Name </td><td><input type="text" name="organization_name_2"></td></tr>
@@ -197,8 +197,8 @@
 						
 						<table border="1">
 						<tr><th colspan="2">Billing Contact Information</th></tr>
-						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci" name="bci" value="aci_1"></td></tr>
-						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci_1" name="bci" value="oci_2"></td></tr>
+						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci" name="bci" value="1" ></td></tr>
+						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci_1" name="bci" value="2"></td></tr>
 						<tr class="row_b"><td>First Name </td><td><input type="text" name="first_name_3"></td></tr>
 						<tr class="row_b"><td>Last Name </td><td><input type="text" name="last_name_3"></td></tr>
 						<tr class="row_b"><td>Organization Name </td><td><input type="text" name="organization_name_3"></td></tr>
@@ -216,9 +216,9 @@
 						
 						<table border="1">
 						<tr><th colspan="2">Technical Contact Information</th></tr>
-						<tr><td>Same As Billing Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci" name="tci" value="bci_1"></td></tr>
-						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_1" name="tci" value="aci_1"></td></tr>
-						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_2" name="tci" value="oci_2"></td></tr>
+						<tr><td>Same As Billing Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci" name="tci" value="1" ></td></tr>
+						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_1" name="tci" value="2" ></td></tr>
+						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_2" name="tci" value="3" ></td></tr>
 						<tr class="row_t"><td>First Name </td><td><input type="text" name="first_name_4"></td></tr>
 						<tr class="row_t"><td>Last Name </td><td><input type="text" name="last_name_4"></td></tr>
 						<tr class="row_t"><td>Organization Name </td><td><input type="text" name="organization_name_4"></td></tr>
@@ -289,12 +289,15 @@
 			document.getElementById("Registrer_domain").style.display = 'block';
 			document.getElementById("id_domain").value = domain[0];
 			document.getElementById("domain_name").value = domain[1];
+			document.getElementById("user_id_registrer").value = id;
+			document.getElementById("user_id_registrer_1").value = id;
 			//alert($id);
 		});
 		function checked_aci(){
 			var check = document.getElementById("aci").checked;
 			if(check==true){
 				$('tr.row').hide();
+				$("#aci").val(check);
 				//document.getElementById("row[]").style.display = 'none';
 			}
 		}	
@@ -305,6 +308,8 @@
 				$('tr.row_b').hide();
 				//document.getElementById("row[]").style.display = 'none';
 			}
+			//alert(check + " --- " + check_1)
+			
 		}	
 		function checked_tci(){
 			var check = document.getElementById("tci").checked;
@@ -314,6 +319,9 @@
 				$('tr.row_t').hide();
 				//document.getElementById("row[]").style.display = 'none';
 			}
+			$("#tci").val(check);
+			$("#tci_1").val(check_1);
+			$("#tci_2").val(check_2);
 		}	
 		function uncheckRadio(rbutton) {
 			rbutton.checked=(rbutton.checked)?false:true;
@@ -345,20 +353,141 @@
 		</script>
 		
 		<?php
-		if(isset($_POST["renew"])){
-			//echo nl2br($_POST["id_domain"]. "\n" .$_POST["domain_name"]. "\n" .$_POST["affiliate_id"]."\n".$_POST["year"]."\n".$_POST["language"]."\n".$_POST["renew"]."\n".$_POST["whois"]."\n". $_POST["lock_domain"]."\n". $_POST["EPP"]."\n".$_POST["comments"]."\n");
-			//echo nl2br("\n\n");
-			//echo nl2br($_POST["previous_domain"]."\n".$_POST["Registrant_Username"].$_POST["Registrant_Password"]."\n".$_POST["Confirm_Password"] ."\n");
-			//echo nl2br($_POST["first_name_1"]."\n".$_POST["last_name_1"]."\n".$_POST["organization_name_1"]."\n".$_POST["street_1"]."\n".$_POST["street_1_1"]."\n".$_POST["street_1_1_2"]."\n".$_POST["city_1"]."\n".$_POST["state_1"]."\n".$_POST["country_1"]."\n".$_POST["postal_code_1"]."\n".$_POST["phone_number_1"]."\n".$_POST["fax_number_1"]."\n");
-			//INSERT INTO `profile_information`(`username`, `password`, `customer_id`) VALUES ()
-			
-			/*$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',5,13,4,".$_POST["id_user"].")";
-			$insert_result = mysql_query($insert_query);*/
-			
-			$insert_query = "INSERT INTO `profile_information`(`username`, `password`, `customer_id`) VALUES ('".$_POST["previous_domain"]."','".$_POST["Registrant_Password"]."',".$_POST["user_id"].")";
-			echo $insert_query;
+		if(isset($_POST["first_name_1"])){
+					
+			//profile insert
+			$insert_query = 'INSERT INTO `profile_information`(`previous_domain`, `username`, `password`, `customer_id`) VALUES ("'.$_POST["previous_domain"].'","'.$_POST["Registrant_Username"].'","'.$_POST["Registrant_Password"].'",'.$_POST['user_id_registrer_1'].')';
 			//$insert_result = mysql_query($insert_query);
+			//$id_profiel= mysql_insert_id();
+			
+			// owner insert
+			$insert_query = "INSERT INTO `owner_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+			VALUES ('".$_POST["first_name_1"]."','".$_POST["last_name_1"]."','".$_POST["organization_name_1"]."','".$_POST["street_1"]."','".$_POST["street_1_1"]."','".$_POST["street_1_1_2"]."','".$_POST["city_1"]."','".$_POST["state_1"]."','".$_POST["country_1"]."','".$_POST["postal_code_1"]."','".$_POST["phone_number_1"]."','".$_POST["fax_number_1"]."','".$_POST["mail_1"]."')";
+			//$insert_result = mysql_query($insert_query);
+			//$id_owner= mysql_insert_id();
+		
+			//admin insert
+			switch($_POST['aci']){
+				case true:
+					$insert_query = "INSERT INTO `admin_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_1"]."','".$_POST["last_name_1"]."','".$_POST["organization_name_1"]."','".$_POST["street_1"]."','".$_POST["street_1_1"]."','".$_POST["street_1_1_2"]."','".$_POST["city_1"]."','".$_POST["state_1"]."','".$_POST["country_1"]."','".$_POST["postal_code_1"]."','".$_POST["phone_number_1"]."','".$_POST["fax_number_1"]."','".$_POST["mail_1"]."')";
+					//$insert_result = mysql_query($insert_query);
+					//$id_admin= mysql_insert_id();			
+				break;
+				case false:
+					$insert_query = "INSERT INTO `admin_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_2"]."','".$_POST["last_name_2"]."','".$_POST["organization_name_2"]."','".$_POST["street_2"]."','".$_POST["street_1_2"]."','".$_POST["street_2_2"]."','".$_POST["city_2"]."','".$_POST["state_2"]."','".$_POST["country_2"]."','".$_POST["postal_code_2"]."','".$_POST["phone_number_2"]."','".$_POST["fax_number_2"]."','".$_POST["mail_2"]."')";
+					//$insert_result = mysql_query($insert_query);
+					//$id_admin= mysql_insert_id();			
+				break;
+			}
+			
+			/*if($_POST['aci'] == true){
+					// attach the owner information
+					$insert_query = "INSERT INTO `admin_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_1"]."','".$_POST["last_name_1"]."','".$_POST["organization_name_1"]."','".$_POST["street_1"]."','".$_POST["street_1_1"]."','".$_POST["street_1_1_2"]."','".$_POST["city_1"]."','".$_POST["state_1"]."','".$_POST["country_1"]."','".$_POST["postal_code_1"]."','".$_POST["phone_number_1"]."','".$_POST["fax_number_1"]."','".$_POST["mail_1"]."')";
+				}else{
+					//attach the fields for admin
+					$insert_query = "INSERT INTO `admin_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_2"]."','".$_POST["last_name_2"]."','".$_POST["organization_name_2"]."','".$_POST["street_2"]."','".$_POST["street_1_2"]."','".$_POST["street_2_2"]."','".$_POST["city_2"]."','".$_POST["state_2"]."','".$_POST["country_2"]."','".$_POST["postal_code_2"]."','".$_POST["phone_number_2"]."','".$_POST["fax_number_2"]."','".$_POST["mail_2"]."')";
+				}*/
+			//$insert_result = mysql_query($insert_query);
+			//$id_admin= mysql_insert_id();			
+			
+			// billing insert
+			switch($_POST["bci"]){
+				case 1:
+				// attach information of the admin
+				// I ask if admin button is ON , it must do what admin does , else , saving the information of the fields
+				if($_POST['aci'] == true){
+					$insert_query = "INSERT INTO `billing_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_1"]."','".$_POST["last_name_1"]."','".$_POST["organization_name_1"]."','".$_POST["street_1"]."','".$_POST["street_1_1"]."','".$_POST["street_1_1_2"]."','".$_POST["city_1"]."','".$_POST["state_1"]."','".$_POST["country_1"]."','".$_POST["postal_code_1"]."','".$_POST["phone_number_1"]."','".$_POST["fax_number_1"]."','".$_POST["mail_1"]."')";
+					//$insert_result = mysql_query($insert_query);
+					//$id_billing= mysql_insert_id();			
+				}else{
+					//attach the fields for admin
+					$insert_query = "INSERT INTO `technical_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_2"]."','".$_POST["last_name_2"]."','".$_POST["organization_name_2"]."','".$_POST["street_2"]."','".$_POST["street_1_2"]."','".$_POST["street_2_2"]."','".$_POST["city_2"]."','".$_POST["state_2"]."','".$_POST["country_2"]."','".$_POST["postal_code_2"]."','".$_POST["phone_number_2"]."','".$_POST["fax_number_2"]."','".$_POST["mail_2"]."')";
+				}
+				echo nl2br("1 ".$insert_query);
+				break;
+				case 2:
+				// attach information of the owner
+				$insert_query = "INSERT INTO `billing_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+				VALUES ('".$_POST["first_name_1"]."','".$_POST["last_name_1"]."','".$_POST["organization_name_1"]."','".$_POST["street_1"]."','".$_POST["street_1_1"]."','".$_POST["street_1_1_2"]."','".$_POST["city_1"]."','".$_POST["state_1"]."','".$_POST["country_1"]."','".$_POST["postal_code_1"]."','".$_POST["phone_number_1"]."','".$_POST["fax_number_1"]."','".$_POST["mail_1"]."')";
+				//$insert_result = mysql_query($insert_query);
+				//$id_billing= mysql_insert_id();
+				break;
+				default:
+				
+				// Making the insert with the fields
+				$insert_query = "INSERT INTO `billing_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+				VALUES ('".$_POST["first_name_3"]."','".$_POST["last_name_3"]."','".$_POST["organization_name_3"]."','".$_POST["street_3"]."','".$_POST["street_1_3"]."','".$_POST["street_2_3"]."','".$_POST["city_3"]."','".$_POST["state_3"]."','".$_POST["country_3"]."','".$_POST["postal_code_3"]."','".$_POST["phone_number_3"]."','".$_POST["fax_number_3"]."','".$_POST["mail_3"]."')";
+				//$insert_result = mysql_query($insert_query);
+				//$id_billing= mysql_insert_id();
+				break;
+				
+			}
+		
+			// technical insert
+			switch($_POST["tci"]){
+				case 1:
+				
+				if($_POST['aci'] ==  "1"){
+					// attach information of the admin
+					// I ask if admin button is ON , it must do what admin does , else , saving the information of the fields
+				if($_POST['aci'] == true){
+					$insert_query = "INSERT INTO `technical_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_1"]."','".$_POST["last_name_1"]."','".$_POST["organization_name_1"]."','".$_POST["street_1"]."','".$_POST["street_1_1"]."','".$_POST["street_1_1_2"]."','".$_POST["city_1"]."','".$_POST["state_1"]."','".$_POST["country_1"]."','".$_POST["postal_code_1"]."','".$_POST["phone_number_1"]."','".$_POST["fax_number_1"]."','".$_POST["mail_1"]."')";
+					//$insert_result = mysql_query($insert_query);
+					//$id_technical= mysql_insert_id();			
+				}else{
+					//attach the fields for admin
+					$insert_query = "INSERT INTO `technical_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_2"]."','".$_POST["last_name_2"]."','".$_POST["organization_name_2"]."','".$_POST["street_2"]."','".$_POST["street_1_2"]."','".$_POST["street_2_2"]."','".$_POST["city_2"]."','".$_POST["state_2"]."','".$_POST["country_2"]."','".$_POST["postal_code_2"]."','".$_POST["phone_number_2"]."','".$_POST["fax_number_2"]."','".$_POST["mail_2"]."')";
+					}
+				}
+				
+				if($_POST['aci'] ==  "2"){
+					// attach information of the owner
+					$insert_query = "INSERT INTO `technical_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_1"]."','".$_POST["last_name_1"]."','".$_POST["organization_name_1"]."','".$_POST["street_1"]."','".$_POST["street_1_1"]."','".$_POST["street_1_1_2"]."','".$_POST["city_1"]."','".$_POST["state_1"]."','".$_POST["country_1"]."','".$_POST["postal_code_1"]."','".$_POST["phone_number_1"]."','".$_POST["fax_number_1"]."','".$_POST["mail_1"]."')";
+					//$insert_result = mysql_query($insert_query);
+					//$id_technical= mysql_insert_id();
+				}
+				break;
+				case 2:
+				//admin fields
+				if($_POST['aci'] == true){
+					$insert_query = "INSERT INTO `technical_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_1"]."','".$_POST["last_name_1"]."','".$_POST["organization_name_1"]."','".$_POST["street_1"]."','".$_POST["street_1_1"]."','".$_POST["street_1_1_2"]."','".$_POST["city_1"]."','".$_POST["state_1"]."','".$_POST["country_1"]."','".$_POST["postal_code_1"]."','".$_POST["phone_number_1"]."','".$_POST["fax_number_1"]."','".$_POST["mail_1"]."')";
+					//$insert_result = mysql_query($insert_query);
+					//$id_technical= mysql_insert_id();			
+				}else{
+					//attach the fields for admin
+					$insert_query = "INSERT INTO `technical_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_2"]."','".$_POST["last_name_2"]."','".$_POST["organization_name_2"]."','".$_POST["street_2"]."','".$_POST["street_1_2"]."','".$_POST["street_2_2"]."','".$_POST["city_2"]."','".$_POST["state_2"]."','".$_POST["country_2"]."','".$_POST["postal_code_2"]."','".$_POST["phone_number_2"]."','".$_POST["fax_number_2"]."','".$_POST["mail_2"]."')";
+				}
+				break;
+				case 3:
+				//owner fields
+					$insert_query = "INSERT INTO `technical_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_1"]."','".$_POST["last_name_1"]."','".$_POST["organization_name_1"]."','".$_POST["street_1"]."','".$_POST["street_1_1"]."','".$_POST["street_1_1_2"]."','".$_POST["city_1"]."','".$_POST["state_1"]."','".$_POST["country_1"]."','".$_POST["postal_code_1"]."','".$_POST["phone_number_1"]."','".$_POST["fax_number_1"]."','".$_POST["mail_1"]."')";
+					//$insert_result = mysql_query($insert_query);
+					//$id_technical= mysql_insert_id();
+				break;
+				default:
+					$insert_query = "INSERT INTO `technical_contact`(`first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`)
+					VALUES ('".$_POST["first_name_4"]."','".$_POST["last_name_4"]."','".$_POST["organization_name_4"]."','".$_POST["street_4"]."','".$_POST["street_1_4"]."','".$_POST["street_2_4"]."','".$_POST["city_4"]."','".$_POST["state_4"]."','".$_POST["country_4"]."','".$_POST["postal_code_4"]."','".$_POST["phone_number_4"]."','".$_POST["fax_number_4"]."','".$_POST["mail_4"]."')";
+					//$insert_result = mysql_query($insert_query);
+					//$id_technical= mysql_insert_id();
+				break;
+			}
 		}
+				
+		
+		
+		
 		?>
 	</body>
 </html>
