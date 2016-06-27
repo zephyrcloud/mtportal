@@ -44,7 +44,7 @@
 						<div class="clear">&nbsp;</div>
 					</div>
 					
-					<div id="check_domain" >
+					<div id="check_domain" class="check_domain" >
 						<form action="domainscustomers.php" method="POST">
 						<input type="text" name="user_id" id="user_id" hidden  >
 						  New Domain Lookup: <input type="text" name="fname">
@@ -72,7 +72,7 @@
 							<script>
 							document.getElementById("check_domain").style.display = 'none';
 							</script>
-					<div id="lookfor_domain">
+					<div id="lookfor_domain" class="lookfor_domain">
 					<form action="domainscustomers.php" method="POST">
 						  Domain Name Suggestion for: <input type="text" name="fname" value="<?php echo $_POST['fname']; ?>">
 						  <input type="submit" value="search"><br><br>
@@ -118,19 +118,20 @@
 						} // here ends the if for post[fname}
 					?>
 					
-					<div id="Registrer_domain" hidden >
+					<div id="Registrer_domain" hidden class="registrer_domain">
 						
 						<!-- First form action , with it , in the case that the client has a accout, he can log it and retreive the information-->
 						<form action="domainscustomers.php" method="POST">						
 						<input type="text" name="user_id_registrer" id="user_id_registrer" hidden >
 						<input type="text" name="id_domain" id="id_domain" hidden >
+						<input type="text" name="domain_name_1" id="domain_name_1" readonly hidden >
 						
 						<table border="1">
 						<tr><th colspan="3">Retrieve Order information</th></tr>
 						<tr><td rowspan="3">From Existing Domain</td>
-						<td>Previous Domain: <input type="text" name="domain_exits" required ></td>
+						<td>Previous Domain: <input type="text" name="domain_exits"  ></td>
 						<tr><td>Username: <input type="text" name="username" id="username" required > </td></tr>
-						<tr><td>Password: <input type="password" name="password" id="password" required> </td></tr>
+						<tr><td>Password: <input type="password" name="password" id="password"  required> </td></tr>
 						<tr><th colspan="3"><input type="submit" value="retrieve data"></th></tr>
 						</table>
 						</form>
@@ -155,7 +156,7 @@
 						<tr><td>Additional Comments</td><td><input type="text" name="comments" required ></td></tr>
 						</table>
 						
-						<table border="1">
+						<table border="1" id="new_registration">
 						<tr><th colspan="2">Registrant Profile Information</th></tr>
 						<tr><td>Previous Domain (optional) </td><td><input type="text" name="previous_domain"></td></tr>
 						<tr><td>Registrant Username</td><td><input type="text" name="Registrant_Username" required ></td></tr>
@@ -163,7 +164,7 @@
 						<tr><td>Confirm Password</td><td><input type="password" name="Confirm_Password" required ></td></tr>
 						</table>
 						
-						<table border="1">
+						<table border="1"> 
 						<tr><th colspan="2">Owner Contact Information</th></tr>
 						<tr><td>First Name </td><td><input type="text" name="first_name_1" required></td></tr>
 						<tr><td>Last Name </td><td><input type="text" name="last_name_1" required></td></tr>
@@ -222,24 +223,24 @@
 						<tr><td>Same As Billing Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci" name="tci" value="1" ></td></tr>
 						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_1" name="tci" value="2" ></td></tr>
 						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_2" name="tci" value="3" ></td></tr>
-						<tr class="row_t"><td>First Name </td><td><input type="text" name="first_name_4"></td></tr>
-						<tr class="row_t"><td>Last Name </td><td><input type="text" name="last_name_4"></td></tr>
-						<tr class="row_t"><td>Organization Name </td><td><input type="text" name="organization_name_4"></td></tr>
-						<tr class="row_t"><td>Street Address </td><td><input type="text" name="street_4"></td></tr>
+						<tr class="row_t"><td>First Name </td><td><input type="text" name="first_name_4" value="Cesar" ></td></tr>
+						<tr class="row_t"><td>Last Name </td><td><input type="text" name="last_name_4" value= "Feghali" ></td></tr>
+						<tr class="row_t"><td>Organization Name </td><td><input type="text" name="organization_name_4" value="Scorpico Interactive, Inc." ></td></tr>
+						<tr class="row_t"><td>Street Address </td><td><input type="text" name="street_4" value="13499 Biscayne blvd 1101" ></td></tr>
 						<tr class="row_t"><td>(eg: Suite #245) [optional] </td><td><input type="text" name="street_1_4"></td></tr>
-						<tr class="row_t"><td>Address 3 [optional] </td><td><input type="text" name="street_2_4"></td></tr>
-						<tr class="row_t"><td>City </td><td><input type="text" name="city_4"></td></tr>
-						<tr class="row_t"><td>State </td><td><input type="text" name="state_4"></td></tr>
+						<tr class="row_t"><td>Address 3 [optional] </td><td><input type="text" name="street_2_4" ></td></tr>
+						<tr class="row_t"><td>City </td><td><input type="text" name="city_4" value="North Miami"></td></tr>
+						<tr class="row_t"><td>State </td><td><input type="text" name="state_4" value="FL"></td></tr>
 						<tr class="row_t"><td>2 Letter Country Code </td><td><select name="country_4"><option id="country" value="1">United State</option></select></td></tr>
-						<tr class="row_t"><td>Postal Code </td><td><input type="text" name="postal_code_4"></td></tr>
-						<tr class="row_t"><td>Phone Number </td><td><input type="text" name="phone_number_4"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr class="row_t"><td>Fax Number[optional] </td><td><input type="text" name="fax_number_4"></td></tr>
-						<tr class="row_t"><td>Email </td><td><input type="text" name="mail_4"><br>Must be a current valid address</td></tr>
+						<tr class="row_t"><td>Postal Code </td><td><input type="text" name="postal_code_4" value="33181" ></td></tr>
+						<tr class="row_t"><td>Phone Number </td><td><input type="text" name="phone_number_4" value="305-753-3293"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr class="row_t"><td>Fax Number[optional] </td><td><input type="text" name="fax_number_4" value="305-947-4104" ></td></tr>
+						<tr class="row_t"><td>Email </td><td><input type="text" name="mail_4" value="cesar@scorpico.com" ><br>Must be a current valid address</td></tr>
 						</table>
-						
+					
 						<table border="1">
 						<tr><th colspan="2">DNS Information</th></tr>
-						<tr><td>Use your own DNS servers <input type="radio" name="dns" value="own_dns"> </td><td>Use our DNS <input checked type="radio" name="dns" value="our_DNS"></td></tr>
+						<tr><td>Use your own DNS servers <input type="radio" name="dns" value="own_dns"> </td><td>Use our DNS <input checked type="radio" name="dns" value="our_dns"></td></tr>
 						<tr><td> 
 						Primary   <input type="text" name="primary"> <br>
 						Secondary <input type="text" name="secondary"> <br>
@@ -284,7 +285,6 @@
 		<script>
 		var id=document.getElementById("id_user").value;
 		document.getElementById("user_id").value = id;
-		
 		$("a[id^='aRegistrer']").click(function(event) {			
 			$id = event.target.id.toString().split("aRegistrer")[1];
 			var domain = $id.split(",")
@@ -293,6 +293,7 @@
 			document.getElementById("id_domain").value = domain[0];
 			document.getElementById("id_domain_1").value = domain[0];
 			document.getElementById("domain_name").value = domain[1];
+			document.getElementById("domain_name_1").value = domain[1];
 			document.getElementById("user_id_registrer").value = id;
 			document.getElementById("user_id_registrer_1").value = id;
 			//alert($id);
@@ -355,13 +356,90 @@
 		</script>
 		
 		<?php
+		
+		if(isset($_POST["username"]) && isset($_POST["password"])){
+		 echo "<script>	$('div.check_domain').hide(); 
+				$('div.lookfor_domain').hide(); 
+				$('div.registrer_domain').show();
+				document.getElementById('id_domain').value = '".$_POST['id_domain']."';
+				document.getElementById('id_domain_1').value = '".$_POST['id_domain']."';
+				document.getElementById('domain_name').value = '".$_POST['domain_name_1']."';
+				document.getElementById('domain_name_1').value = '".$_POST['domain_name_1']."';
+				document.getElementById('user_id_registrer').value = '".$_POST['user_id_registrer']."';
+				document.getElementById('user_id_registrer_1').value = '".$_POST['user_id_registrer']."';
+				</script>";
+		 
+		 $select_users_query = "SELECT count(*) as conteo FROM `profile_information` 
+								WHERE `customer_id` = ".$_POST['user_id_registrer']."
+								AND `username` ='".$_POST["username"]."'
+								AND `password`= '".$_POST["password"]."'";
+		$count=0;
+		 $select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+								
+								while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+									
+										if($line['conteo'] >0){
+											$count++;
+										}
+								}
+		if($count != 0){
+			
+			//look for into domain request if the user has tegistred before
+			 $select_users_query = "SELECT * FROM `domain_request` WHERE `customer_id` =".$_POST['user_id_registrer'];
+			
+			 $select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+			$id_owner=0;
+			$id_admin=0;
+			$id_billing=0;
+			$id_technical=0;
+			while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+					$id_owner=$line['owner_contact_id'];
+					$id_admin=$line['admin_contact_id'];
+					$id_billing=['billing_contact_id'];
+					$id_technical=['technical_contact_id'];
+			}
+			
+			// it must find in the table by order:
+			//owner
+			$select_users_query = "SELECT `id`, `first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`  FROM `owner_contact` WHERE `id` =".$id_owner;
+			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+			while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+			    
+				echo " <script>
+				document.getElementById('first_name_1').value = '".$line['first_name']."';
+				document.getElementById('last_name_1').value = '".$line['last_name']."';
+				document.getElementById('organization_name_1').value = '".$line['organization_name']."';
+				document.getElementById('street_1').value = '".$line['street_address']."';
+				document.getElementById('street_1_1').value = '".$line['street_address_1']."';
+				document.getElementById('street_1_1_2').value = '".$line['street_address_2']."';
+				document.getElementById('city_1').value = '".$line['city']."';
+				document.getElementById('state_1').value = '".$line['state']."';				
+				document.getElementById('postal_code_1').value = '".$line['postal_code']."';
+				document.getElementById('phone_number_1').value = '".$line['phone_number']."';
+				document.getElementById('fax_number_1').value = '".$line['fax_number']."';
+				document.getElementById('mail_1').value = '".$line['email']."';
+				</script>";
+			// teminate the validation when i put username and password if i have a previous registrer.
+			}
+			//admin
+			$select_users_query = "SELECT * FROM `admin_contact` WHERE `id` =".$id_owner;
+			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+			//billing
+			$select_users_query = "SELECT * FROM `billing_contact` WHERE `id` =".$id_owner;
+			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+			//technical
+			$select_users_query = "SELECT * FROM `technical_contact` WHERE `id` =".$id_owner;
+			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+		}
+		
+		}
 		if(isset($_POST["first_name_1"])){
 			
 			/* profile insert */
 			if($_POST['Registrant_Username']){		
 			$insert_query = 'INSERT INTO `profile_information`(`previous_domain`, `username`, `password`, `customer_id`) VALUES ("'.$_POST["previous_domain"].'","'.$_POST["Registrant_Username"].'","'.$_POST["Registrant_Password"].'",'.$_POST['user_id_registrer_1'].')';
-			//$insert_result = mysql_query($insert_query);
-			//$id_profiel= mysql_insert_id();
+			$insert_result = mysql_query($insert_query);
+			$id_profiel= mysql_insert_id();
 			}
 			
 			/* owner insert */
@@ -589,13 +667,46 @@
 			$insert_query = "INSERT INTO `domain_request`(`customer_id`, `domain_id`, `billing_contact_id`, `admin_contact_id`, `technical_contact_id`, `owner_contact_id`) 
 							 VALUES (".$_POST['user_id_registrer_1'].",".$_POST['id_domain_1'].",".$id_billing.",".$id_admin.",".$id_technical.",".$id_owner.")";
 			$insert_result = mysql_query($insert_query);
-						
+			$id_domain= mysql_insert_id();
+			
+			$insert_query = "INSERT INTO `domain_information`(`registration_type`, `affiliate_id`, `registration_period`, `languaje`, `auto_renew`, `whois_privacy`, `lock_domain`, `enable_parked_pages`, `coments`, `domain_request_id`) 
+								VALUES ('".$_POST['primary']."',
+								'".$_POST['affiliate_id']."',
+								'".$_POST['year']."',
+								'".$_POST['language']."',
+								'".$_POST['renew']."',
+								'".$_POST['whois'].",
+								'".$_POST['lock_domain'].",
+								'".$_POST['EPP'].",
+								'".$_POST['comments'].","
+								.$id_domain.")";						        		
+			$insert_result = mysql_query($insert_query);
+			
 			$update_user_query = 'UPDATE `domains` SET `status`=0,`customer_id`= '.$_POST["user_id_registrer_1"].' WHERE `id`='.$_POST["id_domain_1"];
 			$update_user_result = mysql_query($update_user_query);
 			
 			if($update_user_result){
 				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',9,17,6,".$_POST['user_id_registrer_1'].")";
 				$insert_result = mysql_query($insert_query);
+			}
+			
+			switch($_POST['dns']){
+				
+				case "own_dns": // custom 2
+				$insert_query = "INSERT INTO `dns_information`(`id_domain_request`, `id_type_option_dns`, `primary_field`, `secondary_field`, `third_field`, `fourth_field`, `fifth_field`, `sixth_field`) VALUES (".$id_domain.",2,
+								'".$_POST['primary']."',
+								'".$_POST['secondary']."',
+								'".$_POST['third']."',
+								'".$_POST['fourth']."',
+								'".$_POST['fifth']."',
+								'".$_POST['sixth']."')";
+				$insert_result = mysql_query($insert_query);
+				
+				break;
+				case "our_dns": // default 1 
+				$insert_query = "INSERT INTO `dns_information`(`id_domain_request`, `id_type_option_dns`) VALUES (".$id_domain.",1)";
+				$insert_result = mysql_query($insert_query);
+				break;
 			}
 		}
 				
