@@ -166,56 +166,57 @@
 						
 						<table border="1"> 
 						<tr><th colspan="2">Owner Contact Information</th></tr>
-						<tr><td>First Name </td><td><input type="text" name="first_name_1" required></td></tr>
-						<tr><td>Last Name </td><td><input type="text" name="last_name_1" required></td></tr>
-						<tr><td>Organization Name </td><td><input type="text" name="organization_name_1" required></td></tr>
-						<tr><td>Street Address </td><td><input type="text" name="street_1" required></td></tr>
-						<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" name="street_1_1" ></td></tr>
-						<tr><td>Address 3 [optional] </td><td><input type="text" name="street_1_1_2" ></td></tr>
-						<tr><td>City </td><td><input type="text" name="city_1" required></td></tr>
-						<tr><td>State </td><td><input type="text" name="state_1" required></td></tr>
+						<tr><td>First Name </td><td><input type="text" id="first_name_1" name="first_name_1" required></td></tr>
+						<tr><td>Last Name </td><td><input type="text" id="last_name_1" name="last_name_1" required></td></tr>
+						<tr><td>Organization Name </td><td><input type="text" id="organization_name_1"  name="organization_name_1" required></td></tr>
+						<tr><td>Street Address </td><td><input type="text" id="street_1" name="street_1" required></td></tr>
+						<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_1" name="street_1_1" ></td></tr>
+						<tr><td>Address 3 [optional] </td><td><input type="text" id="street_1_1_2" name="street_1_1_2" ></td></tr>
+						<tr><td>City </td><td><input type="text" id="city_1" name="city_1" required></td></tr>
+						<tr><td>State </td><td><input type="text" id="state_1" name="state_1" required></td></tr>
 						<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-						<tr><td>Postal Code </td><td><input type="text" name="postal_code_1" required></td></tr>
-						<tr><td>Phone Number </td><td><input type="text" name="phone_number_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr><td>Fax Number[optional] </td><td><input type="text" name="fax_number_1" ></td></tr>
-						<tr><td>Email </td><td><input type="text" name="mail_1" required><br>Must be a current valid address</td></tr>
+						<tr><td>Postal Code </td><td><input type="text" id="postal_code_1" name="postal_code_1" required></td></tr>
+						<tr><td>Phone Number </td><td><input type="text" id="phone_number_1" name="phone_number_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_number_1" name="fax_number_1" ></td></tr>
+						<tr><td>Email </td><td><input type="text" id="mail_1" name="mail_1" required><br>Must be a current valid address</td></tr>
 						</table>
 						
 						<table border="1">
 						<tr><th colspan="2">Admin Contact Information</th></tr>
 						<tr><td>Same As Owner Contact Information </td><td><input type="radio" id="aci" name="aci"  onDblClick="uncheckRadio_aci(this)" onclick="checked_aci();"> </td> </tr>
-						<tr class="row"><td>First Name </td><td><input type="text" name="first_name_2"></td></tr>
-						<tr class="row"><td>Last Name </td><td><input type="text" name="last_name_2"></td></tr>
-						<tr class="row"><td>Organization Name </td><td><input type="text" name="organization_name_2"></td></tr>
-						<tr class="row"><td>Street Address </td><td><input type="text" name="street_2"></td></tr>
-						<tr class="row"><td>(eg: Suite #245) [optional] </td><td><input type="text" name="street_1_2"></td></tr>
-						<tr class="row"><td>Address 3 [optional] </td><td><input type="text" name="street_2_2"></td></tr>
-						<tr class="row"><td>City </td><td><input type="text" name="city_2"></td></tr>
-						<tr class="row"><td>State </td><td><input type="text" name="state_2"></td></tr>
+						<tr class="row"><td>First Name </td><td><input type="text" id="first_name_2" name="first_name_2"></td></tr>
+						<tr class="row"><td>Last Name </td><td><input type="text" id="last_name_2" name="last_name_2"></td></tr>
+						<tr class="row"><td>Organization Name </td><td><input type="text" id="organization_name_2" name="organization_name_2"></td></tr>
+						<tr class="row"><td>Street Address </td><td><input type="text" id="street_2" name="street_2"></td></tr>
+						<tr class="row"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_2" name="street_1_2"></td></tr>
+						<tr class="row"><td>Address 3 [optional] </td><td><input type="text" id="street_2_2" name="street_2_2"></td></tr>
+						<tr class="row"><td>City </td><td><input type="text" id="city_2" name="city_2"></td></tr>
+						<tr class="row"><td>State </td><td><input type="text" id="state_2" name="state_2"></td></tr>
 						<tr class="row"><td>2 Letter Country Code </td><td><select name="country_2"><option id="country" value="1">United State</option></select></td></tr>
-						<tr class="row"><td>Postal Code </td><td><input type="text" name="postal_code_2"></td></tr>
-						<tr class="row"><td>Phone Number </td><td><input type="text" name="phone_number_2"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr class="row"><td>Fax Number[optional] </td><td><input type="text" name="fax_number_2"></td></tr>
-						<tr class="row"><td>Email </td><td><input type="text" name="mail_2"><br>Must be a current valid address</td></tr>
+						<tr class="row"><td>Postal Code </td><td><input type="text" id="postal_code_2" name="postal_code_2"></td></tr>
+						<tr class="row"><td>Phone Number </td><td><input type="text" id="phone_number_2" name="phone_number_2"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr class="row"><td>Fax Number[optional] </td><td><input type="text" id="fax_number_2" name="fax_number_2"></td></tr>
+						<tr class="row"><td>Email </td><td><input type="text" id="mail_2" name="mail_2"><br>Must be a current valid address</td></tr>
 						</table>
 						
 						<table border="1">
 						<tr><th colspan="2">Billing Contact Information</th></tr>
+						
 						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci" name="bci" value="1" ></td></tr>
 						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci_1" name="bci" value="2"></td></tr>
-						<tr class="row_b"><td>First Name </td><td><input type="text" name="first_name_3"></td></tr>
-						<tr class="row_b"><td>Last Name </td><td><input type="text" name="last_name_3"></td></tr>
-						<tr class="row_b"><td>Organization Name </td><td><input type="text" name="organization_name_3"></td></tr>
-						<tr class="row_b"><td>Street Address </td><td><input type="text" name="street_3"></td></tr>
-						<tr class="row_b"><td>(eg: Suite #245) [optional] </td><td><input type="text" name="street_1_3"></td></tr>
-						<tr class="row_b"><td>Address 3 [optional] </td><td><input type="text" name="street_2_3"></td></tr>
-						<tr class="row_b"><td>City </td><td><input type="text" name="city_3"></td></tr>
-						<tr class="row_b"><td>State </td><td><input type="text" name="state_3"></td></tr>
+						<tr class="row_b"><td>First Name </td><td><input type="text" id="first_name_3" name="first_name_3"></td></tr>
+						<tr class="row_b"><td>Last Name </td><td><input type="text" id="last_name_3" name="last_name_3"></td></tr>
+						<tr class="row_b"><td>Organization Name </td><td><input type="text" id="organization_name_3" name="organization_name_3"></td></tr>
+						<tr class="row_b"><td>Street Address </td><td><input type="text" id="street_3" name="street_3"></td></tr>
+						<tr class="row_b"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_3" name="street_1_3"></td></tr>
+						<tr class="row_b"><td>Address 3 [optional] </td><td><input type="text" id="street_2_3" name="street_2_3"></td></tr>
+						<tr class="row_b"><td>City </td><td><input type="text" id="city_3" name="city_3"></td></tr>
+						<tr class="row_b"><td>State </td><td><input type="text" id="state_3" name="state_3"></td></tr>
 						<tr class="row_b"><td>2 Letter Country Code </td><td><select name="country_3"><option id="country" value="1">United State</option></select></td></tr>
-						<tr class="row_b"><td>Postal Code </td><td><input type="text" name="postal_code_3"></td></tr>
-						<tr class="row_b"><td>Phone Number </td><td><input type="text" name="phone_number_3"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr class="row_b"><td>Fax Number[optional] </td><td><input type="text" name="fax_number_3"></td></tr>
-						<tr class="row_b"><td>Email </td><td><input type="text" name="mail_3"><br>Must be a current valid address</td></tr>
+						<tr class="row_b"><td>Postal Code </td><td><input type="text" id="postal_code_3" name="postal_code_3"></td></tr>
+						<tr class="row_b"><td>Phone Number </td><td><input type="text" id="phone_number_3" name="phone_number_3"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr class="row_b"><td>Fax Number[optional] </td><td><input type="text" id="fax_number_3" name="fax_number_3"></td></tr>
+						<tr class="row_b"><td>Email </td><td><input type="text"  id="mail_3" name="mail_3"><br>Must be a current valid address</td></tr>
 						</table>
 						
 						<table border="1">
@@ -223,19 +224,19 @@
 						<tr><td>Same As Billing Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci" name="tci" value="1" ></td></tr>
 						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_1" name="tci" value="2" ></td></tr>
 						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_2" name="tci" value="3" ></td></tr>
-						<tr class="row_t"><td>First Name </td><td><input type="text" name="first_name_4" value="Cesar" ></td></tr>
-						<tr class="row_t"><td>Last Name </td><td><input type="text" name="last_name_4" value= "Feghali" ></td></tr>
-						<tr class="row_t"><td>Organization Name </td><td><input type="text" name="organization_name_4" value="Scorpico Interactive, Inc." ></td></tr>
-						<tr class="row_t"><td>Street Address </td><td><input type="text" name="street_4" value="13499 Biscayne blvd 1101" ></td></tr>
-						<tr class="row_t"><td>(eg: Suite #245) [optional] </td><td><input type="text" name="street_1_4"></td></tr>
-						<tr class="row_t"><td>Address 3 [optional] </td><td><input type="text" name="street_2_4" ></td></tr>
-						<tr class="row_t"><td>City </td><td><input type="text" name="city_4" value="North Miami"></td></tr>
-						<tr class="row_t"><td>State </td><td><input type="text" name="state_4" value="FL"></td></tr>
+						<tr class="row_t"><td>First Name </td><td><input type="text" id="first_name_4" name="first_name_4" value="Cesar" ></td></tr>
+						<tr class="row_t"><td>Last Name </td><td><input type="text" id="last_name_4" name="last_name_4" value= "Feghali" ></td></tr>
+						<tr class="row_t"><td>Organization Name </td><td><input type="text" id="organization_name_4" name="organization_name_4" value="Scorpico Interactive, Inc." ></td></tr>
+						<tr class="row_t"><td>Street Address </td><td><input type="text" id="street_4" name="street_4" value="13499 Biscayne blvd 1101" ></td></tr>
+						<tr class="row_t"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_4" name="street_1_4"></td></tr>
+						<tr class="row_t"><td>Address 3 [optional] </td><td><input type="text" id="street_2_4" name="street_2_4" ></td></tr>
+						<tr class="row_t"><td>City </td><td><input type="text" id="city_4" name="city_4" value="North Miami"></td></tr>
+						<tr class="row_t"><td>State </td><td><input type="text" id="state_4" name="state_4" value="FL"></td></tr>
 						<tr class="row_t"><td>2 Letter Country Code </td><td><select name="country_4"><option id="country" value="1">United State</option></select></td></tr>
-						<tr class="row_t"><td>Postal Code </td><td><input type="text" name="postal_code_4" value="33181" ></td></tr>
-						<tr class="row_t"><td>Phone Number </td><td><input type="text" name="phone_number_4" value="305-753-3293"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr class="row_t"><td>Fax Number[optional] </td><td><input type="text" name="fax_number_4" value="305-947-4104" ></td></tr>
-						<tr class="row_t"><td>Email </td><td><input type="text" name="mail_4" value="cesar@scorpico.com" ><br>Must be a current valid address</td></tr>
+						<tr class="row_t"><td>Postal Code </td><td><input type="text" id="postal_code_4" name="postal_code_4" value="33181" ></td></tr>
+						<tr class="row_t"><td>Phone Number </td><td><input type="text" id="phone_number_4" name="phone_number_4" value="305-753-3293"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr class="row_t"><td>Fax Number[optional] </td><td><input type="text" id="fax_number_4" name="fax_number_4" value="305-947-4104" ></td></tr>
+						<tr class="row_t"><td>Email </td><td><input type="text" id="mail_4" name="mail_4" value="cesar@scorpico.com" ><br>Must be a current valid address</td></tr>
 						</table>
 					
 						<table border="1">
@@ -262,11 +263,11 @@
 						Secondary	ns2.systemdns.com<br>
 						Third	ns3.systemdns.com<br>
 						</td></tr>
-						<tr><th colspan="2">Action <select>
+						<tr><th colspan="2"> <!--Action <select>
 						<option id="submit_op" value="1">Register Now</option>
-						<option id="submit_op" value="2">Save Order</option></select> 
+						<option id="submit_op" value="2">Save Order</option></select> -->
 						<input type="submit" value="Submit"> 
-						<input type="submit" value="Restore Values"> </th></tr>
+						<!-- <input type="submit" value="Restore Values"> --> </th></tr>
 						</table>
 						</form>
 						<!-- Here ends the second  -->
@@ -383,7 +384,11 @@
 										}
 								}
 		if($count != 0){
-			
+			// when i press retrieve data button , it must vanish the "registrant profile information" 
+			echo " <script>
+					document.getElementById('new_registration').style.display = 'none';
+					</script>"; 
+			 
 			//look for into domain request if the user has tegistred before
 			 $select_users_query = "SELECT * FROM `domain_request` WHERE `customer_id` =".$_POST['user_id_registrer'];
 			
@@ -395,8 +400,9 @@
 			while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
 					$id_owner=$line['owner_contact_id'];
 					$id_admin=$line['admin_contact_id'];
-					$id_billing=['billing_contact_id'];
-					$id_technical=['technical_contact_id'];
+					$id_billing=$line['billing_contact_id'];
+					$id_technical=$line['technical_contact_id'];
+					$id_domain_request=$line['id'];
 			}
 			
 			// it must find in the table by order:
@@ -404,7 +410,6 @@
 			$select_users_query = "SELECT `id`, `first_name`, `last_name`, `organization_name`, `street_address`, `street_address_1`, `street_address_2`, `city`, `state`, `country_code`, `postal_code`, `phone_number`, `fax_number`, `email`  FROM `owner_contact` WHERE `id` =".$id_owner;
 			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
 			while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
-			    
 				echo " <script>
 				document.getElementById('first_name_1').value = '".$line['first_name']."';
 				document.getElementById('last_name_1').value = '".$line['last_name']."';
@@ -419,17 +424,84 @@
 				document.getElementById('fax_number_1').value = '".$line['fax_number']."';
 				document.getElementById('mail_1').value = '".$line['email']."';
 				</script>";
-			// teminate the validation when i put username and password if i have a previous registrer.
 			}
 			//admin
-			$select_users_query = "SELECT * FROM `admin_contact` WHERE `id` =".$id_owner;
-			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+			$select_users_query = "SELECT * FROM `admin_contact` WHERE `id` =".$id_admin;
+			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida 1 : ' . mysql_error());
+			while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+				echo " <script>
+				document.getElementById('first_name_2').value = '".$line['first_name']."';
+				document.getElementById('last_name_2').value = '".$line['last_name']."';
+				document.getElementById('organization_name_2').value = '".$line['organization_name']."';
+				document.getElementById('street_2').value = '".$line['street_address']."';
+				document.getElementById('street_1_2').value = '".$line['street_address_1']."';
+				document.getElementById('street_2_2').value = '".$line['street_address_2']."';
+				document.getElementById('city_2').value = '".$line['city']."';
+				document.getElementById('state_2').value = '".$line['state']."';				
+				document.getElementById('postal_code_2').value = '".$line['postal_code']."';
+				document.getElementById('phone_number_2').value = '".$line['phone_number']."';
+				document.getElementById('fax_number_2').value = '".$line['fax_number']."';
+				document.getElementById('mail_2').value = '".$line['email']."';
+				</script>";
+				             
+			}
 			//billing
-			$select_users_query = "SELECT * FROM `billing_contact` WHERE `id` =".$id_owner;
-			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+			$select_users_query = "SELECT * FROM `billing_contact` WHERE `id` =".$id_billing;
+			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida 2: ' . mysql_error());
+			while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+			 	echo " <script>
+				document.getElementById('first_name_3').value = '".$line['first_name']."';
+				document.getElementById('last_name_3').value = '".$line['last_name']."';
+				document.getElementById('organization_name_3').value = '".$line['organization_name']."';
+				document.getElementById('street_3').value = '".$line['street_address']."';
+				document.getElementById('street_1_3').value = '".$line['street_address_1']."';
+				document.getElementById('street_2_3').value = '".$line['street_address_2']."';
+				document.getElementById('city_3').value = '".$line['city']."';
+				document.getElementById('state_3').value = '".$line['state']."';				
+				document.getElementById('postal_code_3').value = '".$line['postal_code']."';
+				document.getElementById('phone_number_3').value = '".$line['phone_number']."';
+				document.getElementById('fax_number_3').value = '".$line['fax_number']."';
+				document.getElementById('mail_3').value = '".$line['email']."';
+				</script>";
+				           
+			}
+			
 			//technical
-			$select_users_query = "SELECT * FROM `technical_contact` WHERE `id` =".$id_owner;
-			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+			$select_users_query = "SELECT * FROM `technical_contact` WHERE `id` =".$id_technical;
+			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida 3: ' . mysql_error());
+			while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+				echo " <script>
+				document.getElementById('first_name_4').value = '".$line['first_name']."';
+				document.getElementById('last_name_4').value = '".$line['last_name']."';
+				document.getElementById('organization_name_4').value = '".$line['organization_name']."';
+				document.getElementById('street_4').value = '".$line['street_address']."';
+				document.getElementById('street_1_4').value = '".$line['street_address_1']."';
+				document.getElementById('street_2_4').value = '".$line['street_address_2']."';
+				document.getElementById('city_4').value = '".$line['city']."';
+				document.getElementById('state_4').value = '".$line['state']."';				
+				document.getElementById('postal_code_4').value = '".$line['postal_code']."';
+				document.getElementById('phone_number_4').value = '".$line['phone_number']."';
+				document.getElementById('fax_number_4').value = '".$line['fax_number']."';
+				document.getElementById('mail_4').value = '".$line['email']."';
+				</script>";
+			}
+		
+			// in case the user has a own dns
+			$select_users_query = "SELECT * FROM `dns_information` WHERE `id_domain_request` =".$id_domain_request;
+			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida 3: ' . mysql_error());
+			while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+				     
+				if($line['id_type_option_dns'] != 1){
+					echo " <script>
+					document.getElementById('primary').value = '".$line['primary_field']."';
+					document.getElementById('secondary').value = '".$line['secondary_field']."';
+					document.getElementById('third').value = '".$line['third_field']."';
+					document.getElementById('fourth').value = '".$line['fourth_field']."';
+					document.getElementById('fifth').value = '".$line['fifth_field']."';
+					document.getElementById('sixth').value = '".$line['sixth_field']."';
+					</script>";
+				}
+			}
 		}
 		
 		}
