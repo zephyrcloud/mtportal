@@ -113,10 +113,11 @@
 									echo "</tr>";
 								} ?>
 								</table>
-								</div>
+								
 					<?php
 						} // here ends the if for post[fname}
 					?>
+					</div>
 					
 					<div id="Registrer_domain" hidden class="registrer_domain">
 						
@@ -271,9 +272,7 @@
 						</table>
 						</form>
 						<!-- Here ends the second  -->
-						
 					</div>
-					
 				</div>
 			</div>
 		</div>
@@ -505,8 +504,9 @@
 		}
 		
 		}
+		
 		if(isset($_POST["first_name_1"])){
-			
+			/* Domain request*/
 			/* profile insert */
 			if($_POST['Registrant_Username']){		
 			$insert_query = 'INSERT INTO `profile_information`(`previous_domain`, `username`, `password`, `customer_id`) VALUES ("'.$_POST["previous_domain"].'","'.$_POST["Registrant_Username"].'","'.$_POST["Registrant_Password"].'",'.$_POST['user_id_registrer_1'].')';
@@ -742,7 +742,7 @@
 			$id_domain= mysql_insert_id();
 			
 			$insert_query = "INSERT INTO `domain_information`(`registration_type`, `affiliate_id`, `registration_period`, `languaje`, `auto_renew`, `whois_privacy`, `lock_domain`, `enable_parked_pages`, `coments`, `domain_request_id`) 
-								VALUES ('".$_POST['primary']."',
+								VALUES ('Registration',
 								'".$_POST['affiliate_id']."',
 								'".$_POST['year']."',
 								'".$_POST['language']."',
@@ -751,7 +751,8 @@
 								'".$_POST['lock_domain'].",
 								'".$_POST['EPP'].",
 								'".$_POST['comments'].","
-								.$id_domain.")";						        		
+								.$id_domain.")";
+			echo nl2br($insert_query ."\n");
 			$insert_result = mysql_query($insert_query);
 			
 			$update_user_query = 'UPDATE `domains` SET `status`=0,`customer_id`= '.$_POST["user_id_registrer_1"].' WHERE `id`='.$_POST["id_domain_1"];
