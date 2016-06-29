@@ -243,11 +243,8 @@ ini_set('display_errors',1);
 		?>
 		
 		<div id="pagecontents">
-			
 			<div class="wrapper">
-			
 				<div id="post">
-				
 					<div id="postitle">
 						<div class="floatleft"><h1>Users</h1></div>
 						<div class="floatright righttext tpad"></div>

@@ -13,11 +13,12 @@
 			function goTo(destination) {
 				window.location.href = destination;
 			}
-
 		</script>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
+        <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
 		<!-- JQuery UI -->
 		<!--<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>-->
@@ -28,7 +29,6 @@
 		<?php
 			include("header.php");
 			include("menucustomer.php");
-
 		?>
 
 		<!-- Body of the form -->
@@ -64,7 +64,15 @@
 						  <input type="checkbox" name="display[]" value="5"> Display ccTDLs <br>
 						  <input type="checkbox" name="display[]" value="5"> Display Personal Names <br>
 						</form>
+						<br>
+						<form action="domainscustomers.php" method="POST">
+						<input type="text" name="user_id_1" id="user_id_1" hidden  >
+						  Transfer domain: <input type="text" id="ftransdomain" name="ftransdomain" required>
+						  <input type="submit" value="Transfer">
+						 </form>
 					</div>
+					
+					
 					
 					<?php
 						if(isset($_POST['fname'])){ //here begin the if for fname
@@ -72,52 +80,87 @@
 							<script>
 							document.getElementById("check_domain").style.display = 'none';
 							</script>
-					<div id="lookfor_domain" class="lookfor_domain">
-					<form action="domainscustomers.php" method="POST">
-						  Domain Name Suggestion for: <input type="text" name="fname" value="<?php echo $_POST['fname']; ?>">
-						  <input type="submit" value="search"><br><br>
-					</form>
-					
-					<table>
-							<col width="150px">
-                            <col width="150px">
-                            <col width="150px">
-                            
-							<tr>
-								<th style="border: 1px solid;">Domains name</th>
-								<th style="border: 1px solid;">Status </th>
-								<th style="border: 1px solid;">Action </th>
-								
-							</tr>
+							<div id="lookfor_domain" class="lookfor_domain">
 							
-					<?php
-								$select_customers_query = 'SELECT * FROM `domains` WHERE domain_name LIKE "%'.$_POST['fname'].'%"';
+							<!--- here must validate if the user has overload the permited quota -->
+							<?php 
+								// look for how many quotas has the user
+								$quota_limit = 0;
+								$select_customers_query = "SELECT `quota_domain` FROM `customer` WHERE `id` = ".$_POST['user_id'];
 								$select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
-								
+												
 								while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+									$quota_limit = $line['quota_domain']; 
+								}
+								// look for how domains the user has registred
+								$quotas_user = 0;
+								$select_customers_query = "SELECT count(*) as counter FROM `domain_request` WHERE `customer_id` = ".$_POST['user_id'];
+								$select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
+												
+								while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+									$quotas_user = $line['counter']; 
+								}
+								// if the domains registred , not over the permited
+								if($quota_limit > $quotas_user ){
+									//true: permit the registrer_domain
+									?>
+									<form action="domainscustomers.php" method="POST">
+										  Domain Name Suggestion for: <input type="text" name="fname" value="<?php echo $_POST['fname']; ?>">
+										  <input type="submit" value="search"><br><br>
+									</form>
+									<table>
+											<col width="150px">
+											<col width="150px">
+											<col width="150px">
+											
+											<tr>
+												<th style="border: 1px solid;">Domains name</th>
+												<th style="border: 1px solid;">Status </th>
+												<th style="border: 1px solid;">Action </th>
+												
+											</tr>
+											
+									<?php
+												$select_customers_query = 'SELECT * FROM `domains` WHERE domain_name LIKE "%'.$_POST['fname'].'%"';
+												$select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
+												
+												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+													
+													
+													echo "<tr id='tr" . $line['id'] . "'>";
+													
+													echo "<td style='border: 1px solid;'><span id='spanName" . $line['id'] . "'>" . $line['domain_name'] . "</span></td>";
+													if($line['status'] == 1){
+														echo "<td style='border: 1px solid;'><span id='spanUserName" . $line['id'] . "'> Available </span></td>";
+														echo "<td style='border: 1px solid;'><a id='aRegistrer" . $line['id'] . ",".$line['domain_name']."' href='#'>Registrer</a></td>";
+													}else{
+														echo "<td style='border: 1px solid;'><span id='spanUserName" . $line['id'] . "'> No available</span></td>";
+														echo "<td style='border: 1px solid;'><a id='aRegistrer" . $line['id'] . "' href='#'></a></td>";
+													}
+													//echo "<td style='border: 1px solid;'><span id='spanPassword" . $line['id'] . "'>" . $line['password'] . "</span></td>";
+													
+													echo "</tr>";
+												} ?>
+									</table>
+							
+									<?php
+								}else{
+									//else: sorry , you can't registred domains because you over the permited quota, contact with the administrator
+									//echo nl2br("sorry , you can't registred domains because you over the permited quota, contact with the administrator");
+									?>
 									
-									
-									echo "<tr id='tr" . $line['id'] . "'>";
-									
-									echo "<td style='border: 1px solid;'><span id='spanName" . $line['id'] . "'>" . $line['domain_name'] . "</span></td>";
-									if($line['status'] == 1){
-										echo "<td style='border: 1px solid;'><span id='spanUserName" . $line['id'] . "'> Available </span></td>";
-										echo "<td style='border: 1px solid;'><a id='aRegistrer" . $line['id'] . ",".$line['domain_name']."' href='#'>Registrer</a></td>";
-									}else{
-										echo "<td style='border: 1px solid;'><span id='spanUserName" . $line['id'] . "'> No available</span></td>";
-										echo "<td style='border: 1px solid;'><a id='aRegistrer" . $line['id'] . "' href='#'></a></td>";
-									}
-									//echo "<td style='border: 1px solid;'><span id='spanPassword" . $line['id'] . "'>" . $line['password'] . "</span></td>";
-
-									
-									echo "</tr>";
-								} ?>
-								</table>
-								
+									<div class="alert alert-info">
+									  <strong>Sorry!</strong> you can't registred domains because you over the permited quota, contact with the administrator.
+									</div>
+								<?php
+								}
+							?>
+							
+							<!--- here ends the validation of the quotas-->
+							</div>
 					<?php
 						} // here ends the if for post[fname}
 					?>
-					</div>
 					
 					<div id="Registrer_domain" hidden class="registrer_domain">
 						
@@ -126,10 +169,10 @@
 						<input type="text" name="user_id_registrer" id="user_id_registrer" hidden >
 						<input type="text" name="id_domain" id="id_domain" hidden >
 						<input type="text" name="domain_name_1" id="domain_name_1" readonly hidden >
-						
+						<input type="text" name="type_registrer_2" id="type_registrer_2" hidden >
 						<table border="1">
 						<tr><th colspan="3">Retrieve Order information</th></tr>
-						<tr><td rowspan="3">From Existing Domain</td>
+						<tr><td rowspan="3">From Existing Domain</td>						
 						<td>Previous Domain: <input type="text" name="domain_exits"  ></td>
 						<tr><td>Username: <input type="text" name="username" id="username" required > </td></tr>
 						<tr><td>Password: <input type="password" name="password" id="password"  required> </td></tr>
@@ -140,31 +183,32 @@
 						
 						<!-- Here must be the second form for the information -->
 						
+						
 						<form action="domainscustomers.php" method="POST">
 						<input type="text" name="user_id_registrer_1" id="user_id_registrer_1" hidden >
 						<input type="text" name="id_domain_1" id="id_domain_1" hidden >
 						<table border="1">
 						<tr><th colspan="2">Domain information</th></tr>
 						<tr><td>Domain Name</td><td><input type="text" name="domain_name" id="domain_name" readonly ></td>
-						<tr><td>Registration Type</td><td>New Domain Registration</td></tr>
+						<tr><td>Registration Type</td><td> <input type="text" name="type_registrer" id="type_registrer" readonly value="New Domain Registration" > </td></tr>
 						<tr><td>Affiliate ID</td><td><input type="text" name="affiliate_id"></td></tr>
 						<tr><td>Registration Period</td><td><select name="year"><option id="year" value="1">1 Year</option></select></td></tr>
 						<tr><td>Language</td><td><select name="language" ><option id="language" value="1">Standar ASCII</option></select></td></tr>
 						<tr><td>Auto Renew</td><td><input type="radio" name="renew" value="1"> yes <input checked type="radio" name="renew" value="0"> no</td></tr>
 						<tr><td>WHOIS Privacy</td><td><input checked type="radio" name="whois" value="1"> yes <input type="radio" name="whois" value="0"> no</td></tr>
-						<tr><td>Lock Domain</td><td><input type="radio" name="lock_domain" value="1"> yes <input checked type="radio" name="lock_domain" value="0"> no</td></tr>
-						<tr><td>Enable Parked Pages</td><td><input type="radio" name="EPP" value="1"> yes <input checked type="radio" name="EPP" value="0"> no</td></tr>						
-						<tr><td>Additional Comments</td><td><input type="text" name="comments" required ></td></tr>
+						<tr><td>Lock Domain</td><td><input type="radio" id="lock_domain" name="lock_domain" value="1"> yes <input checked type="radio" name="lock_domain" value="0"> no</td></tr>
+						<tr><td>Enable Parked Pages</td><td><input type="radio" id="EPP" name="EPP" value="1"> yes <input checked type="radio" name="EPP" value="0"> no</td></tr>						
+						<tr><td>Additional Comments</td><td><input type="text" id="comments" name="comments" required ></td></tr>
 						</table>
 						
 						<table border="1" id="new_registration">
 						<tr><th colspan="2">Registrant Profile Information</th></tr>
 						<tr><td>Previous Domain (optional) </td><td><input type="text" name="previous_domain"></td></tr>
-						<tr><td>Registrant Username</td><td><input type="text" name="Registrant_Username" required ></td></tr>
-						<tr><td>Registrant Password</td><td><input type="password" name="Registrant_Password" required ></td></tr>
-						<tr><td>Confirm Password</td><td><input type="password" name="Confirm_Password" required ></td></tr>
+						<tr><td>Registrant Username</td><td><input type="text" id="Registrant_Username" name="Registrant_Username" required ></td></tr>
+						<tr><td>Registrant Password</td><td><input type="password" id="Registrant_Password" name="Registrant_Password" required ></td></tr>
+						<tr><td>Confirm Password</td><td><input type="password" id="Confirm_Password" name="Confirm_Password" required ></td></tr>
 						</table>
-						
+												
 						<table border="1"> 
 						<tr><th colspan="2">Owner Contact Information</th></tr>
 						<tr><td>First Name </td><td><input type="text" id="first_name_1" name="first_name_1" required></td></tr>
@@ -182,27 +226,26 @@
 						<tr><td>Email </td><td><input type="text" id="mail_1" name="mail_1" required><br>Must be a current valid address</td></tr>
 						</table>
 						
-						<table border="1">
+						<table border="1"> 
 						<tr><th colspan="2">Admin Contact Information</th></tr>
 						<tr><td>Same As Owner Contact Information </td><td><input type="radio" id="aci" name="aci"  onDblClick="uncheckRadio_aci(this)" onclick="checked_aci();"> </td> </tr>
-						<tr class="row"><td>First Name </td><td><input type="text" id="first_name_2" name="first_name_2"></td></tr>
-						<tr class="row"><td>Last Name </td><td><input type="text" id="last_name_2" name="last_name_2"></td></tr>
-						<tr class="row"><td>Organization Name </td><td><input type="text" id="organization_name_2" name="organization_name_2"></td></tr>
-						<tr class="row"><td>Street Address </td><td><input type="text" id="street_2" name="street_2"></td></tr>
-						<tr class="row"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_2" name="street_1_2"></td></tr>
-						<tr class="row"><td>Address 3 [optional] </td><td><input type="text" id="street_2_2" name="street_2_2"></td></tr>
-						<tr class="row"><td>City </td><td><input type="text" id="city_2" name="city_2"></td></tr>
-						<tr class="row"><td>State </td><td><input type="text" id="state_2" name="state_2"></td></tr>
-						<tr class="row"><td>2 Letter Country Code </td><td><select name="country_2"><option id="country" value="1">United State</option></select></td></tr>
-						<tr class="row"><td>Postal Code </td><td><input type="text" id="postal_code_2" name="postal_code_2"></td></tr>
-						<tr class="row"><td>Phone Number </td><td><input type="text" id="phone_number_2" name="phone_number_2"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr class="row"><td>Fax Number[optional] </td><td><input type="text" id="fax_number_2" name="fax_number_2"></td></tr>
-						<tr class="row"><td>Email </td><td><input type="text" id="mail_2" name="mail_2"><br>Must be a current valid address</td></tr>
+						<tr class="row_a"><td>First Name </td><td><input type="text" id="first_name_2" name="first_name_2"></td></tr>
+						<tr class="row_a"><td>Last Name </td><td><input type="text" id="last_name_2" name="last_name_2"></td></tr>
+						<tr class="row_a"><td>Organization Name </td><td><input type="text" id="organization_name_2" name="organization_name_2"></td></tr>
+						<tr class="row_a"><td>Street Address </td><td><input type="text" id="street_2" name="street_2"></td></tr>
+						<tr class="row_a"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_2" name="street_1_2"></td></tr>
+						<tr class="row_a"><td>Address 3 [optional] </td><td><input type="text" id="street_2_2" name="street_2_2"></td></tr>
+						<tr class="row_a"><td>City </td><td><input type="text" id="city_2" name="city_2"></td></tr>
+						<tr class="row_a"><td>State </td><td><input type="text" id="state_2" name="state_2"></td></tr>
+						<tr class="row_a"><td>2 Letter Country Code </td><td><select name="country_2"><option id="country" value="1">United State</option></select></td></tr>
+						<tr class="row_a"><td>Postal Code </td><td><input type="text" id="postal_code_2" name="postal_code_2"></td></tr>
+						<tr class="row_a"><td>Phone Number </td><td><input type="text" id="phone_number_2" name="phone_number_2"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr class="row_a"><td>Fax Number[optional] </td><td><input type="text" id="fax_number_2" name="fax_number_2"></td></tr>
+						<tr class="row_a"><td>Email </td><td><input type="text"  id="mail_2" name="mail_2"><br>Must be a current valid address</td></tr>
 						</table>
 						
 						<table border="1">
 						<tr><th colspan="2">Billing Contact Information</th></tr>
-						
 						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci" name="bci" value="1" ></td></tr>
 						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci_1" name="bci" value="2"></td></tr>
 						<tr class="row_b"><td>First Name </td><td><input type="text" id="first_name_3" name="first_name_3"></td></tr>
@@ -242,6 +285,7 @@
 					
 						<table border="1">
 						<tr><th colspan="2">DNS Information</th></tr>
+						<tr><th colspan="2" hidden class="existing" > Use existing DNS settings <input type="radio" name="dns" id="transfer_dns" value="transfer_dns"> <br> (leave your DNS settings as they are) </th></tr>
 						<tr><td>Use your own DNS servers <input type="radio" name="dns" value="own_dns"> </td><td>Use our DNS <input checked type="radio" name="dns" value="our_dns"></td></tr>
 						<tr><td> 
 						Primary   <input type="text" name="primary"> <br>
@@ -271,8 +315,11 @@
 						<!-- <input type="submit" value="Restore Values"> --> </th></tr>
 						</table>
 						</form>
+						
 						<!-- Here ends the second  -->
+						
 					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -285,6 +332,7 @@
 		<script>
 		var id=document.getElementById("id_user").value;
 		document.getElementById("user_id").value = id;
+		document.getElementById("user_id_1").value = id;
 		$("a[id^='aRegistrer']").click(function(event) {			
 			$id = event.target.id.toString().split("aRegistrer")[1];
 			var domain = $id.split(",")
@@ -301,7 +349,7 @@
 		function checked_aci(){
 			var check = document.getElementById("aci").checked;
 			if(check==true){
-				$('tr.row').hide();
+				$('tr.row_a').hide();
 				$("#aci").val(check);
 				//document.getElementById("row[]").style.display = 'none';
 			}
@@ -349,7 +397,7 @@
 			rbutton.checked=(rbutton.checked)?false:true;
 			var check = document.getElementById("aci").checked;
 			if(check==false){
-				$('tr.row').show();
+				$('tr.row_a').show();
 				//document.getElementById("row[]").style.display = 'none';
 			}
 		}
@@ -358,6 +406,15 @@
 		<?php
 		
 		if(isset($_POST["username"]) && isset($_POST["password"])){
+		
+		if($_POST["type_registrer_2"] == "Transfer"){
+			echo "<script>	
+				$('th.existing').show();
+				document.getElementById('type_registrer').value = 'Transfer';
+				document.getElementById('transfer_dns').checked = true;
+				</script> ";
+		}	
+		
 		 echo "<script>	$('div.check_domain').hide(); 
 				$('div.lookfor_domain').hide(); 
 				$('div.registrer_domain').show();
@@ -385,7 +442,9 @@
 		if($count != 0){
 			// when i press retrieve data button , it must vanish the "registrant profile information" 
 			echo " <script>
-					document.getElementById('new_registration').style.display = 'none';
+					document.getElementById('Registrant_Username').disabled = true;
+					document.getElementById('Registrant_Password').disabled = true;
+					document.getElementById('Confirm_Password').disabled = true;
 					</script>"; 
 			 
 			//look for into domain request if the user has tegistred before
@@ -445,7 +504,7 @@
 				             
 			}
 			//billing
-			$select_users_query = "SELECT * FROM `billing_contact` WHERE `id` =".$id_billing;
+			$select_users_query = "SELECT * FROM `billing_contact` WHERE `id` =".$id_billing;			
 			$select_users_result = mysql_query($select_users_query) or die('Consulta fallida 2: ' . mysql_error());
 			while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
 			 	echo " <script>
@@ -504,11 +563,10 @@
 		}
 		
 		}
-		
 		if(isset($_POST["first_name_1"])){
-			/* Domain request*/
+			
 			/* profile insert */
-			if($_POST['Registrant_Username']){		
+			if($_POST['Registrant_Username'] != "" ){		
 			$insert_query = 'INSERT INTO `profile_information`(`previous_domain`, `username`, `password`, `customer_id`) VALUES ("'.$_POST["previous_domain"].'","'.$_POST["Registrant_Username"].'","'.$_POST["Registrant_Password"].'",'.$_POST['user_id_registrer_1'].')';
 			$insert_result = mysql_query($insert_query);
 			$id_profiel= mysql_insert_id();
@@ -735,28 +793,58 @@
 				break;
 			}
 			
+			$domains = $_POST["id_domain_1"];
+			if($_POST["id_domain_1"] != ""){
+			$update_user_query = 'UPDATE `domains` SET `status`=0,`customer_id`= '.$_POST["user_id_registrer_1"].' WHERE `id`='.$domains;
+			$update_user_result = mysql_query($update_user_query);
 			
 			$insert_query = "INSERT INTO `domain_request`(`customer_id`, `domain_id`, `billing_contact_id`, `admin_contact_id`, `technical_contact_id`, `owner_contact_id`) 
-							 VALUES (".$_POST['user_id_registrer_1'].",".$_POST['id_domain_1'].",".$id_billing.",".$id_admin.",".$id_technical.",".$id_owner.")";
+							 VALUES (".$_POST['user_id_registrer_1'].",".$domains.",".$id_billing.",".$id_admin.",".$id_technical.",".$id_owner.")";
 			$insert_result = mysql_query($insert_query);
 			$id_domain= mysql_insert_id();
 			
 			$insert_query = "INSERT INTO `domain_information`(`registration_type`, `affiliate_id`, `registration_period`, `languaje`, `auto_renew`, `whois_privacy`, `lock_domain`, `enable_parked_pages`, `coments`, `domain_request_id`) 
-								VALUES ('Registration',
+								VALUES (1,
 								'".$_POST['affiliate_id']."',
 								'".$_POST['year']."',
 								'".$_POST['language']."',
 								'".$_POST['renew']."',
-								'".$_POST['whois'].",
-								'".$_POST['lock_domain'].",
-								'".$_POST['EPP'].",
-								'".$_POST['comments'].","
+								'".$_POST['whois']."',
+								'".$_POST['lock_domain']."',
+								'".$_POST['EPP']."',
+								'".$_POST['comments']."',"
 								.$id_domain.")";
-			echo nl2br($insert_query ."\n");
+			
+			
 			$insert_result = mysql_query($insert_query);
 			
-			$update_user_query = 'UPDATE `domains` SET `status`=0,`customer_id`= '.$_POST["user_id_registrer_1"].' WHERE `id`='.$_POST["id_domain_1"];
-			$update_user_result = mysql_query($update_user_query);
+			}else{
+				$insert_query = "INSERT INTO `domains`(`domain_name`, `status`, `customer_id`) VALUES ('".$_POST['domain_name']."',0,".$_POST['user_id_registrer_1'].")";
+				$insert_result = mysql_query($insert_query);
+				$domains =  mysql_insert_id();
+				
+				$insert_query = "INSERT INTO `domain_request`(`customer_id`, `domain_id`, `billing_contact_id`, `admin_contact_id`, `technical_contact_id`, `owner_contact_id`) 
+							 VALUES (".$_POST['user_id_registrer_1'].",".$domains.",".$id_billing.",".$id_admin.",".$id_technical.",".$id_owner.")";
+			$insert_result = mysql_query($insert_query);
+			$id_domain= mysql_insert_id();
+			
+			$insert_query = "INSERT INTO `domain_information`(`registration_type`, `affiliate_id`, `registration_period`, `languaje`, `auto_renew`, `whois_privacy`, `lock_domain`, `enable_parked_pages`, `coments`, `domain_request_id`) 
+								VALUES (2,
+								'".$_POST['affiliate_id']."',
+								'".$_POST['year']."',
+								'".$_POST['language']."',
+								'".$_POST['renew']."',
+								'".$_POST['whois']."',
+								'".$_POST['lock_domain']."',
+								'".$_POST['EPP']."',
+								'".$_POST['comments']."',"
+								.$id_domain.")";
+			
+			
+			$insert_result = mysql_query($insert_query);
+			}
+			
+			
 			
 			if($update_user_result){
 				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',9,17,6,".$_POST['user_id_registrer_1'].")";
@@ -780,9 +868,28 @@
 				$insert_query = "INSERT INTO `dns_information`(`id_domain_request`, `id_type_option_dns`) VALUES (".$id_domain.",1)";
 				$insert_result = mysql_query($insert_query);
 				break;
+				case "transfer_dns":
+				$insert_query = "INSERT INTO `dns_information`(`id_domain_request`, `id_type_option_dns`) VALUES (".$id_domain.",3)";
+				$insert_result = mysql_query($insert_query);
+				break;
 			}
+		
 		}
-				
+		if(isset($_POST["ftransdomain"])){
+			 echo "<script>	$('div.check_domain').hide(); 
+				$('div.lookfor_domain').hide(); 
+				$('div.registrer_domain').show();
+				document.getElementById('domain_name').value ='".$_POST['ftransdomain']."';
+				document.getElementById('domain_name_1').value ='".$_POST['ftransdomain']."';				
+				$('th.existing').show();
+				document.getElementById('transfer_dns').checked = true;
+				document.getElementById('user_id_registrer').value = '".$_POST['user_id_1']."';
+				document.getElementById('user_id_registrer_1').value = '".$_POST['user_id_1']."';
+				document.getElementById('type_registrer').value = 'Transfer';
+				document.getElementById('type_registrer_2').value = 'Transfer';
+				</script> ";
+			
+		}
 		
 		
 		

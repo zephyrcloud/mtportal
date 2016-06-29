@@ -45,23 +45,30 @@
 							<div class="tab-pane active" id="red">
 								<div id="principal">
 									<table>
-										<col width="100px">
-										<col width="100px">
-										<col width="100px">
+										<col width="300px">
+										<col width="300px">
+										<col width="300px">
+										<col width="300px">
+										<col width="300px">
 										<tr>
 											<th style="border: 1px solid;">Domain registred</th>
 											<th style="border: 1px solid;">Customer</th>
+											<th style="border: 1px solid;">Registred type</th>
 											<th style="border: 1px solid;">Time registred</th>
+											<th style="border: 1px solid;">Action</th>
 										</tr>
 										<?php
-										$select_customers_query = 'SELECT dr.`id` as id ,c.name as name, d.domain_name as domain_name, dr.`time_registrer` as time FROM `domain_request` dr, customer c, domains d WHERE c.id = dr.customer_id and d.id = dr.domain_id';
+										$select_customers_query = 'SELECT dr.`id` as id ,c.name as name, c.id as c_id, d.id as domain_id , d.domain_name as domain_name, dr.`time_registrer` as time , r.registration_name as registred FROM `domain_request` dr, customer c, domains d ,domain_information di , registration r WHERE c.id = dr.customer_id and d.id = dr.domain_id and dr.id = di.domain_request_id and r.id = di.registration_type';
 										$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 											echo "<tr id='tr" . $line['id'] . "'>";
 											echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['domain_name'] . "</span></td>";
 											echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['name'] . "</span></td>";
+											echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['registred'] . "</span></td>";
 											echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['time'] . "</span></td>";
-											echo "</tr>";
+											echo "<td style='border: 1px solid;'><a  href='reportsperuser.php?i=". htmlentities(base64_encode ($line['domain_id']))."&c=".htmlentities(base64_encode ($line['c_id']))."&n=".htmlentities(base64_encode ($line['domain_name']))."&tr=".htmlentities(base64_encode ($line['registred']))."' target='_blank'>See report</a></td>";
+											//echo "<td style='border: 1px solid;'><a id='aRegistrer" . $line['id'] . ",".$line['domain_name']."' href='#'>Registrer</a></td>";
+											echo "</tr>"; 
 										}
 										?>
 									</table>
@@ -70,9 +77,9 @@
 							<div class="tab-pane" id="orange">
 								<div id="quotasPerUser">
 									<table>
-										<col width="100px">
-										<col width="100px">
-										<col width="100px">
+										<col width="300px">
+										<col width="300px">
+										<col width="300px">
 										<tr>
 											<th style="border: 1px solid;">Customer</th>
 											<th style="border: 1px solid;">Username</th>
