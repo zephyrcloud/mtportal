@@ -215,6 +215,9 @@ ini_set('display_errors',1);
 		
 	}
 	
+	if (isset($_POST["cancelEmailsPerUserBtn"])) {
+		echo "<script> $('#emailsPerUserPnl').hide(); $('#tables').hide(); </script> " ;
+	}
 ?>
 
 <html>
@@ -252,7 +255,8 @@ ini_set('display_errors',1);
 					</div>
 					
 					<div id="postcontent">
-					
+						
+						<div id="tables" name="tables">
 						<input id="newUserBtn" name="newUserBtn" type="submit" value="Add user">
 						
 						<!-- DIV Message -->
@@ -357,6 +361,7 @@ ini_set('display_errors',1);
 							?>
 							
 						</table>
+						</div>
 						
 						<br />
 						
@@ -473,12 +478,13 @@ ini_set('display_errors',1);
 		
 		// Funcion asignar email
 		$("a[id^='aEmails']").click(function(event) {
+			$("#tables").hide();
 			$("#appsPerUserPnl").hide();
 			$("#emailsPerUserPnl").show();
 			
 			$id = event.target.id.toString().split("aEmails")[1];
-			$user = $("#spanFirstName".concat($id)).text().concat(" ").concat($("#spanLastName".concat($id)).text());
-			
+			//$user = $("#spanFirstName".concat($id)).text().concat(" ").concat($("#spanLastName".concat($id)).text());
+			$user = $("#spanFirstName".concat($id)).text();
 			if (window.XMLHttpRequest) {
 				// code for IE7+, Firefox, Chrome, Opera, Safari
 				xmlhttp = new XMLHttpRequest();

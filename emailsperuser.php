@@ -60,6 +60,6 @@
 			<br />
 			
 			<input id="saveEmailsPerUserBtn" name="saveEmailsPerUserBtn" type="submit" value="Save emails">
-			<!--<input id="cancelEmailsPerUserBtn" name="cancelEmailsPerUserBtn" type="button" value="Cancel">-->
+			<input id="cancelEmailsPerUserBtn" name="cancelEmailsPerUserBtn" type="submit" value="Cancel">
 		
 		</form>
