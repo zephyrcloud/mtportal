@@ -9,16 +9,19 @@
    <dt_assoc>
     <item key="protocol">XCP</item>
     <item key="object">DOMAIN</item>
-    <item key="response_text">Registration successful</item>
+    <item key="response_text">Invalid format of tech contact.
+Parameter value syntax error
+oxrs:xcp 2005:Parameter value syntax error (FaxType:number:3059474104)</item>
     <item key="action">REPLY</item>
     <item key="attributes">
      <dt_assoc>
-      <item key="admin_email">adams@example.com</item>
-      <item key="id">11186607</item>
+      <item key="admin_email">jbriceno@zephyrcloud.com</item>
+      <item key="id">11199648</item>
+      <item key="forced_pending">11199648</item>
      </dt_assoc>
     </item>
-    <item key="response_code">200</item>
-    <item key="is_success">1</item>
+    <item key="response_code">470</item>
+    <item key="is_success">0</item>
    </dt_assoc>
   </data_block>
  </body>

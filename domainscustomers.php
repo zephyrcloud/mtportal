@@ -42,6 +42,10 @@
 						</form>	
 					</div>
 					
+					
+					
+					<!-- DIV for registrer domain -->
+					
 					<div id= "registrer" hidden>
 					
 						<form action="domainscustomers.php" method="POST">						
@@ -209,6 +213,7 @@
 			include("footer.php");
 		?>
 		
+		<!-- Domain Lookup -->
 		<?php 
 			if($_POST['domainFld']){
 				$xml_name="domain_lookup";
@@ -240,28 +245,20 @@
 				 switch($status){
 					 case 210:
 					 //echo "Available";
-					 case_210_available();
+					 echo " <script> $('#domain_available').hide(); $('#lookupDomain').hide(); $('#registrer').show(); </script>";
 					 break;
 					 case 211:
 					 //echo "Taken";
-					 case_211_unavailable();
+					 echo " <script> $('#lookupDomain').hide(); $('#domain_available').show(); $('#registrer').hide(); </script>";
 					 break;
 				 }
 			}
 		?>
 		
-		<?php 
-			function case_210_available(){
-				echo " <script> $('#domain_available').hide(); $('#lookupDomain').hide(); $('#registrer').show(); </script>";
-			}
-			
-			function case_211_unavailable(){
-				echo " <script> $('#lookupDomain').hide(); $('#domain_available').show(); $('#registrer').hide(); </script>";
-			}
-		?>
 		
+		<!-- Domain Registrer -->
 		<?php
-		// this validate when i registrer a new domain.
+		
 		if(isset($_POST['mail_1'])){
 						
 			$xml_name="domain_registrer";
@@ -293,7 +290,7 @@
 						  <item key="custom_nameservers">1</item>
 						  <item key="f_lock_domain">'.$_POST['lock_domain'].'</item>
 						  <item key="reg_domain"></item>
-						  
+						  <item key="handle">process</item>
 						  <item key="contact_set">
 						   <dt_assoc>';
 							
@@ -498,7 +495,7 @@
 									break;
 									case 2:
 									//owner check
-									$xml.='<item key="technical">
+									$xml.='<item key="tech">
 											 <dt_assoc>
 											  <item key="country">US</item>
 											  <item key="address3">'.$_POST['street_1_1_2'].'</item>
@@ -525,7 +522,7 @@
 				//admin check
 					switch($_POST['aci']){
 						case true:
-						$xml.='<item key="technical">
+						$xml.='<item key="tech">
 							 <dt_assoc>
 							  <item key="country">US</item>
 							  <item key="address3">'.$_POST['street_1_1_2'].'</item>
@@ -544,7 +541,7 @@
 							</item>';
 						break;
 						case false:	
-						$xml.='<item key="technical">
+						$xml.='<item key="tech">
 							 <dt_assoc>
 							  <item key="country">US</item>
 							  <item key="address3">'.$_POST['street_2_2'].'</item>
@@ -567,7 +564,7 @@
 				break;
 				case 3:
 				// owner check
-					$xml.='<item key="technical">
+					$xml.='<item key="tech">
 											 <dt_assoc>
 											  <item key="country">US</item>
 											  <item key="address3">'.$_POST['street_1_1_2'].'</item>
@@ -586,7 +583,7 @@
 											</item>';
 				break;
 				default:
-				$xml.='<item key="technical">
+				$xml.='<item key="tech">
 											 <dt_assoc>
 											  <item key="country">US</item>
 											  <item key="address3">'.$_POST['street_2_4'].'</item>
@@ -641,6 +638,16 @@
 			$message = $status;
 			echo "<script> alert('".$message."'); </script>";
 		}
+		
+		?>
+		
+		<!-- Domain Renew -->
+		<?php
+		
+		?>
+		
+		<!-- Domain Transfer -->
+		<?php
 		
 		?>
 		
