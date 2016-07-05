@@ -125,8 +125,14 @@ class api_opensrs{
 				}*/
 				
 			//$status = $obj->body->data_block->dt_assoc[0]->item[4]->dt_assoc[0]->item[0];
-			$status = $obj->body->data_block->dt_assoc[0]->item[2];
+			if($obj->body->data_block->dt_assoc[0]->item[2] == "200"){
+				$status = "Domain registration successfully completed. Whois Privacy successfully enabled.";
+			}
+			if($obj->body->data_block->dt_assoc[0]->item[6] == "470"){
+				$status = "It had a mistake, please try again.";
+			}
 			$message= $status;
+			//$message= $obj->body->data_block->dt_assoc[0]->item[4];
 			}
 			
 		} else {
