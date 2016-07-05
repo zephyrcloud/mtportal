@@ -56,7 +56,7 @@
 							<table border="1">
 							<tr><th colspan="3">Retrieve Order information</th></tr>
 							<tr><td rowspan="3">From Existing Domain</td>						
-							<td>Previous Domain: <input type="text" name="domain_exits"  ></td>
+							<td>Previous Domain: <input type="text" name="domain_exits" required></td>
 							<tr><td>Username: <input type="text" name="username" id="username" required > </td></tr>
 							<tr><td>Password: <input type="password" name="password" id="password"  required> </td></tr>
 							<tr><th colspan="3"><input type="submit" value="retrieve data"></th></tr>
@@ -92,56 +92,57 @@
 												
 						<table border="1"> 
 						<tr><th colspan="2">Owner Contact Information</th></tr>
-						<tr><td>First Name </td><td><input type="text" id="first_name_1" name="first_name_1" required></td></tr>
-						<tr><td>Last Name </td><td><input type="text" id="last_name_1" name="last_name_1" required></td></tr>
-						<tr><td>Organization Name </td><td><input type="text" id="organization_name_1"  name="organization_name_1" required></td></tr>
-						<tr><td>Street Address </td><td><input type="text" id="street_1" name="street_1" required></td></tr>
-						<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_1" name="street_1_1" ></td></tr>
-						<tr><td>Address 3 [optional] </td><td><input type="text" id="street_1_1_2" name="street_1_1_2" ></td></tr>
-						<tr><td>City </td><td><input type="text" id="city_1" name="city_1" required></td></tr>
-						<tr><td>State </td><td><input type="text" id="state_1" name="state_1" required></td></tr>
+						<tr><td>First Name </td><td><input type="text" id="first_name_12_1" name="first_name_12_1" required></td></tr>
+						<tr><td>Last Name </td><td><input type="text" id="last_name_5_1 " name="last_name_5_1" required></td></tr>
+						<tr><td>Organization Name </td><td><input type="text" id="org_name_2_1"  name="org_name_2_1" required></td></tr>
+						<tr><td>Street Address </td><td><input type="text" id="address1_11_1" name="address1_11_1" required></td></tr>
+						<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_6_1" name="address2_6_1" ></td></tr>
+						<tr><td>Address 3 [optional] </td><td><input type="text" id="address3_1_1" name="address3_1_1" ></td></tr>
+						<tr><td>City </td><td><input type="text" id="city_8_1" name="city_8_1" required></td></tr>
+						<tr><td>State </td><td><input type="text" id="state_4_1" name="state_4_1" required></td></tr>
 						<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-						<tr><td>Postal Code </td><td><input type="text" id="postal_code_1" name="postal_code_1" required></td></tr>
-						<tr><td>Phone Number </td><td><input type="text" id="phone_number_1" name="phone_number_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_number_1" name="fax_number_1" ></td></tr>
-						<tr><td>Email </td><td><input type="email" id="mail_1" name="mail_1" required><br>Must be a current valid address</td></tr>
+						<tr><td>Postal Code </td><td><input type="text" id="postal_code_9_1" name="postal_code_9_1" required></td></tr>
+						<tr><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_1')"; onkeypress= "telephone_extension('phone_3_1')"; onkeyup = "telephone_extension('phone_3_1')"; type="text" id="phone_3_1" name="phone_3_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_10_1" name="fax_10_1" ></td></tr>
+						<tr><td>Email </td><td><input type="email" id="email_7_1" name="email_7_1" required><br>Must be a current valid address</td></tr>
 						</table>
 						
 						<table border="1"> 
 						<tr><th colspan="2">Admin Contact Information</th></tr>
 						<tr><td>Same As Owner Contact Information </td><td><input type="radio" id="aci" name="aci"  onDblClick="uncheckRadio_aci(this)" onclick="checked_aci();"> </td> </tr>
-						<tr class="row_a"><td>First Name </td><td><input type="text" id="first_name_2" name="first_name_2"></td></tr>
-						<tr class="row_a"><td>Last Name </td><td><input type="text" id="last_name_2" name="last_name_2"></td></tr>
-						<tr class="row_a"><td>Organization Name </td><td><input type="text" id="organization_name_2" name="organization_name_2"></td></tr>
-						<tr class="row_a"><td>Street Address </td><td><input type="text" id="street_2" name="street_2"></td></tr>
-						<tr class="row_a"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_2" name="street_1_2"></td></tr>
-						<tr class="row_a"><td>Address 3 [optional] </td><td><input type="text" id="street_2_2" name="street_2_2"></td></tr>
-						<tr class="row_a"><td>City </td><td><input type="text" id="city_2" name="city_2"></td></tr>
-						<tr class="row_a"><td>State </td><td><input type="text" id="state_2" name="state_2"></td></tr>
-						<tr class="row_a"><td>2 Letter Country Code </td><td><select name="country_2"><option id="country" value="1">United State</option></select></td></tr>
-						<tr class="row_a"><td>Postal Code </td><td><input type="text" id="postal_code_2" name="postal_code_2"></td></tr>
-						<tr class="row_a"><td>Phone Number </td><td><input type="text" id="phone_number_2" name="phone_number_2"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr class="row_a"><td>Fax Number[optional] </td><td><input type="text" id="fax_number_2" name="fax_number_2"></td></tr>
-						<tr class="row_a"><td>Email </td><td><input type="email"  id="mail_2" name="mail_2"><br>Must be a current valid address</td></tr>
+						<tr class="row_a"><td>First Name </td><td><input type="text" id="first_name_12_0" name="first_name_12_0" required></td></tr>
+						<tr class="row_a"><td>Last Name </td><td><input type="text" id="last_name_5_0" name="last_name_5_0" required></td></tr>
+						<tr class="row_a"><td>Organization Name </td><td><input type="text" id="org_name_2_0"  name="org_name_2_0" required></td></tr>
+						<tr class="row_a"><td>Street Address </td><td><input type="text" id="address1_11_0" name="address1_11_0" required></td></tr>
+						<tr class="row_a"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_0" name="address2_4_0" ></td></tr>
+						<tr class="row_a"><td>Address 3 [optional] </td><td><input type="text" id="address3_1_0" name="address3_1_0" ></td></tr>
+						<tr class="row_a"><td>City </td><td><input type="text" id="city_8_0" name="city_8_0" required></td></tr>
+						<tr class="row_a"><td>State </td><td><input type="text" id="state_6_0" name="state_6_0" required></td></tr>
+						<tr class="row_a"><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+						<tr class="row_a"><td>Postal Code </td><td><input type="text" id="postal_code_9_0" name="postal_code_9_0" required></td></tr>
+						<tr class="row_a"><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_0')"; onkeypress= "telephone_extension('phone_3_0')"; onkeyup = "telephone_extension('phone_3_0')"; type="text" id="phone_3_0" name="phone_3_0" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr class="row_a"><td>Fax Number[optional] </td><td><input type="text" id="fax_10_0" name="fax_10_0" ></td></tr>
+						<tr class="row_a"><td>Email </td><td><input type="email" id="email_7_0" name="email_7_0" required><br>Must be a current valid address</td></tr>
+						
 						</table>
 						
 						<table border="1">
 						<tr><th colspan="2">Billing Contact Information</th></tr>
 						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci" name="bci" value="1" ></td></tr>
 						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci_1" name="bci" value="2"></td></tr>
-						<tr class="row_b"><td>First Name </td><td><input type="text" id="first_name_3" name="first_name_3"></td></tr>
-						<tr class="row_b"><td>Last Name </td><td><input type="text" id="last_name_3" name="last_name_3"></td></tr>
-						<tr class="row_b"><td>Organization Name </td><td><input type="text" id="organization_name_3" name="organization_name_3"></td></tr>
-						<tr class="row_b"><td>Street Address </td><td><input type="text" id="street_3" name="street_3"></td></tr>
-						<tr class="row_b"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_3" name="street_1_3"></td></tr>
-						<tr class="row_b"><td>Address 3 [optional] </td><td><input type="text" id="street_2_3" name="street_2_3"></td></tr>
-						<tr class="row_b"><td>City </td><td><input type="text" id="city_3" name="city_3"></td></tr>
-						<tr class="row_b"><td>State </td><td><input type="text" id="state_3" name="state_3"></td></tr>
-						<tr class="row_b"><td>2 Letter Country Code </td><td><select name="country_3"><option id="country" value="1">United State</option></select></td></tr>
-						<tr class="row_b"><td>Postal Code </td><td><input type="text" id="postal_code_3" name="postal_code_3"></td></tr>
-						<tr class="row_b"><td>Phone Number </td><td><input type="text" id="phone_number_3" name="phone_number_3"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr class="row_b"><td>Fax Number[optional] </td><td><input type="text" id="fax_number_3" name="fax_number_3"></td></tr>
-						<tr class="row_b"><td>Email </td><td><input type="email"  id="mail_3" name="mail_3"><br>Must be a current valid address</td></tr>
+						<tr class="row_b"><td>First Name </td><td><input type="text" id="first_name_12_3" name="first_name_12_3" required></td></tr>
+						<tr class="row_b"><td>Last Name </td><td><input type="text" id="last_name_5_3" name="last_name_5_3" required></td></tr>
+						<tr class="row_b"><td>Organization Name </td><td><input type="text" id="org_name_2_3"  name="org_name_2_3" required></td></tr>
+						<tr class="row_b"><td>Street Address </td><td><input type="text" id="address1_11_3" name="address1_11_3" required></td></tr>
+						<tr class="row_b"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_6_3" name="address2_6_3" ></td></tr>
+						<tr class="row_b"><td>Address 3 [optional] </td><td><input type="text" id="address3_1_3" name="address3_1_3" ></td></tr>
+						<tr class="row_b"><td>City </td><td><input type="text" id="city_8_3" name="city_8_3" required></td></tr>
+						<tr class="row_b"><td>State </td><td><input type="text" id="state_4_3" name="state_4_3" required></td></tr>
+						<tr class="row_b"><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+						<tr class="row_b"><td>Postal Code </td><td><input type="text" id="postal_code_9_3" name="postal_code_9_3" required></td></tr>
+						<tr class="row_b"><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_3')"; onkeypress= "telephone_extension('phone_3_3')"; onkeyup = "telephone_extension('phone_3_3')"; type="text" id="phone_3_3" name="phone_3_3" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr class="row_b"><td>Fax Number[optional] </td><td><input type="text" id="fax_10_3" name="fax_10_3" ></td></tr>
+						<tr class="row_b"><td>Email </td><td><input type="email" id="email_7_3" name="email_7_3" required><br>Must be a current valid address</td></tr>
 						</table>
 						
 						<table border="1">
@@ -149,32 +150,32 @@
 						<tr><td>Same As Billing Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci" name="tci" value="1" ></td></tr>
 						<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_1" name="tci" value="2" ></td></tr>
 						<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_2" name="tci" value="3" ></td></tr>
-						<tr class="row_t"><td>First Name </td><td><input type="text" id="first_name_4" name="first_name_4" value="Cesar" ></td></tr>
-						<tr class="row_t"><td>Last Name </td><td><input type="text" id="last_name_4" name="last_name_4" value= "Feghali" ></td></tr>
-						<tr class="row_t"><td>Organization Name </td><td><input type="text" id="organization_name_4" name="organization_name_4" value="Scorpico Interactive, Inc." ></td></tr>
-						<tr class="row_t"><td>Street Address </td><td><input type="text" id="street_4" name="street_4" value="13499 Biscayne blvd 1101" ></td></tr>
-						<tr class="row_t"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="street_1_4" name="street_1_4"></td></tr>
-						<tr class="row_t"><td>Address 3 [optional] </td><td><input type="text" id="street_2_4" name="street_2_4" ></td></tr>
-						<tr class="row_t"><td>City </td><td><input type="text" id="city_4" name="city_4" value="North Miami"></td></tr>
-						<tr class="row_t"><td>State </td><td><input type="text" id="state_4" name="state_4" value="FL"></td></tr>
-						<tr class="row_t"><td>2 Letter Country Code </td><td><select name="country_4"><option id="country" value="1">United State</option></select></td></tr>
-						<tr class="row_t"><td>Postal Code </td><td><input type="text" id="postal_code_4" name="postal_code_4" value="33181" ></td></tr>
-						<tr class="row_t"><td>Phone Number </td><td><input type="text" id="phone_number_4" name="phone_number_4" value="305-753-3293"><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-						<tr class="row_t"><td>Fax Number[optional] </td><td><input type="text" id="fax_number_4" name="fax_number_4" value="305-947-4104" ></td></tr>
-						<tr class="row_t"><td>Email </td><td><input type="email" id="mail_4" name="mail_4" value="cesar@scorpico.com" ><br>Must be a current valid address</td></tr>
+						<tr class="row_t"><td>First Name </td><td><input type="text" id="first_name_12_2 " name="first_name_12_2 " required></td></tr>
+						<tr class="row_t"><td>Last Name </td><td><input type="text" id="last_name_6_2" name="last_name_6_2" required></td></tr>
+						<tr class="row_t"><td>Organization Name </td><td><input type="text" id="org_name_2_2"  name="org_name_2_2" required></td></tr>
+						<tr class="row_t"><td>Street Address </td><td><input type="text" id="address1_11_2" name="address1_11_2" required></td></tr>
+						<tr class="row_t"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_2 " name="address2_4_2 " ></td></tr>
+						<tr class="row_t"><td>Address 3 [optional] </td><td><input type="text" id="address3_1_2" name="address3_1_2" ></td></tr>
+						<tr class="row_t"><td>City </td><td><input type="text" id="city_8_2" name="city_8_2" required></td></tr>
+						<tr class="row_t"><td>State </td><td><input type="text" id="state_5_2" name="state_5_2" required></td></tr>
+						<tr class="row_t"><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+						<tr class="row_t"><td>Postal Code </td><td><input type="text" id="postal_code_9_2" name="postal_code_9_2" required></td></tr>
+						<tr class="row_t"><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_2')"; onkeypress= "telephone_extension('phone_3_2')"; onkeyup = "telephone_extension('phone_3_2')"; type="text" id="phone_3_2" name="phone_3_2" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+						<tr class="row_t"><td>Fax Number[optional] </td><td><input type="text" id="fax_10_2" name="fax_10_2" ></td></tr>
+						<tr class="row_t"><td>Email </td><td><input type="email" id="email_7_2" name="email_7_2" required><br>Must be a current valid address</td></tr>
 						</table>
-					
+
 						<table border="1">
 						<tr><th colspan="2">DNS Information</th></tr>
 						<tr><th colspan="2" hidden class="existing" > Use existing DNS settings <input type="radio" name="dns" id="transfer_dns" value="transfer_dns"> <br> (leave your DNS settings as they are) </th></tr>
 						<tr><td>Use your own DNS servers <input type="radio" name="dns" value="own_dns"> </td><td>Use our DNS <input checked type="radio" name="dns" value="our_dns"></td></tr>
 						<tr><td> 
-						Primary   <input type="text" name="primary"> <br>
-						Secondary <input type="text" name="secondary"> <br>
-						Third  	  <input type="text" name="third"> <br>
-						Fourth 	  <input type="text" name="fourth"> <br>
-						Fifth 	  <input type="text" name="fifth"> <br>
-						Sixth 	  <input type="text" name="sixth"> <br>
+						Primary   <input type="text" id="name_0"> <br>
+						Secondary <input type="text" id="name_1"> <br>
+						Third  	  <input type="text" id="name_2"> <br>
+						Fourth 	  <input type="text" id="name_3"> <br>
+						Fifth 	  <input type="text" id="name_4"> <br>
+						Sixth 	  <input type="text" id="name_5"> <br>
 						</td>
 						<td width="150px" > Apply Template <select><option id="template" value="1">Default</option></select> 
 						<br>
@@ -196,6 +197,8 @@
 						<!-- <input type="submit" value="Restore Values"> --> </th></tr>
 						</table>
 						</form>
+					
+					</div>
 					
 					</div>
 					
@@ -650,25 +653,88 @@
 		<?php
 		
 		?>
+		<!-- retreive data -->
+		<?php
+// when i put a user and password and retreive data. 
+if(isset($_POST['username']) && isset($_POST['password'])){
+
+$xml='<OPS_envelope>
+    <header>
+        <version>0.9</version>
+    </header>
+    <body>
+        <data_block>
+            <dt_assoc>
+                <item key="protocol">XCP</item>
+                <item key="object">DOMAIN</item>
+               <item key="action">GET</item>
+                <item key="attributes">
+                    <dt_assoc>
+                        <item key="clean_ca_subset">1</item>
+                        <item key="domain">'.$_POST['domain_exits'].'</item>
+						 <item key="reg_username">'.$_POST['username'].'</item>
+						<item key="reg_password">'.$_POST['password'].'</item>
+                        <item key="type">all_info</item>
+                    </dt_assoc>
+                </item>
+                <item key="registrant_ip">10.0.62.128</item>
+            </dt_assoc>
+        </data_block>
+    </body>
+</OPS_envelope>';
+
+//echo $api->xml_output($xml,"retreive");
+		if (file_exists("retreive.xml")) {
+						
+			// GET THE THINGS FROM THE DATA BLOCK
+			if(!$obj = simplexml_load_file("retreive.xml")){
+				$message= "Error!";
+			} else {
+				
+				// 0 admin , 1 owner , 2 tech ,3 billing
+				if($obj->body->data_block->dt_assoc->item[5] == 415){
+					echo $obj->body->data_block->dt_assoc->item[5];
+				}else{
+					for($j=0; $j < 4 ; $j++ ){
+						
+						echo "<br>";
+						$i=0;
+						foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[1]->dt_assoc->item[$j]->dt_assoc -> item as $items){
+							//echo nl2br($items['key'] ."_".$i."_".$j.' VALUE:' . $items. "\n"); //owner
+							echo "<script> document.getElementById('".$items['key']."_".$i."_".$j."').value = '".$items ."'; </script>";
+							$i++;
+						}
+					}
+					$i=0;
+					foreach ($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[10]->dt_array->item as $items){
+						//echo nl2br( 'KEY:' . $items['key']. ' '. 'VALUE:' . $items . "\n");
+							foreach($items ->dt_assoc ->item as $item){
+								if($item['key'] == "name"){
+								echo "<script> document.getElementById('".$item['key']."_".$i."').value = '".$item ."'; </script>";
+									//echo nl2br( 'KEY:' . $item['key']. ' '. 'VALUE:' . $item . "\n");
+								}
+							}
+						$i++;
+					}
+				}
+			}
+		}
+}
+?>
 		
 		<script>
-		/*var id=document.getElementById("id_user").value;
-		document.getElementById("user_id").value = id;
-		document.getElementById("user_id_1").value = id;
-		$("a[id^='aRegistrer']").click(function(event) {			
-			$id = event.target.id.toString().split("aRegistrer")[1];
-			var domain = $id.split(",")
-			document.getElementById("lookfor_domain").style.display = 'none';
-			document.getElementById("Registrer_domain").style.display = 'block';
-			document.getElementById("id_domain").value = domain[0];
-			document.getElementById("id_domain_1").value = domain[0];
-			document.getElementById("domain_name").value = domain[1];
-			document.getElementById("domain_name_1").value = domain[1];
-			document.getElementById("user_id_registrer").value = id;
-			document.getElementById("user_id_registrer_1").value = id;
-			//alert($id);
-		});*/
-		function checked_aci(){
+function telephone_extension(id) { 
+  var m = document.getElementById(id).value;
+  var expreg = /^\+([0-9]){1}([\.])([0-9])*$/;
+  
+  if(expreg.test(m))
+	//show
+	$('#submit_boton').show();
+  else
+	$('#submit_boton').hide();  
+    //hide
+} 
+function checked_aci(){
 			var check = document.getElementById("aci").checked;
 			if(check==true){
 				$('tr.row_a').hide();
@@ -723,7 +789,6 @@
 				//document.getElementById("row[]").style.display = 'none';
 			}
 		}
-		
 		function password_validate(){
 			var p= document.getElementById("Registrant_Password").value;
 			var cp=document.getElementById("Confirm_Password").value;
@@ -738,7 +803,7 @@
 				}
 		}
 		
-		</script>
+</script>
 		
 	</body>
 </html>
