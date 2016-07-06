@@ -19,81 +19,81 @@
         <item key="admin">
          <dt_assoc>
           <item key="country">US</item>
-          <item key="address3"></item>
-          <item key="org_name">zephyrcloud</item>
-          <item key="phone">+1.30303555303</item>
-          <item key="address2"></item>
-          <item key="last_name">briceno</item>
-          <item key="state">california</item>
-          <item key="email">jbriceno@zephyrcloud.com</item>
-          <item key="city">FL</item>
-          <item key="postal_code">80800</item>
-          <item key="fax"></item>
-          <item key="address1">street</item>
-          <item key="first_name">john</item>
+          <item key="address3">Admin</item>
+          <item key="org_name">Example Inc.</item>
+          <item key="phone">+1.4165550123x1812</item>
+          <item key="address2">Suite 100</item>
+          <item key="last_name">Adams</item>
+          <item key="state">CA</item>
+          <item key="email">adams@example.com</item>
+          <item key="city">Santa Clara</item>
+          <item key="postal_code">90210</item>
+          <item key="fax">+1.4165550125</item>
+          <item key="address1">32 Oak Street</item>
+          <item key="first_name">Adler</item>
          </dt_assoc>
         </item>
         <item key="owner">
          <dt_assoc>
           <item key="country">US</item>
-          <item key="address3"></item>
-          <item key="org_name">zephyrcloud</item>
-          <item key="phone">+1.30303555303</item>
-          <item key="state">california</item>
-          <item key="last_name">briceno</item>
-          <item key="address2"></item>
-          <item key="email">jbriceno@zephyrcloud.com</item>
-          <item key="city">FL</item>
-          <item key="postal_code">80800</item>
-          <item key="fax"></item>
-          <item key="address1">street</item>
-          <item key="first_name">john</item>
+          <item key="address3">Owner</item>
+          <item key="org_name">Example Inc.</item>
+          <item key="phone">+1.4165550123x1902</item>
+          <item key="state">CA</item>
+          <item key="last_name">Ottway</item>
+          <item key="address2">Suite 500</item>
+          <item key="email">ottway@example.com</item>
+          <item key="city">SomeCity</item>
+          <item key="postal_code">90210</item>
+          <item key="fax">+1.4165550124</item>
+          <item key="address1">32 Oak Street</item>
+          <item key="first_name">Owen</item>
          </dt_assoc>
         </item>
         <item key="tech">
          <dt_assoc>
           <item key="country">US</item>
           <item key="address3"></item>
-          <item key="org_name">zephyrcloud</item>
-          <item key="phone">+1.30303555303</item>
+          <item key="org_name">Scorpico Interactive, Inc.</item>
+          <item key="phone">305-753-3293</item>
           <item key="address2"></item>
-          <item key="state">california</item>
-          <item key="last_name">briceno</item>
-          <item key="email">jbriceno@zephyrcloud.com</item>
-          <item key="city">FL</item>
-          <item key="postal_code">80800</item>
-          <item key="fax"></item>
-          <item key="address1">street</item>
-          <item key="first_name">john</item>
+          <item key="state">FL</item>
+          <item key="last_name">Feghali</item>
+          <item key="email">cesar@scorpico.com</item>
+          <item key="city">North Miami</item>
+          <item key="postal_code">33181</item>
+          <item key="fax">305-947-4104</item>
+          <item key="address1">13499 Biscayne blvd 1101</item>
+          <item key="first_name">Cesar</item>
          </dt_assoc>
         </item>
         <item key="billing">
          <dt_assoc>
           <item key="country">US</item>
-          <item key="address3"></item>
-          <item key="org_name">zephyrcloud</item>
-          <item key="phone">+1.30303555303</item>
-          <item key="state">california</item>
-          <item key="last_name">briceno</item>
-          <item key="address2"></item>
-          <item key="email">jbriceno@zephyrcloud.com</item>
-          <item key="city">FL</item>
-          <item key="postal_code">80800</item>
-          <item key="fax"></item>
-          <item key="address1">street</item>
-          <item key="first_name">john</item>
+          <item key="address3">Billing</item>
+          <item key="org_name">Example Inc.</item>
+          <item key="phone">+1.4165550123x1248</item>
+          <item key="state">CA</item>
+          <item key="last_name">Burton</item>
+          <item key="address2">Suite 200</item>
+          <item key="email">burton@example.com</item>
+          <item key="city">Santa Clara</item>
+          <item key="postal_code">90210</item>
+          <item key="fax">+1.4165550136</item>
+          <item key="address1">32 Oak Street</item>
+          <item key="first_name">Bill</item>
          </dt_assoc>
         </item>
        </dt_assoc>
       </item>
-      <item key="registry_updatedate">2016-06-29 19:19:30</item>
+      <item key="registry_updatedate">2016-07-03 21:06:55</item>
       <item key="sponsoring_rsp">1</item>
-      <item key="registry_createdate">2016-06-29 19:19:30</item>
+      <item key="registry_createdate">2016-07-03 21:06:55</item>
       <item key="affiliate_id"></item>
-      <item key="expiredate">2017-06-29 19:19:30</item>
+      <item key="expiredate">2017-07-03 21:06:55</item>
       <item key="let_expire">0</item>
       <item key="tld_data"></item>
-      <item key="registry_expiredate">2017-06-29 19:19:30</item>
+      <item key="registry_expiredate">2017-07-03 21:06:55</item>
       <item key="nameserver_list">
        <dt_array>
         <item key="0">
@@ -107,13 +107,6 @@
          <dt_assoc>
           <item key="name">ns2.systemdns.com</item>
           <item key="sortorder">2</item>
-          <item key="ipaddress"></item>
-         </dt_assoc>
-        </item>
-        <item key="2">
-         <dt_assoc>
-          <item key="name">ns3.systemdns.com</item>
-          <item key="sortorder">3</item>
           <item key="ipaddress"></item>
          </dt_assoc>
         </item>

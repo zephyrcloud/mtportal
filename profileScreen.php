@@ -20,7 +20,7 @@
 
 <html>
 	<head>
-		<title>Home</title>
+		<title>Profile Screen</title>
 		<link href="style/style.css" rel="stylesheet" type="text/css">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	</head>
@@ -38,7 +38,7 @@
 					
 					<div id="postcontent" align="center">
 						
-						<form id="loginFrm" method="POST" action="profileScreen.php" style="text-align: center; width: 250px;">
+						<form id="loginFrm" method="POST" action="intoDomain.php" style="text-align: center; width: 250px;">
 							<div>
 								<img style="margin-top: 10px; margin-bottom: 10px;" src="images/manage.png" alt="">
 							</div>
@@ -58,19 +58,18 @@
 							<?php
 							echo "<div><span style='font-style: italic; color: red;'> * User Name and Password are case sensitive </span></div>";
 							echo "<div><span style='font-style: italic; color: red;'> * Do not put www. as part of your domain name </span></div>";
-							?>
-						</form>
-							
-						<?php
-								
-								/*if($error == "401"){
-									echo "<div><span style='font-style: italic; color: red;'>Username and/or password incorrect</span></div>";
+							if($error == "401"){
+									echo "<div><span style='font-style: italic; color: red;'>Username and/or password incorrect and/or domain invalid or not exists </span></div>";
 									$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_user,id_tableModified) VALUES('".$ip_capture->getRealIP()."',1,10,2,4)";
 									$insert_result = mysql_query($insert_query);					
-									$subject="Login failed";
-									$body_message="Login Failed From IP address: ". $ip_capture->getRealIP() ;
-									//$email->enviar_correo($subject,$body_message);
-								}*/
+								}
+							?>
+							
+						</form>
+					</div>
+					
+				<!--<div id="managament" hidden >
+					<?php
 								if($_POST['passwordFldPass'] && $_POST['usernameFldUser']  && $_POST['domainFldUser']){
 									$xml='<OPS_envelope>
 										<header>
@@ -97,7 +96,7 @@
 										</body>
 									</OPS_envelope>';
 
-									//echo $api->xml_output($xml,"domain_list");
+									echo $api->xml_output($xml,"domain_list");
 									
 									if (file_exists("domain_list.xml")) {
 								
@@ -105,19 +104,24 @@
 										if(!$obj = simplexml_load_file("domain_list.xml")){
 											$message= "Error!";
 										} else {
-										echo '<table border="1"><tr><th>Domain information</th><th>Expire Day</th></tr><tr>';
 										
 											// 0 admin , 1 owner , 2 tech ,3 billing
-											if($obj->body->data_block->dt_assoc->item[5] == 415){
-												echo $obj->body->data_block->dt_assoc->item[5];
+											if($obj->body->data_block->dt_assoc->item[3] == "415"){
+												//echo $obj->body->data_block->dt_assoc->item[5];
+												echo "<div><span style='font-style: italic; color: red;'>Username and/or password and/or domain incorrect or not created </span></div>";
 											}else{
+												echo "<script> $('#postcontent').hide(); $('#managament').show(); </script>";
 												$i=0;
+												echo "<div style='text-align: center;' ><h2><label id='domain_name' > Your are in the ".$_POST['domainFldUser']." domain </label></h2></div>";
 												$count = $obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[1];
+												echo '<table border="1">';
+												echo '<tr><th colspan="2">You got '.$count.' domains, click <a href="#" onclick="show();">here</a> to show the table or <a href="#" onclick="hide();">here</a> to hide it</th></tr>';
+												echo '<tr hidden class="inf"><th>Domain information</th><th>Expire Day</th></tr>';												
 												//$obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[3]->dt_array->item --> list of domains that the user has.
 												for($j=0; $j < $count ;$j++){
 													foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_array->item[$j]->dt_assoc->item as $items){
 														//echo nl2br($items['key'] . ' VALUE:' . $items. "\n\n"); //owner
-														echo '<td>'.$items['key'].'</td>';
+														echo '<tr hidden class="inf"><td><a id="aEdit' . $items['key'] . '" href="#">'.$items['key'].'</td>';
 													}
 													foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_array->item[$j]->dt_assoc->item->dt_assoc->item as $items){
 														if($items['key'] == "expiredate"){
@@ -136,9 +140,8 @@
 									
 								}
 
-							?>	
-							
-					</div>
+					?>	
+					</div> -->
 					
 				</div>
 			
@@ -150,5 +153,20 @@
 			include("footer.php");
 		?>
 		
+		
+		<script>
+		function hide(){
+			$('tr.inf').hide();
+		}
+		
+		function show(){
+			$('tr.inf').show();
+		}
+		
+		$("a[id^='aEdit']").click(function(event) {
+			$id = event.target.id.toString().split("aEdit")[1];
+			$("#domain_name").val($id);
+		});
+		</script>
 	</body>
 </html>
