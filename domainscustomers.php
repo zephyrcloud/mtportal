@@ -41,6 +41,7 @@
 						<form method="POST" action="domainscustomers.php">
 							Lookup Domain: <input id="domainFld" name="domainFld" type="text" required="required"><br />
 							<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Check Available">
+							<input type="text" name="user_id_registrer_1" id="user_id_registrer_1" readonly hidden >
 						</form>	
 						<br>
 						<a href="profileScreen.php" target="_BLANK"> Click here for going to the screen profile </a>
@@ -52,10 +53,8 @@
 					
 					<div id= "registrer" hidden>
 					
-						<form action="domainscustomers.php" method="POST">						
+							<form action="domainscustomers.php" method="POST">						
 							<input type="text" name="id_domain" id="id_domain" hidden value="<?php echo $_POST['domainFld']; ?>"  >
-							<input type="text" name="domain_name_1" id="domain_name_1" readonly hidden >
-							<input type="text" name="type_registrer_2" id="type_registrer_2" hidden >
 							
 							<table border="1">
 							<tr><th colspan="3">Retrieve Order information</th></tr>
@@ -203,6 +202,9 @@
 						<!-- <input type="submit" value="Restore Values"> --> </th></tr>
 						</table>
 						</form>
+						
+					
+						
 					
 					</div>
 					
@@ -254,11 +256,40 @@
 				 switch($status){
 					 case 210:
 					 //echo "Available";
-					 echo " <script> $('#domain_available').hide(); $('#lookupDomain').hide(); $('#registrer').show(); </script>";
+							// look for the qoutas for the 
+							$quota=0;
+							$select_customers_query = 'SELECT `quota_domain` FROM `customer` WHERE `id` = '.$_POST['user_id_registrer_1'];
+							$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+											$quota=$line['quota_domain'];
+							}
+							
+							// look for the table of create domains if the user has domains and count item
+							$counter=0;
+							$select_customers_query = 'SELECT COUNT(*) as counter FROM `created_domains` WHERE `customer_id` ='.$_POST['user_id_registrer_1'];
+							$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+											$counter=$line['counter'];
+							}
+							
+							// Asking if qoutas is minus to counter
+							if($quota > $counter){
+								//if true, permit the div
+								//echo "true";
+								echo " <script> $('#domain_available').hide(); $('#lookupDomain').hide(); $('#registrer').show(); </script>";					
+							}else{
+								// show a message or redirect to principal look for domain
+								echo " <script> alert('You over the quota and do not have permited to regitrer more domains, please contact the administrator'); </script>";
+								//echo "false";
+							}
+							
+
 					 break;
 					 case 211:
 					 //echo "Taken";
 					 //echo " <script> $('#lookupDomain').hide(); $('#domain_available').show(); $('#registrer').hide(); </script>";
+					 echo " <script> alert('This domain has been taken , please try other domain'); </script>";
+								
 					 break;
 				 }
 			}
@@ -350,19 +381,18 @@
 			//owner
 			$xml.=	'<item key="owner">
 						 <dt_assoc>
-						  <item key="country">US</item>
-						  <item key="address3">'.$_POST['address3_1_0'].'</item>
-						  <item key="org_name">'.$_POST['org_name_2_0'].'</item>
-						  <item key="phone">'.$_POST['phone_3_0'].' </item>
-						  <item key="state">'.$_POST['state_6_0'].'</item>
-						  <item key="address2">'.$_POST['address2_4_0'].'</item>
-						  <item key="last_name">'.$_POST['last_name_5_0'].'</item>
-						  <item key="email"> '.$_POST['email_7_0'].'</item>
-						  <item key="city">'.$_POST['city_8_0'].'</item>
-						  <item key="postal_code">'.$_POST['postal_code_9_0'].'</item>
-						  <item key="fax">'.$_POST['fax_10_0'].'</item>
-						  <item key="address1">'.$_POST['address1_11_0'].'</item>
-						  <item key="first_name">'.$_POST['first_name_12_0'].'</item>
+						  <item key="address3">'.$_POST['address3_1_1'].'</item>
+						  <item key="org_name">'.$_POST['org_name_2_1'].'</item>
+						  <item key="phone">'.$_POST['phone_3_1'].' </item>
+						  <item key="state">'.$_POST['state_4_1'].'</item>
+						  <item key="address2">'.$_POST['address2_6_1'].'</item>
+						  <item key="last_name">'.$_POST['last_name_5_1'].'</item>
+						  <item key="email"> '.$_POST['email_7_1'].'</item>
+						  <item key="city">'.$_POST['city_8_1'].'</item>
+						  <item key="postal_code">'.$_POST['postal_code_9_1'].'</item>
+						  <item key="fax">'.$_POST['fax_10_1'].'</item>
+						  <item key="address1">'.$_POST['address1_11_1'].'</item>
+						  <item key="first_name">'.$_POST['first_name_12_1'].'</item>
 						 </dt_assoc>
 						</item>';  
 			 
@@ -701,6 +731,10 @@
 			// log for knowing who made a registrer to new domain.
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',9,17,4,".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
 			$insert_result = mysql_query($insert_query);
+			
+			// insert registrer on db for auditory
+			$insert_query = "INSERT INTO `created_domains`(`customer_id`, `domain`) VALUES (".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
+			$insert_result = mysql_query($insert_query);
 		}
 		
 		?>
@@ -780,12 +814,14 @@
 						}
 					}
 				}
+		
 		}
 		?>
 		
 		<script>
 		var id = document.getElementById('id_user').value;
-		document.getElementById('user_id_registrer').value = id;		
+		document.getElementById('user_id_registrer').value = id;	
+		document.getElementById('user_id_registrer_1').value = id;			
 		function telephone_extension(id) { 
 		  var m = document.getElementById(id).value;
 		  var expreg = /^\+([0-9]){1}([\.])([0-9])*$/;

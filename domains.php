@@ -51,22 +51,25 @@
 										<col width="300px">
 										<col width="300px">
 										<tr>
-											<th style="border: 1px solid;">Domain registred</th>
-											<th style="border: 1px solid;">Customer</th>
-											<th style="border: 1px solid;">Registred type</th>
+											<th style="border: 1px solid;">Customer name</th>
+											<th style="border: 1px solid;">Domain</th>
 											<th style="border: 1px solid;">Time registred</th>
 											<th style="border: 1px solid;">Action</th>
+											<th style="border: 1px solid;">Result</th>
 										</tr>
 										<?php
-										$select_customers_query = 'SELECT dr.`id` as id ,c.name as name, c.id as c_id, d.id as domain_id , d.domain_name as domain_name, dr.`time_registrer` as time , r.registration_name as registred FROM `domain_request` dr, customer c, domains d ,domain_information di , registration r WHERE c.id = dr.customer_id and d.id = dr.domain_id and dr.id = di.domain_request_id and r.id = di.registration_type';
+										$select_customers_query = 'SELECT `timeStamp` as time , c.name as name , at.action_name as action , r.result_name as result, `domain_name` as domain 
+										FROM `log` l , customer c , action_type at , table_modified tm, result r 
+										WHERE `domain_name` NOT LIKE "NULL" AND l.id_user = c.id AND l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id';
 										$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 											echo "<tr id='tr" . $line['id'] . "'>";
-											echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['domain_name'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['name'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['registred'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['time'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><a  href='reportsperuser.php?i=". htmlentities(base64_encode ($line['domain_id']))."&c=".htmlentities(base64_encode ($line['c_id']))."&n=".htmlentities(base64_encode ($line['domain_name']))."&tr=".htmlentities(base64_encode ($line['registred']))."' target='_blank'>See report</a></td>";
+											echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['name'] . "</span></td>";
+											echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['domain'] . "</span></td>";
+											echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['time'] . "</span></td>";
+											echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['action'] . "</span></td>";
+											echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+											
 											//echo "<td style='border: 1px solid;'><a id='aRegistrer" . $line['id'] . ",".$line['domain_name']."' href='#'>Registrer</a></td>";
 											echo "</tr>"; 
 										}
@@ -131,7 +134,7 @@
 							//echo nl2br("Query = " .$update_user_query . "\n");
 							$update_user_result = mysql_query($update_user_query);
 						}
-						
+						echo "<script> alert('update quotas succesfully'); </script>";
 					}
 					?>
 					</div>	<!-- here ends the container -->		
