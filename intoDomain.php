@@ -1,6 +1,5 @@
 <?php
 
-
 	// Connect to database
 	include("config/connection.php");
 	include("api_opensrs.php");
@@ -20,18 +19,20 @@
 	
 	$_SESSION['pass'] = $_POST['passwordFldPass'];
 	$_SESSION['user'] = $_POST['usernameFldUser'];
-	$_SESSION['domain'] = $_POST['domainFldUser'];
+	
+	//$_SESSION['domain'] = $_POST['domainFldUser'];
+	//$_SESSION['domain'] = html_entity_decode(base64_decode($_GET['domain']));
 	
 ?>
 
 
 <html>
 	<head>
-		<title>Profile Screen</title>
+		<title>Domain manager</title>
 		<link href="style/style.css" rel="stylesheet" type="text/css">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	</head>
-	<body>
+	<body >
 		
 		<?php
 			include("header.php");
@@ -45,7 +46,7 @@
 					
 					<div id="postcontent" align="center">
 							 <table border="1">
-								<tr><th colspan="5"><h2 style="color:#FFFFFF">Your are logged with the <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser'];}else{echo $_SESSION['domain'];} ?> domain </h2></th></tr>
+								<tr><th colspan="5"><h2 style="color:#FFFFFF">Your are logged with the <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> domain </h2></th></tr>
 								<td><a href="#" onclick="show_organization();" >Organization</a></td>
 								<td><a href="#" onclick="show_admin();" >Admin</a></td>
 								<td><a href="#" onclick="show_billing();" >Billing</a></td>
@@ -53,12 +54,11 @@
 								<td><a href="#" onclick="show_renew();" >Renew this domain</a></td>
 								<!--<td><a href="#" onclick="show_transfer();" >Transfer domains</a></td> -->
 							 </table>
-																											
 
 						<?php
 						
 							if(isset($_POST['passwordFldPass']) && isset($_POST['usernameFldUser'])  && isset($_POST['domainFldUser'])){
-										
+										$_SESSION['user_id'] = $_POST['user_id'];
 										$xml='<OPS_envelope>
 											<header>
 												<version>0.9</version>
@@ -84,12 +84,32 @@
 											</body>
 										</OPS_envelope>';
 										
-										echo $api->xml_output($xml,"domain_list");
+										echo $api->xml_output($xml,"domain_list_".$_POST['user_id']);
+										
+										if (file_exists("domain_list_".$_POST['user_id'].".xml")) {
+									
+											// GET THE THINGS FROM THE DATA BLOCK
+											if(!$obj = simplexml_load_file("domain_list_".$_POST['user_id'].".xml")){
+												$message= "Error!";
+											} else {
+											 
+												// 0 admin , 1 owner , 2 tech ,3 billing
+												if($obj->body->data_block->dt_assoc->item[3] == "415"){
+													//echo $obj->body->data_block->dt_assoc->item[5];
+													header("Location: profileScreen.php?error=401");
+												}else{
+													// log
+													$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',12,20,4,".$_POST['user_id'].",'".$_POST['domainFldUser']."')";
+													$insert_result = mysql_query($insert_query);
+												}
+												
+											}
+										}
 										
 							}
 							
 							if(isset($_GET['domain'])){
-								$_SESSION['domain'] = html_entity_decode(base64_decode($_GET['domain']));
+								//$_SESSION['domain'] = html_entity_decode(base64_decode($_GET['domain']));
 								$xml='<OPS_envelope>
 												<header>
 													<version>0.9</version>
@@ -103,7 +123,7 @@
 															<item key="attributes">
 																<dt_assoc>
 																	<item key="clean_ca_subset">1</item>
-																	<item key="domain">'.$_SESSION['domain'].'</item>
+																	<item key="domain">'.html_entity_decode(base64_decode($_GET['domain'])).'</item>
 																	<item key="type">list</item>
 																</dt_assoc>
 															</item>
@@ -113,8 +133,10 @@
 												</body>
 											</OPS_envelope>';
 
-											echo $api->xml_output($xml,"domain_list");
-											$obj = simplexml_load_file("domain_list.xml");
+											echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
+											
+											$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',13,21,4,".$_SESSION['user_id'].",'".html_entity_decode(base64_decode($_GET['domain']))."')";
+											$insert_result = mysql_query($insert_query);
 											
 													
 								}
@@ -146,11 +168,11 @@
 										</body>
 									</OPS_envelope>';
 									
-									echo $api->xml_output($xml,"renew_domain");
-									if (file_exists("renew_domain.xml")) {
+									echo $api->xml_output($xml,"renew_domain_".$_SESSION['user_id']);
+									if (file_exists("renew_domain_".$_SESSION['user_id'].".xml")) {
 									
 											// GET THE THINGS FROM THE DATA BLOCK
-											if(!$obj = simplexml_load_file("renew_domain.xml")){
+											if(!$obj = simplexml_load_file("renew_domain_".$_SESSION['user_id'].".xml")){
 												$message= "Error!";
 											} else {
 												if($obj->body->data_block->dt_assoc->item[4]=="Command completed successfully"){
@@ -173,7 +195,7 @@
 																<item key="attributes">
 																	<dt_assoc>
 																		<item key="clean_ca_subset">1</item>
-																		<item key="domain">'.$_SESSION['domain'].'</item>
+																		<item key="domain">'.$_POST['domainName'].'</item>
 																		 <item key="reg_username">'.$_SESSION['user'].'</item>
 																		<item key="reg_password">'.$_SESSION['pass'].'</item>
 																		<item key="type">list</item>
@@ -185,85 +207,18 @@
 													</body>
 												</OPS_envelope>';
 
-												echo $api->xml_output($xml,"domain_list");
+												echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
 												
-												if (file_exists("domain_list.xml")) {
-											
-													// GET THE THINGS FROM THE DATA BLOCK
-													if(!$obj = simplexml_load_file("domain_list.xml")){
-														$message= "Error!";
-													} else {
-													
-														// 0 admin , 1 owner , 2 tech ,3 billing
-														if($obj->body->data_block->dt_assoc->item[3] == "415"){
-															//echo $obj->body->data_block->dt_assoc->item[5];
-															header("Location: profileScreen.php?error=401");
-														}else{
-															//echo "<script> $('#postcontent').hide(); $('#managament').show(); </script>";
-															$i=0;
-															$count = $obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[1];
-															
-															echo '<table border="1">';
-															echo '<tr><th colspan="4">You got '.$count.' domains, click <a href="#" onclick="show();">here</a> to show the table or <a href="#" onclick="hide();">here</a> to hide it</th></tr>';
-															echo '<tr hidden class="inf"><th>Domain information</th><th>Expire Day</th><th>Whois Privacy</th><th>WP Expiry Date</th></tr>';												
-															//$obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[3]->dt_array->item --> list of domains that the user has.
-															for($j=0; $j < $count ;$j++){
-																foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_array->item[$j]->dt_assoc->item as $items){ // name of domains
-																	//echo nl2br($items['key'] . ' VALUE:' . $items. "\n\n"); //owner
-																	echo '<tr hidden class="inf"><td><a href="intoDomain.php?domain='.htmlentities(base64_encode($items['key'])).'">'.$items['key'].'</td>';
-																}
-																
-																foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_array->item[$j]->dt_assoc->item->dt_assoc->item as $items){ // some atributes of domains
-																	if($items['key'] == "expiredate"){
-																		//echo nl2br($items['key'] . ' VALUE:' . $items. "\n"); //owner
-																		echo '<td>'.$items.'</td>';
-																	}
-																	
-																}
-																
-																foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_array->item[$j]->dt_assoc->item->dt_assoc->item as $items){ // some atributes of domains
-																	if($items['key'] == "has_whois_privacy"){
-																		//echo nl2br($items['key'] . ' VALUE:' . $items. "\n"); //owner
-																		if($items == "0"){
-																			echo '<td>N</td>';
-																		}else{
-																			echo '<td>Y</td>';
-																		}
-																	
-																	}
-																
-																}
-																
-																foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_array->item[$j]->dt_assoc->item->dt_assoc->item as $items){ // some atributes of domains
-																	if($items['key'] == "wp_expiredate"){
-																		//echo nl2br($items['key'] . ' VALUE:' . $items. "\n"); //owner
-																		if($items == "0"){
-																			echo '<td>N</td>';
-																		}else{
-																			echo '<td>Y</td>';
-																		}
-
-																	}
-																}
-																
-																echo '</tr>';
-																
-															}
-															echo '</table>';
-															
-														}
-													}
-												}
 												
 											}
 									}
 									
 							}
 							
-									if (file_exists("domain_list.xml")) {
+									if (file_exists("domain_list_".$_SESSION['user_id'].".xml")) {
 									
 											// GET THE THINGS FROM THE DATA BLOCK
-											if(!$obj = simplexml_load_file("domain_list.xml")){
+											if(!$obj = simplexml_load_file("domain_list_".$_SESSION['user_id'].".xml")){
 												$message= "Error!";
 											} else {
 											
@@ -323,14 +278,14 @@
 														
 													}
 													echo '</table>';
-													
 												}
+												
 											}
+											
 										}
 						
 						
 						?>	
-						
 						
 						<div id="organization" hidden >
 							<form action="intoDomain.php" method="POST">
@@ -356,7 +311,7 @@
 						</div>
 						<?php
 						if(isset($_POST['first_name_12_1'])){
-							$xml='<OPS_envelope>
+								$xml='<OPS_envelope>
 								<header>
 									<version>0.9</version>
 								</header>
@@ -400,11 +355,12 @@
 									</data_block>
 								</body>
 							</OPS_envelope>';
-							echo $api->xml_output($xml,"update");
-							if (file_exists("update.xml")) {
+							
+							echo $api->xml_output($xml,"update_".$_SESSION['user_id']);
+							if (file_exists("update_".$_SESSION['user_id'].".xml")) {
 															
 												// GET THE THINGS FROM THE DATA BLOCK
-												if(!$obj = simplexml_load_file("update.xml")){
+												if(!$obj = simplexml_load_file("update_".$_SESSION['user_id'].".xml")){
 													$message= "Error!";
 												} else {
 													
@@ -492,12 +448,11 @@
 									</data_block>
 								</body>
 							</OPS_envelope>';
-							echo $api->xml_output($xml,"update");
-							
-							if (file_exists("update.xml")) {
+							echo $api->xml_output($xml,"update_".$_SESSION['user_id']);
+							if (file_exists("update_".$_SESSION['user_id'].".xml")) {
 															
 												// GET THE THINGS FROM THE DATA BLOCK
-												if(!$obj = simplexml_load_file("update.xml")){
+												if(!$obj = simplexml_load_file("update_".$_SESSION['user_id'].".xml")){
 													$message= "Error!";
 												} else {
 													
@@ -586,12 +541,11 @@
 									</data_block>
 								</body>
 							</OPS_envelope>';
-							echo $api->xml_output($xml,"update");
-							
-							if (file_exists("update.xml")) {
+						echo $api->xml_output($xml,"update_".$_SESSION['user_id']);
+							if (file_exists("update_".$_SESSION['user_id'].".xml")) {
 															
 												// GET THE THINGS FROM THE DATA BLOCK
-												if(!$obj = simplexml_load_file("update.xml")){
+												if(!$obj = simplexml_load_file("update_".$_SESSION['user_id'].".xml")){
 													$message= "Error!";
 												} else {
 													
@@ -681,12 +635,11 @@
 								</body>
 							</OPS_envelope>';
 							
-							echo $api->xml_output($xml,"update");
-							
-							if (file_exists("update.xml")) {
+							echo $api->xml_output($xml,"update_".$_SESSION['user_id']);
+							if (file_exists("update_".$_SESSION['user_id'].".xml")) {
 															
 												// GET THE THINGS FROM THE DATA BLOCK
-												if(!$obj = simplexml_load_file("update.xml")){
+												if(!$obj = simplexml_load_file("update_".$_SESSION['user_id'].".xml")){
 													$message= "Error!";
 												} else {
 													
@@ -705,6 +658,7 @@
 													}
 												}
 						}
+						
 						?>
 						
 						<div id="renew" hidden >
@@ -746,11 +700,11 @@
 												</body>
 											</OPS_envelope>';
 
-											echo $api->xml_output($xml,"expire_time");
-											if (file_exists("expire_time.xml")) {
+											echo $api->xml_output($xml,"expire_time_".$_SESSION['user_id']);
+											if (file_exists("expire_time_".$_SESSION['user_id'].".xml")) {
 																			
 												// GET THE THINGS FROM THE DATA BLOCK
-												if(!$obj = simplexml_load_file("expire_time.xml")){
+												if(!$obj = simplexml_load_file("expire_time_".$_SESSION['user_id'].".xml")){
 													$message= "Error!";
 												} else {
 													$expire= $obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[1];
@@ -817,7 +771,7 @@
 											</data_block>
 										</body>
 									</OPS_envelope>';
-			echo $api->xml_output($xml,"retreive_data");
+			echo $api->xml_output($xml,"retreive_data_".$_SESSION['user_id']);
 
 		}else{
 			$xml='<OPS_envelope>
@@ -844,14 +798,14 @@
 														</data_block>
 													</body>
 												</OPS_envelope>';
-			echo $api->xml_output($xml,"retreive_data");
+			echo $api->xml_output($xml,"retreive_data_".$_SESSION['user_id']);
 		}
 		
 		
-											if (file_exists("retreive_data.xml")) {
+											if (file_exists("retreive_data_".$_SESSION['user_id'].".xml")) {
 															
 												// GET THE THINGS FROM THE DATA BLOCK
-												if(!$obj = simplexml_load_file("retreive_data.xml")){
+												if(!$obj = simplexml_load_file("retreive_data_".$_SESSION['user_id'].".xml")){
 													$message= "Error!";
 												} else {
 													
@@ -885,6 +839,42 @@
 		
 											
 		
+		?>
+		
+		<?php 
+		
+		unlink("domain_list_".$_SESSION['user_id'].".xml");
+		unlink( "renew_domain_".$_SESSION['user_id'].".xml");
+		unlink( "update_".$_SESSION['user_id'].".xml");
+		unlink( "retreive_data_".$_SESSION['user_id'].".xml");
+		unlink( "expire_time_".$_SESSION['user_id'].".xml");
+
+			$xml='<OPS_envelope>
+													<header>
+														<version>0.9</version>
+													</header>
+													<body>
+														<data_block>
+															<dt_assoc>
+																<item key="protocol">XCP</item>
+																<item key="object">DOMAIN</item>
+															   <item key="action">GET</item>
+																<item key="attributes">
+																	<dt_assoc>
+																		<item key="clean_ca_subset">1</item>
+																		<item key="domain">'.$_SESSION['domain'].'</item>
+																		 <item key="reg_username">'.$_SESSION['user'].'</item>
+																		<item key="reg_password">'.$_SESSION['pass'].'</item>
+																		<item key="type">list</item>
+																	</dt_assoc>
+																</item>
+																<item key="registrant_ip">10.0.62.128</item>
+															</dt_assoc>
+														</data_block>
+													</body>
+												</OPS_envelope>';
+
+												echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
 		?>
 		
 		<script>
@@ -950,6 +940,16 @@
 			$('#renew').hide();
 			$('#transfer').show();			
 		}
+		
+		 /*var goodexit = false;
+		 window.onbeforeunload = confirmRegisterExit;        
+		 function confirmRegisterExit(evt) {
+			if(!goodexit) {
+				return "Si vas abandonar el sistema haz click en Cerrar Sesion!!";
+			}
+		 }*/
+		 
+		
 		</script>
 	</body>
 </html>
