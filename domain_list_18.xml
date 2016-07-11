@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE OPS_envelope SYSTEM "ops.dtd">
+<OPS_envelope>
+ <header>
+  <version>0.9</version>
+  </header>
+ <body>
+  <data_block>
+   <dt_assoc>
+    <item key="protocol">XCP</item>
+    <item key="object">DOMAIN</item>
+    <item key="response_text">Command Successful</item>
+    <item key="action">REPLY</item>
+    <item key="attributes">
+     <dt_assoc>
+      <item key="ext_results">
+       <dt_array>
+        <item key="0">
+         <dt_assoc>
+          <item key="clock.org">
+           <dt_assoc>
+            <item key="wp_service">0</item>
+            <item key="wp_expiredate">0</item>
+            <item key="auto_renew">1</item>
+            <item key="expiredate">2020-06-29 19:19:30</item>
+            <item key="sponsoring_rsp">1</item>
+            <item key="lock_state">0</item>
+            <item key="let_expire">0</item>
+            <item key="has_whois_privacy">0</item>
+           </dt_assoc>
+          </item>
+         </dt_assoc>
+        </item>
+        <item key="1">
+         <dt_assoc>
+          <item key="magiranger.net">
+           <dt_assoc>
+            <item key="wp_service">enabled</item>
+            <item key="wp_expiredate">0</item>
+            <item key="auto_renew">1</item>
+            <item key="expiredate">2018-07-03 21:06:55</item>
+            <item key="sponsoring_rsp">1</item>
+            <item key="lock_state">0</item>
+            <item key="let_expire">0</item>
+            <item key="has_whois_privacy">1</item>
+           </dt_assoc>
+          </item>
+         </dt_assoc>
+        </item>
+        <item key="2">
+         <dt_assoc>
+          <item key="magiranger.org">
+           <dt_assoc>
+            <item key="wp_service">enabled</item>
+            <item key="wp_expiredate">0</item>
+            <item key="auto_renew">1</item>
+            <item key="expiredate">2018-07-05 18:51:01</item>
+            <item key="sponsoring_rsp">1</item>
+            <item key="lock_state">0</item>
+            <item key="let_expire">0</item>
+            <item key="has_whois_privacy">1</item>
+           </dt_assoc>
+          </item>
+         </dt_assoc>
+        </item>
+        <item key="3">
+         <dt_assoc>
+          <item key="notebook.org">
+           <dt_assoc>
+            <item key="wp_service">0</item>
+            <item key="wp_expiredate">0</item>
+            <item key="auto_renew">1</item>
+            <item key="expiredate">2018-06-29 19:16:04</item>
+            <item key="sponsoring_rsp">1</item>
+            <item key="lock_state">0</item>
+            <item key="let_expire">0</item>
+            <item key="has_whois_privacy">0</item>
+           </dt_assoc>
+          </item>
+         </dt_assoc>
+        </item>
+        <item key="4">
+         <dt_assoc>
+          <item key="zxcasdqe.com">
+           <dt_assoc>
+            <item key="wp_service">enabled</item>
+            <item key="wp_expiredate">0</item>
+            <item key="auto_renew">1</item>
+            <item key="expiredate">2019-07-02 17:21:29</item>
+            <item key="sponsoring_rsp">1</item>
+            <item key="lock_state">0</item>
+            <item key="let_expire">0</item>
+            <item key="has_whois_privacy">1</item>
+           </dt_assoc>
+          </item>
+         </dt_assoc>
+        </item>
+       </dt_array>
+      </item>
+      <item key="count">5</item>
+      <item key="remainder">0</item>
+      <item key="domain_list">
+       <dt_array>
+        <item key="0">clock.org</item>
+        <item key="1">magiranger.net</item>
+        <item key="2">magiranger.org</item>
+        <item key="3">notebook.org</item>
+        <item key="4">zxcasdqe.com</item>
+       </dt_array>
+      </item>
+     </dt_assoc>
+    </item>
+    <item key="response_code">200</item>
+    <item key="is_success">1</item>
+   </dt_assoc>
+  </data_block>
+ </body>
+</OPS_envelope>

@@ -17,8 +17,7 @@
 		
 	}
 	
-	$_SESSION['pass'] = $_POST['passwordFldPass'];
-	$_SESSION['user'] = $_POST['usernameFldUser'];
+
 	
 	//$_SESSION['domain'] = $_POST['domainFldUser'];
 	//$_SESSION['domain'] = html_entity_decode(base64_decode($_GET['domain']));
@@ -46,19 +45,22 @@
 					
 					<div id="postcontent" align="center">
 							 <table border="1">
-								<tr><th colspan="5"><h2 style="color:#FFFFFF">Your are logged with the <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> domain </h2></th></tr>
+								<tr><th colspan="6"><h2 style="color:#FFFFFF">Your are logged with the <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> domain </h2></th></tr>
 								<td><a href="#" onclick="show_organization();" >Organization</a></td>
 								<td><a href="#" onclick="show_admin();" >Admin</a></td>
 								<td><a href="#" onclick="show_billing();" >Billing</a></td>
 								<td><a href="#" onclick="show_technical();" >Technical</a></td>
 								<td><a href="#" onclick="show_renew();" >Renew this domain</a></td>
-								<!--<td><a href="#" onclick="show_transfer();" >Transfer domains</a></td> -->
+								<td><a href="#" onclick="show_dns_manager_panel();" >Domain manager</a></td>
 							 </table>
 
 						<?php
 						
 							if(isset($_POST['passwordFldPass']) && isset($_POST['usernameFldUser'])  && isset($_POST['domainFldUser'])){
 										$_SESSION['user_id'] = $_POST['user_id'];
+										$_SESSION['pass'] = $_POST['passwordFldPass'];
+										$_SESSION['user'] = $_POST['usernameFldUser'];
+										 
 										$xml='<OPS_envelope>
 											<header>
 												<version>0.9</version>
@@ -141,7 +143,7 @@
 													
 								}
 						
-							if(isset($_POST['domainName']) && isset($_POST['expireTime']) && isset($_POST['renew_time'])){
+							if(isset($_POST['domainName']) && isset($_POST['expireTime']) ){
 								//echo nl2br($_POST['domainName'] . " " .$_POST['expireTime'] . " ".$_POST['renew_time'] );
 								$xml='<OPS_envelope>
 										<header>
@@ -160,7 +162,7 @@
 															<item key="handle">process</item>
 															<item key="domain">'.$_POST['domainName'].'</item>
 															<item key="currentexpirationyear">'.$_POST['expireTime'].'</item>
-															<item key="period">'.$_POST['renew_time'].'</item>
+															<item key="period">1</item>
 														</dt_assoc>
 													</item>
 												</dt_assoc>
@@ -666,16 +668,12 @@
 							<table border="1">
 							<tr><th colspan="3">Renew this domain</th></tr>
 							<input hidden readonly type="text" id="user_id" name="user_id" ></td></tr>
-							<tr class="row_t"><td>Domain name </td><td><input readonly type="text" id="domainName" name="domainName" value="<?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser'];}else{echo $_SESSION['domain'];} ?>" ></td></tr>
-							<tr class="row_t"><td>Expire year </td><td><input readonly type="text" id="expireTime" name="expireTime" ></td></tr>
-							<tr class="row_t"><td>Renew time domain (years) </td>
-							<td><select name="renew_time">
-								<?php
-									for($i=1 ; $i <11 ; $i++){
-										echo '<option id="country" value="'.$i.'">'.$i.'</option>';
-									}
-								?>
-								</select>
+							<tr hidden ><td><input readonly type="text" id="domainName" name="domainName" value="<?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser'];}else{echo $_SESSION['domain'];} ?>" ></td></tr>
+							<tr hidden ><td><input readonly type="text" id="expireTime" name="expireTime" ></td></tr>
+							<td colspan="2"> Are you sure that you want to renew this domain ? </td>
+							<tr><td>Yes <input onclick="show_button();" type="radio"  name="tci" id="tci" ></td>
+								<td>No <input onclick="hide_panel();" type="radio"  name="tci" id="tci_1" ></td></tr>
+							<input hidden readonly type="text" id="user_id" name="user_id" ></td></tr>
 								<?php
 									$xml='<OPS_envelope>
 												<header>
@@ -713,27 +711,162 @@
 												}
 											}										
 								?>
-							</td></tr>
-							<tr><th colspan="2"> 
+							
+							<tr><th colspan="2" hidden id="button_panel"> 
 							<input id="submit_boton" type="submit" value="Renew Domain"> 
 							</th></tr>
 							</table>
 							</form>
 						</div>
-						<div id="transfer" hidden> 
-							<form action="intoDomain.php" method="POST">
-							<table border="1">
-							<tr><th colspan="3">Transfer domain</th></tr>
-							<input hidden readonly type="text" id="user_id" name="user_id" ></td></tr>
-							<tr class="row_t"><td>Username </td><td><input type="text" id="Username" name="Username" ></td></tr>
-							<tr class="row_t"><td>Password </td><td><input type="password" id="Password" name="Password" ></td></tr>
-							<tr class="row_t"><td>Confirm: </td><td><input type="password" id="Confirm" name="Confirm" ></td></tr>
-							<tr><th colspan="2"> 
-							<input id="submit_boton" type="submit" value="Transfer "> 
-							</th></tr>
-							</table>
-							</form>
+						<div id="dns_manager" hidden> 
+						<form action="intoDomain.php" method="POST">
+							<input hidden readonly type="text" id="uid" name="uid" >
+								<table border="1">  
+									<tr><th colspan="2">Manage Name Servers </th></tr>
+									<tr><td colspan="2"> Set custom name servers on your domain<br>
+									<ul>
+									  <li>To replace a nameserver, simply edit the existing hostname.</li>
+									  <li>To remove a nameserver, simply cleanup the existing hostname.</li>
+									  <li>To add a nameserver, simply fill an empty field for hostname.</li>
+									  <li>IP addresses are not displayed by certain registries. This does not affect the operation of the nameserver.</li>
+									  <li>** IMPORTANT: Before adding additional name servers to your configuration, you should be sure that the name server has setup correctly. 24 - 48 hours after you submit a request for an additional name server, it will be in the rotation for authoritative lookups and if it is not setup correctly, your site will take a long time to resolve when visitors try to find you.</li>
+									  <li>The order of the nameservers is not relevant</li>
+									</ul>
+								</td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_0' name='name_0' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_1' name='name_1' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_2' name='name_2' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_3' name='name_3' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_4' name='name_4' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_5' name='name_5' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_6' name='name_6' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_7' name='name_7' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_8' name='name_8' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_9' name='name_9' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_10' name='name_10' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_11' name='name_11' ></td></tr>
+								<tr><td>Nameserver </td><td><input type='text' id='name_12' name='name_12' ></td></tr>
+
+									<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"></th></tr>
+								</table>							
+						</form>
+							
 						</div>
+						<?php
+							$xml='<OPS_envelope>
+									<header>
+										<version>0.9</version>
+									</header>
+									<body>
+										<data_block>
+											<dt_assoc>
+												<item key="protocol">XCP</item>
+												<item key="action">get</item>
+											  <item key="object">domain</item>
+												<item key="registrant_ip">111.121.121.121</item>
+												<item key="attributes">
+													<dt_assoc>
+														<item key="domain">'.$_SESSION['domain'].'</item>
+														<item key="type">nameservers</item>
+													</dt_assoc>
+												</item>
+											</dt_assoc>
+										</data_block>
+									</body>
+								</OPS_envelope>';
+								echo $api->xml_output($xml,"dnslook_".$_SESSION['user_id']);
+								if (file_exists("dnslook_".$_SESSION['user_id'].".xml")) {
+											
+								// GET THE THINGS FROM THE DATA BLOCK
+									if(!$obj = simplexml_load_file("dnslook_".$_SESSION['user_id'].".xml")){
+										$message= "Error!";
+									} else {
+										if($obj->body->data_block->dt_assoc->item[3] == "415"){
+											echo "<script> alert('Something wrong happens.'); </script>";
+										}else{
+												$i=0;
+												foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item->dt_array -> item as $items){
+													foreach($items ->dt_assoc ->item as $item){
+														if($item['key'] == "name"){
+															echo "<script> document.getElementById('".$item['key']."_".$i."').value = '".$item ."'; </script>";
+															//echo nl2br( 'KEY:' . $item['key']. ' '. 'VALUE:' . $item . "\n");
+															
+														}
+													}
+													//echo nl2br($items['key'] .' VALUE:' . $items. "\n"); //owner
+													//echo "<script> document.getElementById('".$items['key']."_".$i."_".$j."').value = '".$items ."'; </script>";
+													//$i++;
+												}
+											}
+
+										}
+								}
+							
+						?>
+						<?php
+						//click in modified domain;
+							if(isset($_POST['uid'])){
+								$xml='<OPS_envelope>
+										<header>
+											<version>0.9</version>
+										</header>
+										<body>
+											<data_block>
+												<dt_assoc>
+													<item key="protocol">XCP</item>
+													<item key="action">modify</item>
+													<item key="object">nameserver</item>
+													<item key="reg_username">'.$_SESSION['user'].'</item>
+													<item key="reg_password">'.$_SESSION['pass'].'</item>
+													<item key="domain">'.$_SESSION['domain'].'</item>
+													<item key="affect_domains">0</item>
+													<item key="attributes">
+														<dt_assoc>';
+														
+								
+								if (file_exists("dnslook_".$_SESSION['user_id'].".xml")) {
+											
+								// GET THE THINGS FROM THE DATA BLOCK
+									if(!$obj = simplexml_load_file("dnslook_".$_SESSION['user_id'].".xml")){
+										$message= "Error!";
+									} else {
+										if($obj->body->data_block->dt_assoc->item[3] == "415"){
+											echo "<script> alert('Something wrong happens.'); </script>";
+										}else{
+												$i=0;
+												foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item->dt_array -> item as $items){
+													foreach($items ->dt_assoc ->item as $item){
+														if($item['key'] == "name"){
+															//echo "<script> document.getElementById('".$item['key']."_".$i."').value = '".$item ."'; </script>";
+															//echo nl2br( 'KEY:' . $item['key']. ' '. 'VALUE:' . $item . "\n");
+															$xml.='<item key="name">'.$item.'</item>
+																	<item key="new_name">'.$_POST['name_'.$i].'</item>';
+															
+														}
+														
+													}
+													//echo nl2br("here i am ".$i. ": ".$_POST['name_'.$i]." name_".$i."\n");
+													//echo nl2br($items['key'] .' VALUE:' . $items. "\n"); //owner
+													//echo "<script> document.getElementById('".$items['key']."_".$i."_".$j."').value = '".$items ."'; </script>";
+													$i++;
+												}
+											}
+
+										}
+								}
+														$xml.='<item key="ipaddress">212.112.123.11</item>
+														</dt_assoc>
+													</item>
+												</dt_assoc>
+											</data_block>
+										</body>
+									</OPS_envelope>';
+									
+
+									//echo htmlentities($xml);
+									echo $api->xml_output($xml,"updatedns_".$_SESSION['user_id']);
+							}
+						?>
 					</div>
 				</div>
 			
@@ -883,7 +1016,17 @@
 		function hide(){
 			$('tr.inf').hide();
 		}
-		
+		function show_button(){$('#button_panel').show(); }
+		function show_dns_manager_panel(){
+			$('#organization').hide();
+			$('#admin ').hide();
+			$('#billing ').hide();
+			$('#technical').hide();
+			$('#renew').hide();
+			$('#transfer').hide();
+			$('#dns_manager').show();
+		}
+		function hide_panel(){$('#renew ').hide(); $('#button_panel').hide(); document.getElementById("tci_1").checked = false}
 		function show(){
 			$('tr.inf').show();
 		}
