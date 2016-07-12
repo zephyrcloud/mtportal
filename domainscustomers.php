@@ -144,6 +144,437 @@
 	   
 	   
 		</script>
+				<!-- Domain Registrer -->
+		<?php
 		
+		if(isset($_POST['first_name_12_1'])){
+						
+			
+			$xml='';
+			$xml_name="domain_registrer";			
+			
+					$xml.='<OPS_envelope>
+		 <header>
+		  <version>0.9</version>
+		  </header>
+		 <body>
+		  <data_block>
+		   <dt_assoc>
+			<item key="protocol">XCP</item>
+			<item key="object">DOMAIN</item>
+			<item key="action">SW_REGISTER</item>
+			<item key="attributes">
+			 <dt_assoc>
+			  <item key="f_parkp">Y</item>
+			  <item key="affiliate_id"></item>
+			  <item key="auto_renew"></item>
+			  <item key="comments"></item>
+			  <item key="domain">'.$_POST['domain_name'].'</item>
+			  <item key="reg_type">new</item>
+			  <item key="reg_username">'.$_POST['Registrant_Username'].'</item>
+			  <item key="reg_password">'.$_POST['Registrant_Password'].'</item>
+			  <item key="f_whois_privacy">1</item>
+			  <item key="period">1</item>
+			  <item key="link_domains">0</item>
+			  <item key="custom_nameservers">1</item>
+			  <item key="f_lock_domain">0</item>
+			  <item key="reg_domain">'.$_POST['previous_domain'].'</item>
+			  <item key="handle">process</item>
+			  <item key="contact_set">
+			  <dt_assoc>'; // here begin for the ites by person (owner , billing, technical , admin)
+			
+			//admin
+			 if($_POST['aci'] == true){
+				// admin case true
+				// owner fields
+				$xml.=	'<item key="admin">
+						 <dt_assoc>
+						  <item key="country">US</item>
+						  <item key="address3">'.$_POST['address3_1_1'].'</item>
+						  <item key="org_name">'.$_POST['org_name_2_1'].'</item>
+						  <item key="phone">'.$_POST['phone_3_1'].' </item>
+						  <item key="state">'.$_POST['state_4_1'].'</item>
+						  <item key="address2">'.$_POST['address2_4_1'].'</item>
+						  <item key="last_name">'.$_POST['last_name_5_1'].'</item>
+						  <item key="email"> '.$_POST['email_7_1'].'</item>
+						  <item key="city">'.$_POST['city_8_1'].'</item>
+						  <item key="postal_code">'.$_POST['postal_code_9_1'].'</item>
+						  <item key="fax">'.$_POST['fax_10_1'].'</item>
+						  <item key="address1">'.$_POST['address1_11_1'].'</item>
+						  <item key="first_name">'.$_POST['first_name_12_1'].'</item>
+						 </dt_assoc>
+						</item>';  
+			 }else{
+				 //admin case false
+				 //admin fields
+				$xml.=	'<item key="admin">
+						 <dt_assoc>
+						  <item key="country">US</item>
+						  <item key="address3">'.$_POST['address3_1_0'].'</item>
+						  <item key="org_name">'.$_POST['org_name_2_0'].'</item>
+						  <item key="phone">'.$_POST['phone_3_0'].' </item>
+						  <item key="state">'.$_POST['state_6_0'].'</item>
+						  <item key="address2">'.$_POST['address2_4_0'].'</item>
+						  <item key="last_name">'.$_POST['last_name_5_0'].'</item>
+						  <item key="email"> '.$_POST['email_7_0'].'</item>
+						  <item key="city">'.$_POST['city_8_0'].'</item>
+						  <item key="postal_code">'.$_POST['postal_code_9_0'].'</item>
+						  <item key="fax">'.$_POST['fax_10_0'].'</item>
+						  <item key="address1">'.$_POST['address1_11_0'].'</item>
+						  <item key="first_name">'.$_POST['first_name_12_0'].'</item>
+						 </dt_assoc>
+						</item>'; 
+			 }
+			
+			//owner
+			$xml.=	'<item key="owner">
+						 <dt_assoc>
+						  <item key="country">US</item>
+						  <item key="address3">'.$_POST['address3_1_1'].'</item>
+						  <item key="org_name">'.$_POST['org_name_2_1'].'</item>
+						  <item key="phone">'.$_POST['phone_3_1'].' </item>
+						  <item key="state">'.$_POST['state_4_1'].'</item>
+						  <item key="address2">'.$_POST['address2_6_1'].'</item>
+						  <item key="last_name">'.$_POST['last_name_5_1'].'</item>
+						  <item key="email"> '.$_POST['email_7_1'].'</item>
+						  <item key="city">'.$_POST['city_8_1'].'</item>
+						  <item key="postal_code">'.$_POST['postal_code_9_1'].'</item>
+						  <item key="fax">'.$_POST['fax_10_1'].'</item>
+						  <item key="address1">'.$_POST['address1_11_1'].'</item>
+						  <item key="first_name">'.$_POST['first_name_12_1'].'</item>
+						 </dt_assoc>
+						</item>';  
+			            
+			 //technical
+			 switch($_POST['tci']){
+				 case 1:
+				 //billing
+				  switch($_POST['bci']){
+						 case 1:
+						 //admin
+						  if($_POST['aci'] == true){
+								// admin case true
+								// owner fields
+								$xml.=	'<item key="tech">
+										 <dt_assoc>
+										  <item key="country">US</item>
+										  <item key="address3">'.$_POST['address3_1_1'].'</item>
+										  <item key="org_name">'.$_POST['org_name_2_1'].'</item>
+										  <item key="phone">'.$_POST['phone_3_1'].' </item>
+										  <item key="state">'.$_POST['state_4_1'].'</item>
+										  <item key="address2">'.$_POST['address2_4_1'].'</item>
+										  <item key="last_name">'.$_POST['last_name_5_1'].'</item>
+										  <item key="email"> '.$_POST['email_7_1'].'</item>
+										  <item key="city">'.$_POST['city_8_1'].'</item>
+										  <item key="postal_code">'.$_POST['postal_code_9_1'].'</item>
+										  <item key="fax">'.$_POST['fax_10_1'].'</item>
+										  <item key="address1">'.$_POST['address1_11_1'].'</item>
+										  <item key="first_name">'.$_POST['first_name_12_1'].'</item>
+										 </dt_assoc>
+										</item>';  
+							 }else{
+								 //admin case false
+								 //admin fields
+								$xml.=	'<item key="tech">
+										 <dt_assoc>
+										  <item key="country">US</item>
+										  <item key="address3">'.$_POST['address3_1_0'].'</item>
+										  <item key="org_name">'.$_POST['org_name_2_0'].'</item>
+										  <item key="phone">'.$_POST['phone_3_0'].' </item>
+										  <item key="state">'.$_POST['state_6_0'].'</item>
+										  <item key="address2">'.$_POST['address2_4_0'].'</item>
+										  <item key="last_name">'.$_POST['last_name_5_0'].'</item>
+										  <item key="email"> '.$_POST['email_7_0'].'</item>
+										  <item key="city">'.$_POST['city_8_0'].'</item>
+										  <item key="postal_code">'.$_POST['postal_code_9_0'].'</item>
+										  <item key="fax">'.$_POST['fax_10_0'].'</item>
+										  <item key="address1">'.$_POST['address1_11_0'].'</item>
+										  <item key="first_name">'.$_POST['first_name_12_0'].'</item>
+										 </dt_assoc>
+										</item>'; 
+							 }
+						 break;
+						 case 2:
+						 //owner
+						 $xml.=	'<item key="tech">
+								 <dt_assoc>
+								  <item key="country">US</item>
+								  <item key="address3">'.$_POST['address3_1_0'].'</item>
+								  <item key="org_name">'.$_POST['org_name_2_0'].'</item>
+								  <item key="phone">'.$_POST['phone_3_0'].' </item>
+								  <item key="state">'.$_POST['state_6_0'].'</item>
+								  <item key="address2">'.$_POST['address2_4_0'].'</item>
+								  <item key="last_name">'.$_POST['last_name_5_0'].'</item>
+								  <item key="email"> '.$_POST['email_7_0'].'</item>
+								  <item key="city">'.$_POST['city_8_0'].'</item>
+								  <item key="postal_code">'.$_POST['postal_code_9_0'].'</item>
+								  <item key="fax">'.$_POST['fax_10_0'].'</item>
+								  <item key="address1">'.$_POST['address1_11_0'].'</item>
+								  <item key="first_name">'.$_POST['first_name_12_0'].'</item>
+								 </dt_assoc>
+								</item>';
+						 break;
+						 default:
+						 //fields billing 
+						 $xml.=	'<item key="tech">
+								 <dt_assoc>
+								  <item key="country">US</item>
+								  <item key="address3">'.$_POST['address3_1_3'].'</item>
+								  <item key="org_name">'.$_POST['org_name_2_3'].'</item>
+								  <item key="phone">'.$_POST['phone_3_3'].' </item>
+								  <item key="state">'.$_POST['state_6_3'].'</item>
+								  <item key="address2">'.$_POST['address2_4_3'].'</item>
+								  <item key="last_name">'.$_POST['last_name_5_3'].'</item>
+								  <item key="email"> '.$_POST['email_7_3'].'</item>
+								  <item key="city">'.$_POST['city_8_3'].'</item>
+								  <item key="postal_code">'.$_POST['postal_code_9_3'].'</item>
+								  <item key="fax">'.$_POST['fax_10_3'].'</item>
+								  <item key="address1">'.$_POST['address1_11_3'].'</item>
+								  <item key="first_name">'.$_POST['first_name_12_3'].'</item>
+								 </dt_assoc>
+								</item>';
+						 break;
+					 }
+			
+				 break;
+				 case 2:
+				 // admin
+				 if($_POST['aci'] == true){
+					// admin case true
+					// owner fields
+					$xml.=	'<item key="tech">
+							 <dt_assoc>
+							  <item key="country">US</item>
+							  <item key="address3">'.$_POST['address3_1_1'].'</item>
+							  <item key="org_name">'.$_POST['org_name_2_1'].'</item>
+							  <item key="phone">'.$_POST['phone_3_1'].' </item>
+							  <item key="state">'.$_POST['state_4_1'].'</item>
+							  <item key="address2">'.$_POST['address2_4_1'].'</item>
+							  <item key="last_name">'.$_POST['last_name_5_1'].'</item>
+							  <item key="email"> '.$_POST['email_7_1'].'</item>
+							  <item key="city">'.$_POST['city_8_1'].'</item>
+							  <item key="postal_code">'.$_POST['postal_code_9_1'].'</item>
+							  <item key="fax">'.$_POST['fax_10_1'].'</item>
+							  <item key="address1">'.$_POST['address1_11_1'].'</item>
+							  <item key="first_name">'.$_POST['first_name_12_1'].'</item>
+							 </dt_assoc>
+							</item>';  
+				 }else{
+					 //admin case false
+					 //admin fields
+					$xml.=	'<item key="tech">
+							 <dt_assoc>
+							  <item key="country">US</item>
+							  <item key="address3">'.$_POST['address3_1_0'].'</item>
+							  <item key="org_name">'.$_POST['org_name_2_0'].'</item>
+							  <item key="phone">'.$_POST['phone_3_0'].' </item>
+							  <item key="state">'.$_POST['state_6_0'].'</item>
+							  <item key="address2">'.$_POST['address2_4_0'].'</item>
+							  <item key="last_name">'.$_POST['last_name_5_0'].'</item>
+							  <item key="email"> '.$_POST['email_7_0'].'</item>
+							  <item key="city">'.$_POST['city_8_0'].'</item>
+							  <item key="postal_code">'.$_POST['postal_code_9_0'].'</item>
+							  <item key="fax">'.$_POST['fax_10_0'].'</item>
+							  <item key="address1">'.$_POST['address1_11_0'].'</item>
+							  <item key="first_name">'.$_POST['first_name_12_0'].'</item>
+							 </dt_assoc>
+							</item>'; 
+				 }
+				 
+				 break;
+				 case 3:
+				 // owner
+				 $xml.=	'<item key="tech">
+						 <dt_assoc>
+						  <item key="country">US</item>
+						  <item key="address3">'.$_POST['address3_1_0'].'</item>
+						  <item key="org_name">'.$_POST['org_name_2_0'].'</item>
+						  <item key="phone">'.$_POST['phone_3_0'].' </item>
+						  <item key="state">'.$_POST['state_6_0'].'</item>
+						  <item key="address2">'.$_POST['address2_4_0'].'</item>
+						  <item key="last_name">'.$_POST['last_name_5_0'].'</item>
+						  <item key="email"> '.$_POST['email_7_0'].'</item>
+						  <item key="city">'.$_POST['city_8_0'].'</item>
+						  <item key="postal_code">'.$_POST['postal_code_9_0'].'</item>
+						  <item key="fax">'.$_POST['fax_10_0'].'</item>
+						  <item key="address1">'.$_POST['address1_11_0'].'</item>
+						  <item key="first_name">'.$_POST['first_name_12_0'].'</item>
+						 </dt_assoc>
+						</item>';
+				 break;
+				 default:
+				 $xml.=	'<item key="tech">
+						 <dt_assoc>
+						  <item key="country">US</item>
+						  <item key="address3">'.$_POST['address3_1_2'].'</item>
+						  <item key="org_name">'.$_POST['org_name_2_2'].'</item>
+						  <item key="phone">'.$_POST['phone_3_2'].' </item>
+						  <item key="state">'.$_POST['state_5_2'].'</item>
+						  <item key="address2">'.$_POST['address2_4_2'].'</item>
+						  <item key="last_name">'.$_POST['last_name_6_2'].'</item>
+						  <item key="email"> '.$_POST['email_7_2'].'</item>
+						  <item key="city">'.$_POST['city_8_2'].'</item>
+						  <item key="postal_code">'.$_POST['postal_code_9_2'].'</item>
+						  <item key="fax">'.$_POST['fax_10_2'].'</item>
+						  <item key="address1">'.$_POST['address1_11_2'].'</item>
+						  <item key="first_name">'.$_POST['first_name_12_2'].'</item>
+						 </dt_assoc>
+						</item>';
+				 break;
+			 }
+			 
+			 //billing
+			 switch($_POST['bci']){
+				 case 1:
+				 //admin
+				  if($_POST['aci'] == true){
+						// admin case true
+						// owner fields
+						$xml.=	'<item key="billing">
+								 <dt_assoc>
+								  <item key="country">US</item>
+								  <item key="address3">'.$_POST['address3_1_1'].'</item>
+								  <item key="org_name">'.$_POST['org_name_2_1'].'</item>
+								  <item key="phone">'.$_POST['phone_3_1'].' </item>
+								  <item key="state">'.$_POST['state_4_1'].'</item>
+								  <item key="address2">'.$_POST['address2_4_1'].'</item>
+								  <item key="last_name">'.$_POST['last_name_5_1'].'</item>
+								  <item key="email"> '.$_POST['email_7_1'].'</item>
+								  <item key="city">'.$_POST['city_8_1'].'</item>
+								  <item key="postal_code">'.$_POST['postal_code_9_1'].'</item>
+								  <item key="fax">'.$_POST['fax_10_1'].'</item>
+								  <item key="address1">'.$_POST['address1_11_1'].'</item>
+								  <item key="first_name">'.$_POST['first_name_12_1'].'</item>
+								 </dt_assoc>
+								</item>';  
+					 }else{
+						 //admin case false
+						 //admin fields
+						$xml.=	'<item key="billing">
+								 <dt_assoc>
+								  <item key="country">US</item>
+								  <item key="address3">'.$_POST['address3_1_0'].'</item>
+								  <item key="org_name">'.$_POST['org_name_2_0'].'</item>
+								  <item key="phone">'.$_POST['phone_3_0'].' </item>
+								  <item key="state">'.$_POST['state_6_0'].'</item>
+								  <item key="address2">'.$_POST['address2_4_0'].'</item>
+								  <item key="last_name">'.$_POST['last_name_5_0'].'</item>
+								  <item key="email"> '.$_POST['email_7_0'].'</item>
+								  <item key="city">'.$_POST['city_8_0'].'</item>
+								  <item key="postal_code">'.$_POST['postal_code_9_0'].'</item>
+								  <item key="fax">'.$_POST['fax_10_0'].'</item>
+								  <item key="address1">'.$_POST['address1_11_0'].'</item>
+								  <item key="first_name">'.$_POST['first_name_12_0'].'</item>
+								 </dt_assoc>
+								</item>'; 
+					 }
+				 break;
+				 case 2:
+				 //owner
+				 $xml.=	'<item key="billing">
+						 <dt_assoc>
+						  <item key="country">US</item>
+						  <item key="address3">'.$_POST['address3_1_0'].'</item>
+						  <item key="org_name">'.$_POST['org_name_2_0'].'</item>
+						  <item key="phone">'.$_POST['phone_3_0'].' </item>
+						  <item key="state">'.$_POST['state_6_0'].'</item>
+						  <item key="address2">'.$_POST['address2_4_0'].'</item>
+						  <item key="last_name">'.$_POST['last_name_5_0'].'</item>
+						  <item key="email"> '.$_POST['email_7_0'].'</item>
+						  <item key="city">'.$_POST['city_8_0'].'</item>
+						  <item key="postal_code">'.$_POST['postal_code_9_0'].'</item>
+						  <item key="fax">'.$_POST['fax_10_0'].'</item>
+						  <item key="address1">'.$_POST['address1_11_0'].'</item>
+						  <item key="first_name">'.$_POST['first_name_12_0'].'</item>
+						 </dt_assoc>
+						</item>';
+				 break;
+				 default:
+				 //fields billing 
+				 $xml.=	'<item key="billing">
+						 <dt_assoc>
+						  <item key="country">US</item>
+						  <item key="address3">'.$_POST['address3_1_3'].'</item>
+						  <item key="org_name">'.$_POST['org_name_2_3'].'</item>
+						  <item key="phone">'.$_POST['phone_3_3'].' </item>
+						  <item key="state">'.$_POST['state_4_3'].'</item>
+						  <item key="address2">'.$_POST['address2_6_3'].'</item>
+						  <item key="last_name">'.$_POST['last_name_5_3'].'</item>
+						  <item key="email"> '.$_POST['email_7_3'].'</item>
+						  <item key="city">'.$_POST['city_8_3'].'</item>
+						  <item key="postal_code">'.$_POST['postal_code_9_3'].'</item>
+						  <item key="fax">'.$_POST['fax_10_3'].'</item>
+						  <item key="address1">'.$_POST['address1_11_3'].'</item>
+						  <item key="first_name">'.$_POST['first_name_12_3'].'</item>
+						 </dt_assoc>
+						</item>';
+						            
+				 break;
+			 }
+			 
+			 
+			 $xml.= '</dt_assoc>
+					</item>
+					<item key="nameserver_list">
+					<dt_array>';// here ends for the ites by person (owner , billing, technical , admin)
+			
+			
+				 $xml.= '<item key="0">
+						 <dt_assoc>
+						  <item key="name">ns1.systemdns.com</item>
+						  <item key="sortorder">1</item>
+						 </dt_assoc>
+						</item>
+						<item key="1">
+						 <dt_assoc>
+						  <item key="name">ns2.systemdns.com</item>
+						  <item key="sortorder">2</item>
+						 </dt_assoc>
+						</item>
+						<item key="2">
+						 <dt_assoc>
+						  <item key="name">ns3.systemdns.com</item>
+						  <item key="sortorder">3</item>
+						 </dt_assoc>
+						</item>';
+				
+			 
+	
+			  //footer
+			  $xml.='</dt_array>
+				  </item>
+				  <item key="encoding_type"></item>
+				  <item key="custom_tech_contact">1</item>
+				 </dt_assoc>
+				</item>
+				<item key="registrant_ip">10.0.10.19</item>
+			   </dt_assoc>
+			  </data_block>
+			 </body>
+			</OPS_envelope>';
+			
+			echo $api -> xml_output($xml,$xml_name);
+			$status=$api -> xml_request_registreDomain($xml_name);
+			$message = $status;
+			
+			if($message=="Domain registration successfully completed. Whois Privacy successfully enabled."){
+			// log for knowing who made a registrer to new domain.
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',9,17,4,".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
+			//echo nl2br($insert_query."\n");
+			$insert_result = mysql_query($insert_query);
+		
+			// insert registrer on db for auditory
+			$insert_query = "INSERT INTO `created_domains`(`customer_id`, `domain`) VALUES (".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
+			//echo nl2br($insert_query."\n");
+			$insert_result = mysql_query($insert_query);}else{
+			
+			echo "<script> alert('".$message."'); </script>";		
+			unlink($xml_name.".xml");			
+			}
+			
+		}
+		
+		?>
+	
 	</body>
 </html>
