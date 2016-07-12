@@ -774,6 +774,7 @@
 										</data_block>
 									</body>
 								</OPS_envelope>';
+							
 								echo $api->xml_output($xml,"dnslook_".$_SESSION['user_id']);
 								if (file_exists("dnslook_".$_SESSION['user_id'].".xml")) {
 											
@@ -784,6 +785,9 @@
 										if($obj->body->data_block->dt_assoc->item[3] == "415"){
 											echo "<script> alert('Something wrong happens.'); </script>";
 										}else{
+											if($obj->body->data_block->dt_assoc->item[4] == "465"){
+												echo "<script> alert('".$obj->body->data_block->dt_assoc->item[2]."'); </script>";
+											}else{
 												$i=0;
 												foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item->dt_array -> item as $items){
 													foreach($items ->dt_assoc ->item as $item){
@@ -797,6 +801,9 @@
 													//echo "<script> document.getElementById('".$items['key']."_".$i."_".$j."').value = '".$items ."'; </script>";
 													//$i++;
 												}
+												//unlink("dnslook_".$_SESSION['user_id'].".xml");
+											}
+												
 											}
 
 										}
@@ -806,7 +813,7 @@
 						<?php
 						//click in modified domain;
 							if(isset($_POST['uid'])){
-								$xml='<OPS_envelope>
+								/*$xml='<OPS_envelope>
 										<header>
 											<version>0.9</version>
 										</header>
@@ -840,7 +847,8 @@
 															//echo "<script> document.getElementById('".$item['key']."_".$i."').value = '".$item ."'; </script>";
 															//echo nl2br( 'KEY:' . $item['key']. ' '. 'VALUE:' . $item . "\n");
 															$xml.='<item key="name">'.$item.'</item>
-																	<item key="new_name">'.$_POST['name_'.$i].'</item>';
+																	<item key="new_name">'.$_POST['name_'.$i].'</item>
+																	<item key="ipaddress">212.112.123.11</item>';
 															
 														}
 														
@@ -854,7 +862,7 @@
 
 										}
 								}
-														$xml.='<item key="ipaddress">212.112.123.11</item>
+														$xml.='
 														</dt_assoc>
 													</item>
 												</dt_assoc>
@@ -862,10 +870,37 @@
 										</body>
 									</OPS_envelope>';
 									
-
+									 $file = fopen("archivo.xml", "w");
+									fwrite($file, $xml);
+									fclose($file);*/
 									//echo htmlentities($xml);
-									echo $api->xml_output($xml,"updatedns_".$_SESSION['user_id']);
+									//echo $api->xml_output($xml,"updatedns_".$_SESSION['user_id']);
+									/*$xml='<OPS_envelope>
+												<header>
+													<version>0.9</version>
+												</header>
+												<body>
+													<data_block>
+														<dt_assoc>
+															<item key="protocol">XCP</item>
+															<item key="action">get</item>
+														  <item key="object">domain</item>
+															<item key="registrant_ip">111.121.121.121</item>
+															<item key="attributes">
+																<dt_assoc>
+																	<item key="domain">'.$_SESSION['domain'].'</item>
+																	<item key="type">all_info</item>
+																	<item key="limit">10</item>
+																</dt_assoc>
+															</item>
+														</dt_assoc>
+													</data_block>
+												</body>
+											</OPS_envelope>';
+											echo $api->xml_output($xml,"updatedns_".$_SESSION['user_id']);*/
+								
 							}
+						
 						?>
 					</div>
 				</div>

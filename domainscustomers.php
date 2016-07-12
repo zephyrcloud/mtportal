@@ -567,10 +567,9 @@
 			$insert_query = "INSERT INTO `created_domains`(`customer_id`, `domain`) VALUES (".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
 			//echo nl2br($insert_query."\n");
 			$insert_result = mysql_query($insert_query);}else{
-			
 			echo "<script> alert('".$message."'); </script>";		
-			unlink($xml_name.".xml");			
 			}
+			unlink($xml_name.".xml");			
 			
 		}
 		
