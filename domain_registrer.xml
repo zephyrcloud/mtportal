@@ -9,17 +9,29 @@
    <dt_assoc>
     <item key="protocol">XCP</item>
     <item key="object">DOMAIN</item>
-    <item key="response_code">465</item>
-    <item key="is_success">0</item>
-    <item key="response_text">Invalid data</item>
-    <item key="transaction_id">2016-07-11 11:56:11 13859 101</item>
+    <item key="response_code">200</item>
+    <item key="is_success">1</item>
+    <item key="response_text">Domain registration successfully completed.
+Whois Privacy successfully enabled.</item>
     <item key="action">REPLY</item>
     <item key="attributes">
      <dt_assoc>
-      <item key="error">Invalid data for owner country code.
-Missing required field: owner Postal Code
-</item>
-      <item key="forced_pending">11331895</item>
+      <item key="registration_text">Domain registration successfully completed.
+Whois Privacy successfully enabled.</item>
+      <item key="admin_email"> jbriceno@zephyrcloud.com</item>
+      <item key="cancelled_orders">
+       <dt_array>
+        <item key="0">11348501</item>
+        <item key="1">11348506</item>
+        <item key="2">11348510</item>
+        <item key="3">11348513</item>
+        <item key="4">11348551</item>
+        <item key="5">11348555</item>
+       </dt_array>
+      </item>
+      <item key="registration_code">200</item>
+      <item key="domain_id">1513658</item>
+      <item key="id">11348556</item>
      </dt_assoc>
     </item>
    </dt_assoc>
