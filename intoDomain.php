@@ -35,6 +35,7 @@
 		
 		<?php
 			include("header.php");
+			include("menucustomer.php");
 		?>
 		
 		<div id="pagecontents">
@@ -718,6 +719,7 @@
 							</table>
 							</form>
 						</div>
+						
 						<div id="dns_manager" hidden> 
 						<form action="intoDomain.php" method="POST">
 							<input hidden readonly type="text" id="uid" name="uid" >
@@ -813,92 +815,49 @@
 						<?php
 						//click in modified domain;
 							if(isset($_POST['uid'])){
-								/*$xml='<OPS_envelope>
-										<header>
-											<version>0.9</version>
-										</header>
-										<body>
-											<data_block>
-												<dt_assoc>
-													<item key="protocol">XCP</item>
-													<item key="action">modify</item>
-													<item key="object">nameserver</item>
-													<item key="reg_username">'.$_SESSION['user'].'</item>
-													<item key="reg_password">'.$_SESSION['pass'].'</item>
-													<item key="domain">'.$_SESSION['domain'].'</item>
-													<item key="affect_domains">0</item>
-													<item key="attributes">
-														<dt_assoc>';
-														
-								
-								if (file_exists("dnslook_".$_SESSION['user_id'].".xml")) {
-											
-								// GET THE THINGS FROM THE DATA BLOCK
-									if(!$obj = simplexml_load_file("dnslook_".$_SESSION['user_id'].".xml")){
-										$message= "Error!";
-									} else {
-										if($obj->body->data_block->dt_assoc->item[3] == "415"){
-											echo "<script> alert('Something wrong happens.'); </script>";
-										}else{
-												$i=0;
-												foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item->dt_array -> item as $items){
-													foreach($items ->dt_assoc ->item as $item){
-														if($item['key'] == "name"){
-															//echo "<script> document.getElementById('".$item['key']."_".$i."').value = '".$item ."'; </script>";
-															//echo nl2br( 'KEY:' . $item['key']. ' '. 'VALUE:' . $item . "\n");
-															$xml.='<item key="name">'.$item.'</item>
-																	<item key="new_name">'.$_POST['name_'.$i].'</item>
-																	<item key="ipaddress">212.112.123.11</item>';
-															
-														}
-														
-													}
-													//echo nl2br("here i am ".$i. ": ".$_POST['name_'.$i]." name_".$i."\n");
-													//echo nl2br($items['key'] .' VALUE:' . $items. "\n"); //owner
-													//echo "<script> document.getElementById('".$items['key']."_".$i."_".$j."').value = '".$items ."'; </script>";
-													$i++;
-												}
-											}
 
-										}
-								}
-														$xml.='
-														</dt_assoc>
-													</item>
-												</dt_assoc>
-											</data_block>
-										</body>
-									</OPS_envelope>';
-									
-									 $file = fopen("archivo.xml", "w");
+								
+								$xml='<OPS_envelope>
+									<header>
+										<version>0.9</version>
+									</header>
+									<body>
+										<data_block>
+											<dt_assoc>
+												<item key="protocol">XCP</item>
+												<item key="action">advanced_update_nameservers</item>
+												<item key="object">domain</item>
+												<item key="domain">'.$_SESSION['domain'].'</item>
+												<item key="attributes">
+													<dt_assoc>
+														<item key="assign_ns">
+															<dt_array>';
+																for($i=0 ; $i<13 ; $i++){
+																	if($_POST['name_'.$i] != ""){
+																	$xml.='<item key="'.$i.'">'.$_POST['name_'.$i].'</item>';
+																	
+																	}
+																}
+																
+														$xml.='</dt_array>
+														</item>
+														<item key="op_type">assign</item>
+													</dt_assoc>
+												</item>
+											</dt_assoc>
+										</data_block>
+									</body>
+								</OPS_envelope>';
+								
+
+									/*$file = fopen("archivo.xml", "w");
 									fwrite($file, $xml);
 									fclose($file);*/
-									//echo htmlentities($xml);
-									//echo $api->xml_output($xml,"updatedns_".$_SESSION['user_id']);
-									/*$xml='<OPS_envelope>
-												<header>
-													<version>0.9</version>
-												</header>
-												<body>
-													<data_block>
-														<dt_assoc>
-															<item key="protocol">XCP</item>
-															<item key="action">get</item>
-														  <item key="object">domain</item>
-															<item key="registrant_ip">111.121.121.121</item>
-															<item key="attributes">
-																<dt_assoc>
-																	<item key="domain">'.$_SESSION['domain'].'</item>
-																	<item key="type">all_info</item>
-																	<item key="limit">10</item>
-																</dt_assoc>
-															</item>
-														</dt_assoc>
-													</data_block>
-												</body>
-											</OPS_envelope>';
-											echo $api->xml_output($xml,"updatedns_".$_SESSION['user_id']);*/
-								
+									
+									echo $api->xml_output($xml,"updatedns_".$_SESSION['user_id']);
+									$status=$api -> xml_request_dns("updatedns_".$_SESSION['user_id']);
+									echo "<script> alert('".$status."'); </script> ";
+									
 							}
 						
 						?>
@@ -1072,6 +1031,7 @@
 			$('#technical').hide();
 			$('#renew').hide();
 			$('#transfer').hide();
+			$('#dns_manager').hide();
 		}
 		
 		function show_admin(){
@@ -1081,6 +1041,7 @@
 			$('#technical').hide();
 			$('#renew').hide();
 			$('#transfer').hide();
+			$('#dns_manager').hide();
 		}
 		
 		function show_billing(){
@@ -1090,6 +1051,7 @@
 			$('#technical').hide();
 			$('#renew').hide();
 			$('#transfer').hide();
+			$('#dns_manager').hide();
 		}
 		
 		function show_technical(){
@@ -1099,6 +1061,7 @@
 			$('#renew').hide();
 			$('#technical').show();
 			$('#transfer').hide();
+			$('#dns_manager').hide();
 		}
 		
 		function show_renew(){
@@ -1107,7 +1070,8 @@
 			$('#billing ').hide();
 			$('#technical').hide();
 			$('#renew').show();	
-			$('#transfer').hide();			
+			$('#transfer').hide();
+			$('#dns_manager').hide();			
 		}
 		
 		function show_transfer(){
@@ -1116,7 +1080,8 @@
 			$('#billing ').hide();
 			$('#technical').hide();
 			$('#renew').hide();
-			$('#transfer').show();			
+			$('#transfer').show();
+			$('#dns_manager').hide();			
 		}
 		
 		 /*var goodexit = false;

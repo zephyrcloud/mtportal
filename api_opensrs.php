@@ -110,7 +110,7 @@ class api_opensrs{
 						
 			// GET THE THINGS FROM THE DATA BLOCK
 			if(!$obj = simplexml_load_file($xml_archive.".xml")){
-				$message= "Error!";
+				$status =  "Error!";
 			} else {
 				/*foreach ($obj->body->data_block->dt_assoc as $dt_assoc)
 				{
@@ -142,7 +142,41 @@ class api_opensrs{
 		return $message;
 	}
 
-
+	function xml_request_dns($xml_archive){
+		if (file_exists($xml_archive.".xml")) {
+						
+			// GET THE THINGS FROM THE DATA BLOCK
+			if(!$obj = simplexml_load_file($xml_archive.".xml")){
+				$status =  "Error!";
+			} else {
+				/*foreach ($obj->body->data_block->dt_assoc as $dt_assoc)
+				{
+					//echo PHP_EOL;
+					foreach ($dt_assoc->item as $item)
+					{
+						//echo PHP_EOL;
+						echo 'KEY:' . $item['key'];
+						echo ' ';
+						echo 'VALUE:' . $item;
+					}
+				}*/
+				
+			//$status = $obj->body->data_block->dt_assoc[0]->item[4]->dt_assoc[0]->item[0];
+			if($obj->body->data_block->dt_assoc[0]->item[4] == "200"){
+				$status = "Command completed successfully.";
+			}else{
+				$status = "there is a mistake, please try again.";
+			}
+			$message= $status;
+			//$message= $obj->body->data_block->dt_assoc[0]->item[4];
+			}
+			
+		} else {
+			$message= "Error with the archive";
+		}
+		
+		return $message;
+	}
 	
 }
  
