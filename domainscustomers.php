@@ -170,15 +170,17 @@
 			  <item key="auto_renew"></item>
 			  <item key="comments"></item>
 			  <item key="domain">'.$_POST['domain_name'].'</item>
-			  <item key="reg_type">new</item>
-			  <item key="reg_username">'.$_POST['Registrant_Username'].'</item>
+			  <item key="reg_type">new</item>';
+			  if($_POST['previous_domain'] != ""){
+				  $xml.='<item key="reg_domain">'.$_POST['previous_domain'].'</item>';
+			  }
+			  $xml.='<item key="reg_username">'.$_POST['Registrant_Username'].'</item>
 			  <item key="reg_password">'.$_POST['Registrant_Password'].'</item>
 			  <item key="f_whois_privacy">1</item>
 			  <item key="period">1</item>
 			  <item key="link_domains">0</item>
 			  <item key="custom_nameservers">1</item>
-			  <item key="f_lock_domain">0</item>
-			  <item key="reg_domain">'.$_POST['previous_domain'].'</item>
+			  <item key="f_lock_domain">0</item>			 
 			  <item key="handle">process</item>
 			  <item key="contact_set">
 			  <dt_assoc>'; // here begin for the ites by person (owner , billing, technical , admin)

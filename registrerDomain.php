@@ -114,30 +114,32 @@
 		<div id="pagecontents">
 			<div class="wrapper" >
 				<div id="post">
-					<div id="registrer">
-						<form action="registrerDomain.php" method="POST">						
-							<table border="1">
-							<tr><th colspan="3">Retrieve Order information</th></tr>
-							<tr><td rowspan="3">Lookfor or registrer domains</td>
-							<input hidden type="text" name="id_domain" id="id_domain" readonly value="<?php if(isset($_POST['domainFld'])){echo $_POST['domainFld']; $_SESSION['domain'] = $_POST['domainFld'];}else{echo $_SESSION['domain'];} ?>" >							
-							<td>Previous Domain: <input  type="text" id="domain_exits" name="domain_exits"></td>
-							<tr><td>Username: <input required type="text" name="username" id="username" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>
-							<tr><td>Password: <input required minlength=10 maxlength="20"  type="password" name="password" id="password" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>
-							<tr><th colspan="3"><input id="retreive_data" type="submit" value="retrieve data"></th></tr>
-							</table>
-						</form>
-					</div>
+					<div id="retreive" hidden>
+								<form action="registrerDomain.php" method="POST">						
+									<table border="1">
+									<tr><th colspan="3">Retrieve Order information</th></tr>
+									<tr><td rowspan="3">Lookfor or registrer domains</td>
+									<input hidden type="text" name="id_domain" id="id_domain" readonly value="<?php if(isset($_POST['domainFld'])){echo $_POST['domainFld']; $_SESSION['domain'] = $_POST['domainFld'];}else{echo $_SESSION['domain'];} ?>" >							
+									<td>Previous Domain: <input  type="text" id="domain_exits" name="domain_exits"></td>
+									<tr><td>Username: <input required type="text" name="username" id="username" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>
+									<tr><td>Password: <input required minlength=10 maxlength="20"  type="password" name="password" id="password" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>
+									<tr><th colspan="3"><input id="retreive_data" type="submit" value="retrieve data"></th></tr>
+									</table>
+								</form>
+							</div>
 					
-					<div id="registrer_1">
+					<div id="registrer">
 						<form action="domainscustomers.php" method="POST">
 							<input type="text" name="user_id_registrer" id="user_id_registrer" readonly hidden >
 							<table border="1">
 							<tr><th colspan="2">Domain information</th></tr>
 							<tr><td>Domain Name</td><td><input type="text" name="domain_name" id="domain_name" readonly value="<?php if(isset($_POST['domainFld'])){echo $_POST['domainFld']; $_SESSION['domain'] = $_POST['domainFld'];}else{echo $_SESSION['domain'];} ?>" ></td>
 							<tr><td>Registration Type</td><td> <input type="text" name="type_registrer" id="type_registrer" readonly value="New Domain Registration" > </td></tr>
-							<tr hidden><td> <input readonly type="text" name="previous_domain" id="previous_domain" > </td></tr>
-							<tr hidden><td> <input readonly type="text" name="Registrant_Username" id="Registrant_Username" > </td></tr>
-							<tr hidden><td> <input readonly type="password" name="Registrant_Password" id="Registrant_Password"> </td></tr>
+							<tr class="prev_dom" hidden><td>Previous domain </td><td><input readonly type="text" name="previous_domain" id="previous_domain" > </td></tr>
+							<tr class="data_own"><td>Username registrer</td><td> <input type="text" name="Registrant_Username" id="Registrant_Username" required> </td></tr>
+							<tr class="data_own"><td>Password registrer</td><td> <input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" type="password" name="Registrant_Password" id="Registrant_Password" required> </td></tr>
+							<tr class="data_own"><td>Confirm Password</td><td> <input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" type="password" name="Password_confirm" id="Password_confirm" required> </td></tr>
+							<tr><td colspan="2"><center><input onDblClick="retreive_disapear(this);" onclick="retreive_apear();" type="radio" id="dom" name="dom"> I want retreive data from previous domain </center></td></tr>
 							</table>
 							
 							<table border="1">  
@@ -234,13 +236,6 @@
 		// when i put a user and password and retreive data. 
 		if(isset($_POST['domain_exits']) ){
 
-		echo " <script> document.getElementById('domain_name').value = '".$_POST['id_domain']."'; </script>";
-		echo " <script> document.getElementById('password').value = '".$_POST['password']."'; </script>";
-		echo " <script> document.getElementById('username').value = '".$_POST['username']."'; </script>";
-		echo " <script> document.getElementById('domain_exits').value = '".$_POST['domain_exits']."'; </script>";
-		echo " <script> document.getElementById('Registrant_Password').value = '".$_POST['password']."'; </script>";
-		echo " <script> document.getElementById('Registrant_Username').value = '".$_POST['username']."'; </script>";
-		echo " <script> document.getElementById('previous_domain').value = '".$_POST['domain_exits']."'; </script>";
 		
 		$xml='<OPS_envelope>
 			<header>
@@ -277,7 +272,8 @@
 						
 						// 0 admin , 1 owner , 2 tech ,3 billing
 						if($obj->body->data_block->dt_assoc->item[3] == "415"){
-							echo "<script> alert('Profile not found, please try again. if this is your first domain or you wish to create a new profile, leave previous domain box empty and we will create a new profile for you with the domain you are currently registering'); </script>";
+							//echo "<script> alert('Profile not found, please try again. if this is your first domain or you wish to create a new profile, leave previous domain box empty and we will create a new profile for you with the domain you are currently registering'); </script>";
+							echo "<script> alert('Profile not found, please try again. if this is your first domain or you wish to create a new profile, please unselect the checkbox and continue with the registrer.'); </script>";
 						}else{
 							for($j=0; $j < 4 ; $j++ ){
 								$i=0;
@@ -298,6 +294,22 @@
 									}
 								$i++;
 							}
+								echo " <script> document.getElementById('domain_name').value = '".$_POST['id_domain']."'; </script>";
+								echo " <script> document.getElementById('password').value = '".$_POST['password']."'; </script>";
+								echo " <script> document.getElementById('username').value = '".$_POST['username']."'; </script>";
+								echo " <script> document.getElementById('domain_exits').value = '".$_POST['domain_exits']."'; </script>";
+								echo " <script> document.getElementById('Registrant_Password').value = '".$_POST['password']."'; </script>";
+								echo " <script> document.getElementById('Registrant_Username').value = '".$_POST['username']."'; </script>";
+								echo " <script> document.getElementById('previous_domain').value = '".$_POST['domain_exits']."';
+												document.getElementById('Password_confirm').value = '".$_POST['password']."';
+												document.getElementById('previous_domain').value = '".$_POST['domain_exits']."';
+								$('#retreive').hide();
+								$('tr.data_own').show();
+								$('tr.prev_dom').show();
+								document.getElementById('Password_confirm').readOnly = true;
+								document.getElementById('Registrant_Username').readOnly = true;
+								document.getElementById('Registrant_Password').readOnly = true;
+								</script>";
 						}
 					}
 				}
@@ -312,13 +324,22 @@
 		var pass = document.getElementById('password').value;
 		document.getElementById('Registrant_Username').value= user;
 		document.getElementById('Registrant_Password').value = pass;
+		function retreive_apear(){
+			$('#retreive').show();
+			$('tr.data_own').hide();
+		}
+		function retreive_disapear(rbutton){
+			rbutton.checked=(rbutton.checked)?false:true;
+			$('#retreive').hide();
+			$('tr.data_own').show();
+		}
 		function cp_text(){
 			var user = document.getElementById('username').value; 
 			var pass = document.getElementById('password').value;
 			document.getElementById('Registrant_Username').value= user;
 			document.getElementById('Registrant_Password').value = pass;
 	   }
-	   function telephone_extension(id) { 
+	    function telephone_extension(id) { 
 		  var m = document.getElementById(id).value;
 		  var expreg = /^\+([0-9]){1}([\.])([0-9])*$/;
 		  
@@ -333,23 +354,42 @@
 			
 					var check = document.getElementById("aci").checked;
 					if(check==true){
-			$('tr.row_a').hide();
-			$("#aci").val(check);
-			document.getElementById("first_name_12_0").removeAttribute("required");
-			document.getElementById("last_name_5_0").removeAttribute("required");
-			document.getElementById("org_name_2_0").removeAttribute("required");
-			document.getElementById("address1_11_0").removeAttribute("required");
-			document.getElementById("city_8_0").removeAttribute("required");
-			document.getElementById("state_6_0").removeAttribute("required");
-			document.getElementById("phone_3_0").removeAttribute("required");
-			document.getElementById("fax_10_0").removeAttribute("required");
-			document.getElementById("email_7_0").removeAttribute("required");
-			document.getElementById("postal_code_9_0").removeAttribute("required");
-			      
-			//document.getElementById("city").removeAttribute("required");
-			//document.getElementById("row[]").style.display = 'none';
-		
-		}
+						$('tr.row_a').hide();
+						$("#aci").val(check);
+						/*document.getElementById("first_name_12_0").removeAttribute("required");
+						document.getElementById("last_name_5_0").removeAttribute("required");
+						document.getElementById("org_name_2_0").removeAttribute("required");
+						document.getElementById("address1_11_0").removeAttribute("required");
+						document.getElementById("city_8_0").removeAttribute("required");
+						document.getElementById("state_6_0").removeAttribute("required");
+						document.getElementById("phone_3_0").removeAttribute("required");
+						document.getElementById("fax_10_0").removeAttribute("required");
+						document.getElementById("email_7_0").removeAttribute("required");
+						document.getElementById("postal_code_9_0").removeAttribute("required");*/
+							document.getElementById("first_name_12_0").required = false;
+							document.getElementById("last_name_5_0").required = false;
+							document.getElementById("org_name_2_0").required = false;
+							document.getElementById("address1_11_0").required = false;
+							document.getElementById("city_8_0").required = false;
+							document.getElementById("state_6_0").required = false;
+							document.getElementById("phone_3_0").required = false;
+							document.getElementById("fax_10_0").required = false;
+							document.getElementById("email_7_0").required = false;
+							document.getElementById("postal_code_9_0").required = false;				
+						//document.getElementById("city").removeAttribute("required");
+						//document.getElementById("row[]").style.display = 'none';
+					}else{
+							document.getElementById("first_name_12_0").required = true;
+							document.getElementById("last_name_5_0").required = true;
+							document.getElementById("org_name_2_0").required = true;
+							document.getElementById("address1_11_0").required = true;
+							document.getElementById("city_8_0").required = true;
+							document.getElementById("state_6_0").required = true;
+							document.getElementById("phone_3_0").required = true;
+							document.getElementById("fax_10_0").required = true;
+							document.getElementById("email_7_0").required = true;
+							document.getElementById("postal_code_9_0").required = true;
+					}
 				}	
 		function checked_bci(){
 			var check = document.getElementById("bci").checked;
@@ -357,7 +397,7 @@
 			if(check==true || check_1==true ){
 				$('tr.row_b').hide();
 				//document.getElementById("row[]").style.display = 'none';
-				document.getElementById("first_name_12_3").removeAttribute("required");
+				/*document.getElementById("first_name_12_3").removeAttribute("required");
 				document.getElementById("last_name_5_3").removeAttribute("required");
 				document.getElementById("org_name_2_3").removeAttribute("required");
 				document.getElementById("address1_11_3").removeAttribute("required");
@@ -366,9 +406,33 @@
 				document.getElementById("postal_code_9_3").removeAttribute("required");
 				document.getElementById("phone_3_3").removeAttribute("required");
 				document.getElementById("fax_10_3").removeAttribute("required");
-				document.getElementById("email_7_3").removeAttribute("required");
+				document.getElementById("email_7_3").removeAttribute("required");*/
+				document.getElementById("first_name_12_3").required = false;
+							document.getElementById("last_name_5_3").required = false;
+							document.getElementById("org_name_2_3").required = false;
+							document.getElementById("address1_11_3").required = false;
+							document.getElementById("city_8_3").required = false;
+							document.getElementById("state_4_3").required = false;
+							document.getElementById("phone_3_3").required = false;
+							document.getElementById("fax_10_3").required = false;
+							document.getElementById("email_7_3").required = false;
+							document.getElementById("postal_code_9_3").required = false;			
 			}
-			         
+			
+			if(check==false && check_1==false ){
+					document.getElementById("first_name_12_3").required = true;
+							document.getElementById("last_name_5_3").required = true;
+							document.getElementById("org_name_2_3").required = true;
+							document.getElementById("address1_11_3").required = true;
+							document.getElementById("city_8_3").required = true;
+							document.getElementById("state_4_3").required = true;
+							document.getElementById("phone_3_3").required = true;
+							document.getElementById("fax_10_3").required = true;
+							document.getElementById("email_7_3").required = true;
+							document.getElementById("postal_code_9_3").required = true;			
+			}
+
+			
 			//alert(check + " --- " + check_1)
 			
 		}	
@@ -379,7 +443,7 @@
 			if(check==true || check_1==true  || check_2 == true){
 				$('tr.row_t').hide();
 				//document.getElementById("row[]").style.display = 'none';
-				document.getElementById("first_name_12_2").removeAttribute("required");
+				/*document.getElementById("first_name_12_2").removeAttribute("required");
 				document.getElementById("last_name_6_2").removeAttribute("required");
 				document.getElementById("org_name_2_2").removeAttribute("required");
 				document.getElementById("address1_11_2").removeAttribute("required");
@@ -388,8 +452,31 @@
 				document.getElementById("postal_code_9_2").removeAttribute("required");
 				document.getElementById("phone_3_2").removeAttribute("required");
 				document.getElementById("fax_10_2").removeAttribute("required");
-				document.getElementById("email_7_2").removeAttribute("required");
+				document.getElementById("email_7_2").removeAttribute("required");*/
+				document.getElementById("first_name_12_2").required = false;
+							document.getElementById("last_name_6_2").required = false;
+							document.getElementById("org_name_2_2").required = false;
+							document.getElementById("address1_11_2").required = false;
+							document.getElementById("city_8_2").required = false;
+							document.getElementById("state_5_2").required = false;
+							document.getElementById("phone_3_2").required = false;
+							document.getElementById("fax_10_2").required = false;
+							document.getElementById("email_7_2").required = false;
+							document.getElementById("postal_code_9_2").required = false;	
 				         
+			}
+			
+			if(check==false && check_1==false  && check_2 == false){
+				document.getElementById("first_name_12_2").required = true;
+							document.getElementById("last_name_6_2").required = true;
+							document.getElementById("org_name_2_2").required = true;
+							document.getElementById("address1_11_2").required = true;
+							document.getElementById("city_8_2").required = true;
+							document.getElementById("state_5_2").required = true;
+							document.getElementById("phone_3_2").required = true;
+							document.getElementById("fax_10_2").required = true;
+							document.getElementById("email_7_2").required = true;
+							document.getElementById("postal_code_9_2").required = true;	
 			}
 		
 		
@@ -431,7 +518,19 @@
 				//document.getElementById("row[]").style.display = 'none';
 			}
 		}
-		
+		function validate_password(){
+			var pass = document.getElementById('Registrant_Password').value;
+			var pass_confirm = document.getElementById('Password_confirm').value;
+			var passl= pass.length;
+			var pass_confirml= pass_confirm.length;
+			 if((pass == pass_confirm) && (passl >= 10 && passl <= 20) && (pass_confirml >= 10 && pass_confirml <= 20)) {
+				 document.getElementById('Registrant_Password').style.color="#0040FF";
+				 document.getElementById('Password_confirm').style.color="#0040FF";
+			 }else{
+				 document.getElementById('pass').style.color="#B40404";
+				 document.getElementById('pass_confirm').style.color="#B40404";				
+			 }
+		}
 		</script>
 	</body>
 </html>

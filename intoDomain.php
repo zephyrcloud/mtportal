@@ -17,11 +17,6 @@
 		
 	}
 	
-
-	
-	//$_SESSION['domain'] = $_POST['domainFldUser'];
-	//$_SESSION['domain'] = html_entity_decode(base64_decode($_GET['domain']));
-	
 ?>
 
 
@@ -46,13 +41,14 @@
 					
 					<div id="postcontent" align="center">
 							 <table border="1">
-								<tr><th colspan="6"><h2 style="color:#FFFFFF">Your are logged with the <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> domain </h2></th></tr>
+								<tr><th colspan="7"><h2 style="color:#FFFFFF">Your are logged with the <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> domain </h2></th></tr>
 								<td><a href="#" onclick="show_organization();" >Organization</a></td>
 								<td><a href="#" onclick="show_admin();" >Admin</a></td>
 								<td><a href="#" onclick="show_billing();" >Billing</a></td>
 								<td><a href="#" onclick="show_technical();" >Technical</a></td>
 								<td><a href="#" onclick="show_renew();" >Renew this domain</a></td>
 								<td><a href="#" onclick="show_dns_manager_panel();" >Domain manager</a></td>
+								<td><a href="#" onclick="show_owner_change();" >Change owership domain</a></td>
 							 </table>
 
 						<?php
@@ -389,18 +385,18 @@
 								<table border="1"> 
 									<tr><th colspan="2">Admin Contact Information</th></tr>
 									<tr class="row_a"><td>First Name </td><td><input type="text" id="first_name_12_0" name="first_name_12_0" required></td></tr>
-									<tr class="row_a"><td>Last Name </td><td><input type="text" id="last_name_5_0" name="last_name_5_0" required></td></tr>
-									<tr class="row_a"><td>Organization Name </td><td><input type="text" id="org_name_2_0"  name="org_name_2_0" required></td></tr>
-									<tr class="row_a"><td>Street Address </td><td><input type="text" id="address1_11_0" name="address1_11_0" required></td></tr>
-									<tr class="row_a"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_0" name="address2_4_0" ></td></tr>
-									<tr class="row_a"><td>Address 3 [optional] </td><td><input type="text" id="address3_1_0" name="address3_1_0" ></td></tr>
-									<tr class="row_a"><td>City </td><td><input type="text" id="city_8_0" name="city_8_0" required></td></tr>
-									<tr class="row_a"><td>State </td><td><input type="text" id="state_6_0" name="state_6_0" required></td></tr>
-									<tr class="row_a"><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-									<tr class="row_a"><td>Postal Code </td><td><input type="text" id="postal_code_9_0" name="postal_code_9_0" required></td></tr>
-									<tr class="row_a"><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_0')"; onkeypress= "telephone_extension('phone_3_0')"; onkeyup = "telephone_extension('phone_3_0')"; type="text" id="phone_3_0" name="phone_3_0" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-									<tr class="row_a"><td>Fax Number[optional] </td><td><input type="text" id="fax_10_0" name="fax_10_0" ></td></tr>
-									<tr class="row_a"><td>Email </td><td><input type="email" id="email_7_0" name="email_7_0" required><br>Must be a current valid address</td></tr>
+									<tr><td>Last Name </td><td><input type="text" id="last_name_5_0" name="last_name_5_0" required></td></tr>
+									<tr><td>Organization Name </td><td><input type="text" id="org_name_2_0"  name="org_name_2_0" required></td></tr>
+									<tr><td>Street Address </td><td><input type="text" id="address1_11_0" name="address1_11_0" required></td></tr>
+									<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_0" name="address2_4_0" ></td></tr>
+									<tr><td>Address 3 [optional] </td><td><input type="text" id="address3_1_0" name="address3_1_0" ></td></tr>
+									<tr><td>City </td><td><input type="text" id="city_8_0" name="city_8_0" required></td></tr>
+									<tr><td>State </td><td><input type="text" id="state_6_0" name="state_6_0" required></td></tr>
+									<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+									<tr><td>Postal Code </td><td><input type="text" id="postal_code_9_0" name="postal_code_9_0" required></td></tr>
+									<tr><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_0')"; onkeypress= "telephone_extension('phone_3_0')"; onkeyup = "telephone_extension('phone_3_0')"; type="text" id="phone_3_0" name="phone_3_0" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+									<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_10_0" name="fax_10_0" ></td></tr>
+									<tr><td>Email </td><td><input type="email" id="email_7_0" name="email_7_0" required><br>Must be a current valid address</td></tr>
 									<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"></th></tr>
 								</table>
 							</form>						
@@ -481,19 +477,19 @@
 							<input hidden readonly type="text" id="user_id" name="user_id" >
 								<table border="1">
 									<tr><th colspan="2">Billing Contact Information</th></tr>
-									<tr class="row_b"><td>First Name </td><td><input type="text" id="first_name_12_3" name="first_name_12_3" required></td></tr>
-									<tr class="row_b"><td>Last Name </td><td><input type="text" id="last_name_5_3" name="last_name_5_3" required></td></tr>
-									<tr class="row_b"><td>Organization Name </td><td><input type="text" id="org_name_2_3"  name="org_name_2_3" required></td></tr>
-									<tr class="row_b"><td>Street Address </td><td><input type="text" id="address1_11_3" name="address1_11_3" required></td></tr>
-									<tr class="row_b"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_6_3" name="address2_6_3" ></td></tr>
-									<tr class="row_b"><td>Address 3 [optional] </td><td><input type="text" id="address3_1_3" name="address3_1_3" ></td></tr>
-									<tr class="row_b"><td>City </td><td><input type="text" id="city_8_3" name="city_8_3" required></td></tr>
-									<tr class="row_b"><td>State </td><td><input type="text" id="state_4_3" name="state_4_3" required></td></tr>
-									<tr class="row_b"><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-									<tr class="row_b"><td>Postal Code </td><td><input type="text" id="postal_code_9_3" name="postal_code_9_3" required></td></tr>
-									<tr class="row_b"><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_3')"; onkeypress= "telephone_extension('phone_3_3')"; onkeyup = "telephone_extension('phone_3_3')"; type="text" id="phone_3_3" name="phone_3_3" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-									<tr class="row_b"><td>Fax Number[optional] </td><td><input type="text" id="fax_10_3" name="fax_10_3" ></td></tr>
-									<tr class="row_b"><td>Email </td><td><input type="email" id="email_7_3" name="email_7_3" required><br>Must be a current valid address</td></tr>
+									<tr><td>First Name </td><td><input type="text" id="first_name_12_3" name="first_name_12_3" required></td></tr>
+									<tr><td>Last Name </td><td><input type="text" id="last_name_5_3" name="last_name_5_3" required></td></tr>
+									<tr><td>Organization Name </td><td><input type="text" id="org_name_2_3"  name="org_name_2_3" required></td></tr>
+									<tr><td>Street Address </td><td><input type="text" id="address1_11_3" name="address1_11_3" required></td></tr>
+									<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_6_3" name="address2_6_3" ></td></tr>
+									<tr><td>Address 3 [optional] </td><td><input type="text" id="address3_1_3" name="address3_1_3" ></td></tr>
+									<tr><td>City </td><td><input type="text" id="city_8_3" name="city_8_3" required></td></tr>
+									<tr><td>State </td><td><input type="text" id="state_4_3" name="state_4_3" required></td></tr>
+									<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+									<tr><td>Postal Code </td><td><input type="text" id="postal_code_9_3" name="postal_code_9_3" required></td></tr>
+									<tr><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_3')"; onkeypress= "telephone_extension('phone_3_3')"; onkeyup = "telephone_extension('phone_3_3')"; type="text" id="phone_3_3" name="phone_3_3" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+									<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_10_3" name="fax_10_3" ></td></tr>
+									<tr><td>Email </td><td><input type="email" id="email_7_3" name="email_7_3" required><br>Must be a current valid address</td></tr>
 									<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"></th></tr>
 								</table>
 							</form>						
@@ -574,19 +570,19 @@
 							<input hidden readonly type="text" id="user_id" name="user_id" >
 								<table border="1">
 									<tr><th colspan="2">Technical Contact Information</th></tr>
-									<tr class="row_t"><td>First Name </td><td><input type="text" id="first_name_12_2" name="first_name_12_2" required></td></tr>
-									<tr class="row_t"><td>Last Name </td><td><input type="text" id="last_name_6_2" name="last_name_6_2" required></td></tr>
-									<tr class="row_t"><td>Organization Name </td><td><input type="text" id="org_name_2_2"  name="org_name_2_2" required></td></tr>
-									<tr class="row_t"><td>Street Address </td><td><input type="text" id="address1_11_2" name="address1_11_2" required></td></tr>
-									<tr class="row_t"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_2 " name="address2_4_2 " ></td></tr>
-									<tr class="row_t"><td>Address 3 [optional] </td><td><input type="text" id="address3_1_2" name="address3_1_2" ></td></tr>
-									<tr class="row_t"><td>City </td><td><input type="text" id="city_8_2" name="city_8_2" required></td></tr>
-									<tr class="row_t"><td>State </td><td><input type="text" id="state_5_2" name="state_5_2" required></td></tr>
-									<tr class="row_t"><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-									<tr class="row_t"><td>Postal Code </td><td><input type="text" id="postal_code_9_2" name="postal_code_9_2" required></td></tr>
-									<tr class="row_t"><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_2')"; onkeypress= "telephone_extension('phone_3_2')"; onkeyup = "telephone_extension('phone_3_2')"; type="text" id="phone_3_2" name="phone_3_2" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-									<tr class="row_t"><td>Fax Number[optional] </td><td><input type="text" id="fax_10_2" name="fax_10_2" ></td></tr>
-									<tr class="row_t"><td>Email </td><td><input type="email" id="email_7_2" name="email_7_2" required><br>Must be a current valid address</td></tr>
+									<tr><td>First Name </td><td><input type="text" id="first_name_12_2" name="first_name_12_2" required></td></tr>
+									<tr><td>Last Name </td><td><input type="text" id="last_name_6_2" name="last_name_6_2" required></td></tr>
+									<tr><td>Organization Name </td><td><input type="text" id="org_name_2_2"  name="org_name_2_2" required></td></tr>
+									<tr><td>Street Address </td><td><input type="text" id="address1_11_2" name="address1_11_2" required></td></tr>
+									<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_2 " name="address2_4_2 " ></td></tr>
+									<tr><td>Address 3 [optional] </td><td><input type="text" id="address3_1_2" name="address3_1_2" ></td></tr>
+									<tr><td>City </td><td><input type="text" id="city_8_2" name="city_8_2" required></td></tr>
+									<tr><td>State </td><td><input type="text" id="state_5_2" name="state_5_2" required></td></tr>
+									<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+									<tr><td>Postal Code </td><td><input type="text" id="postal_code_9_2" name="postal_code_9_2" required></td></tr>
+									<tr><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_2')"; onkeypress= "telephone_extension('phone_3_2')"; onkeyup = "telephone_extension('phone_3_2')"; type="text" id="phone_3_2" name="phone_3_2" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+									<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_10_2" name="fax_10_2" ></td></tr>
+									<tr><td>Email </td><td><input type="email" id="email_7_2" name="email_7_2" required><br>Must be a current valid address</td></tr>
 									<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"></th></tr>
 								</table>
 							</form>						
@@ -861,6 +857,70 @@
 							}
 						
 						?>
+					
+						<div id="change_owner_domain" hidden>
+							<form action="intoDomain.php" method="POST">
+								<table border="1"> 
+									<tr><th colspan="2">Change owership</th></tr>
+									<input hidden readonly type="text" id="user_id1" name="user_id1" >
+									<tr><td>Username</td><td><input type="text" id="user" name="user" required></td></tr>
+									<tr><td>Password</td><td><input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" minlength=10 maxlength="20" type="password" id="pass" name="pass" required></td></tr>
+									<tr><td>Confirm</td><td><input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();"  minlength=10 maxlength="20" type="password" id="pass_confirm" name="pass_confirm" required></td></tr>									
+								</table>
+								<hr>
+								
+								<table border="1"> 
+									<!--<tr colspan="2"><td><input onclick="validate_password();" type="radio"  name="dom" id="dom_same" value="dom_same"> Move other domains already in the same profile as <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> </td></tr>-->
+									<tr colspan="2"><td><input onclick="validate_password();" type="radio"  name="dom" id="dom_exist" value="dom_exist"> Move to the existing profile of this previously registered domain</td></tr>
+									<tr colspan="2" id="p_domain" ><td>Previously registered domain: <input type="text" id="previous" name="previous" required></td></tr>
+									<tr hidden class="row_dom" ><th colspan="2"><input  id="submit_boton" type="submit" value="Submit"></th></tr>
+								</table>
+								
+							</form>
+						</div>
+						<?php 
+							if(isset($_POST['user'])){
+								//echo nl2br($_POST['user']."\n".$_POST['pass']."\n".$_POST['dom']."\n".$_POST['previous']."\n");
+								
+								switch($_POST['dom']){
+																		
+									case "dom_exist":
+									$xml='<OPS_envelope>
+											<header>
+												<version>0.9</version>
+											</header>
+											<body>
+												<data_block>
+													<dt_assoc>
+														<item key="protocol">XCP</item>
+														<item key="domain">'.$_SESSION['domain'].'</item>
+														<item key="object">OWNERSHIP</item>
+														<item key="action">CHANGE</item>
+														<item key="attributes">
+															<dt_assoc>
+																<item key="reg_domain">'.$_POST['previous'].'</item>
+																<item key="password">'.$_POST['pass'].'</item>
+																<item key="username">'.$_POST['user'].'</item>
+															</dt_assoc>
+														</item>
+														<item key="registrant_ip">10.0.10.138</item>
+													</dt_assoc>
+												</data_block>
+											</body>
+										</OPS_envelope>';
+										echo $api -> xml_output($xml,"trasfering");
+										
+										$_SESSION['domain'] = $_POST['previous'];
+										$_SESSION['user'] =$_POST['user'] ;
+										$_SESSION['pass']= $_POST['pass'];
+									break;
+								}
+								
+								
+								
+								
+							}
+						?>
 					</div>
 				</div>
 			
@@ -975,6 +1035,7 @@
 		unlink( "update_".$_SESSION['user_id'].".xml");
 		unlink( "retreive_data_".$_SESSION['user_id'].".xml");
 		unlink( "expire_time_".$_SESSION['user_id'].".xml");
+		unlink( "trasfering.xml");
 
 			$xml='<OPS_envelope>
 													<header>
@@ -1007,6 +1068,7 @@
 		<script>
 		var id = document.getElementById('id_user').value;
 		document.getElementById('user_id').value= id;
+		document.getElementById('user_id1').value= id;
 		function hide(){
 			$('tr.inf').hide();
 		}
@@ -1018,6 +1080,7 @@
 			$('#technical').hide();
 			$('#renew').hide();
 			$('#transfer').hide();
+			$('#change_owner_domain').hide();
 			$('#dns_manager').show();
 		}
 		function hide_panel(){$('#renew ').hide(); $('#button_panel').hide(); document.getElementById("tci_1").checked = false}
@@ -1032,6 +1095,7 @@
 			$('#renew').hide();
 			$('#transfer').hide();
 			$('#dns_manager').hide();
+			$('#change_owner_domain').hide();
 		}
 		
 		function show_admin(){
@@ -1042,6 +1106,7 @@
 			$('#renew').hide();
 			$('#transfer').hide();
 			$('#dns_manager').hide();
+			$('#change_owner_domain').hide();
 		}
 		
 		function show_billing(){
@@ -1052,6 +1117,7 @@
 			$('#renew').hide();
 			$('#transfer').hide();
 			$('#dns_manager').hide();
+			$('#change_owner_domain').hide();
 		}
 		
 		function show_technical(){
@@ -1062,6 +1128,7 @@
 			$('#technical').show();
 			$('#transfer').hide();
 			$('#dns_manager').hide();
+			$('#change_owner_domain').hide();
 		}
 		
 		function show_renew(){
@@ -1071,7 +1138,8 @@
 			$('#technical').hide();
 			$('#renew').show();	
 			$('#transfer').hide();
-			$('#dns_manager').hide();			
+			$('#dns_manager').hide();
+			$('#change_owner_domain').hide();			
 		}
 		
 		function show_transfer(){
@@ -1081,18 +1149,60 @@
 			$('#technical').hide();
 			$('#renew').hide();
 			$('#transfer').show();
-			$('#dns_manager').hide();			
+			$('#dns_manager').hide();
+			$('#change_owner_domain').hide();			
 		}
 		
-		 /*var goodexit = false;
-		 window.onbeforeunload = confirmRegisterExit;        
-		 function confirmRegisterExit(evt) {
-			if(!goodexit) {
-				return "Si vas abandonar el sistema haz click en Cerrar Sesion!!";
-			}
-		 }*/
-		 
+		function show_owner_change(){
+			$('#organization').hide(); 
+			$('#admin ').hide();
+			$('#billing ').hide();
+			$('#technical').hide();
+			$('#renew').hide();
+			$('#transfer').hide();	
+			$('#dns_manager').hide();
+			$('#change_owner_domain').show();		
+		}
 		
+		
+		function validate_password(){
+			var pass = document.getElementById('pass').value;
+			var pass_confirm = document.getElementById('pass_confirm').value;
+			var passl= pass.length;
+			var pass_confirml= pass_confirm.length;
+			 if((pass == pass_confirm) && (passl >= 10 && passl <= 20) && (pass_confirml >= 10 && pass_confirml <= 20)) {
+				 document.getElementById('pass').style.color="#0040FF";
+				 document.getElementById('pass_confirm').style.color="#0040FF";
+				 case_dom();
+			 }else{
+				 document.getElementById('pass').style.color="#B40404";
+				 document.getElementById('pass_confirm').style.color="#B40404";
+				 $('tr.row_dom').hide();
+			 }
+		}
+		 
+		function case_dom(){
+			var check = document.getElementById("dom_same").checked;
+			var check1 = document.getElementById("dom_exist").checked;
+			
+			if(check == true || check1 == true){
+				$('tr.row_dom').show();				
+			}else{
+				$('tr.row_dom').hide();
+			}
+			
+		}
+		
+		function option_1(){
+			$('#p_domain').hide();
+			validate_password();
+			document.getElementById("previous").required = false;
+		}
+		
+		function option_2(){
+			$('#p_domain').show();validate_password();
+			document.getElementById("previous").required = true;
+		}
 		</script>
 	</body>
 </html>
