@@ -8,12 +8,7 @@
 	// Errores
 	$error = "00";
 	if (isset($_GET["error"])) {
-		
-		// 401
-		if (isset($_GET["error"])) {
-			$error = "401";
-		}
-		
+		$error = "401";
 	}
 	
 ?>
@@ -28,18 +23,15 @@
 		
 		<?php
 			include("header.php");
+			include("menucustomer.php");
 		?>
 		
 		<div id="pagecontents">
-			
 			<div class="wrapper">
-			
 				<div id="post">
-					
 					<div id="postcontent" align="center">
-						
 						<form id="loginFrm" method="POST" action="intoDomain.php" style="text-align: center; width: 250px;">
-						<input hidden readonly type="text" id="user_id" name="user_id" >
+							<input hidden readonly type='text' id='user_id' name='user_id' >
 							<div>
 								<img style="margin-top: 10px; margin-bottom: 10px;" src="images/manage.png" alt="">
 							</div>
@@ -61,8 +53,12 @@
 							echo "<div><span style='font-style: italic; color: red;'> * Do not put www. as part of your domain name </span></div>";
 							if($error == "401"){
 									echo "<div><span style='font-style: italic; color: red;'>Username and/or password incorrect and/or domain invalid or not exists </span></div>";
+									echo "<script>
+											var id = document.getElementById('id_user').value;
+											document.getElementById('user_id').value= id;
+											</script>";
 									$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_user,id_tableModified) VALUES('".$ip_capture->getRealIP()."',12,10,2,4)";
-									$insert_result = mysql_query($insert_query);					
+									$insert_result = mysql_query($insert_query);
 								}
 							?>
 							
@@ -153,11 +149,6 @@
 		<?php
 			include("footer.php");
 			
-			if(isset($_POST['id'])){
-				unlink("domain_list_".$_POST['id'].".xml");
-				unlink( "renew_domain_".$_POST['id'].".xml");
-				unlink( "update_".$_POST['id'].".xml");
-			}
 		?>
 		
 		

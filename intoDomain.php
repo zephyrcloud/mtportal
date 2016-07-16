@@ -1,5 +1,4 @@
 <?php
-
 	// Connect to database
 	include("config/connection.php");
 	include("api_opensrs.php");
@@ -13,6 +12,7 @@
 		// 401
 		if (isset($_GET["error"])) {
 			$error = "401";
+			echo "<script> alert('Authentication Error in transfer domain, please verify the information'); </script>";
 		}
 		
 	}
@@ -53,6 +53,37 @@
 
 						<?php
 						
+							if(isset($_GET['p']) && isset($_GET['pa']) && isset($_GET['us']) ){
+								$xml='<OPS_envelope>
+											<header>
+												<version>0.9</version>
+											</header>
+											<body>
+												<data_block>
+													<dt_assoc>
+														<item key="protocol">XCP</item>
+														<item key="object">DOMAIN</item>
+													   <item key="action">GET</item>
+														<item key="attributes">
+															<dt_assoc>
+																<item key="clean_ca_subset">1</item>
+																<item key="domain">'.base64_decode(html_entity_decode($_GET['p'])).'</item>
+																 <item key="reg_username">'.base64_decode(html_entity_decode($_GET['us'])).'</item>
+																<item key="reg_password">'.base64_decode(html_entity_decode($_GET['pa'])).'</item>
+																<item key="type">list</item>
+															</dt_assoc>
+														</item>
+														<item key="registrant_ip">10.0.62.128</item>
+													</dt_assoc>
+												</data_block>
+											</body>
+										</OPS_envelope>';
+										
+										echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
+										echo "<script> alert('Login as the new domain transfer.'); </script>";
+										
+							}
+						
 							if(isset($_POST['passwordFldPass']) && isset($_POST['usernameFldUser'])  && isset($_POST['domainFldUser'])){
 										$_SESSION['user_id'] = $_POST['user_id'];
 										$_SESSION['pass'] = $_POST['passwordFldPass'];
@@ -83,7 +114,7 @@
 											</body>
 										</OPS_envelope>';
 										
-										echo $api->xml_output($xml,"domain_list_".$_POST['user_id']);
+										echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
 										
 										if (file_exists("domain_list_".$_POST['user_id'].".xml")) {
 									
@@ -131,7 +162,6 @@
 													</data_block>
 												</body>
 											</OPS_envelope>';
-
 											echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
 											
 											$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',13,21,4,".$_SESSION['user_id'].",'".html_entity_decode(base64_decode($_GET['domain']))."')";
@@ -205,7 +235,6 @@
 														</data_block>
 													</body>
 												</OPS_envelope>';
-
 												echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
 												
 												
@@ -214,7 +243,7 @@
 									
 							}
 							
-									if (file_exists("domain_list_".$_SESSION['user_id'].".xml")) {
+							if (file_exists("domain_list_".$_SESSION['user_id'].".xml")) {
 									
 											// GET THE THINGS FROM THE DATA BLOCK
 											if(!$obj = simplexml_load_file("domain_list_".$_SESSION['user_id'].".xml")){
@@ -224,7 +253,7 @@
 												// 0 admin , 1 owner , 2 tech ,3 billing
 												if($obj->body->data_block->dt_assoc->item[3] == "415"){
 													//echo $obj->body->data_block->dt_assoc->item[5];
-													header("Location: profileScreen.php?error=401");
+													//header("Location: profileScreen.php?error=401");
 												}else{
 													//echo "<script> $('#postcontent').hide(); $('#managament').show(); </script>";
 													$i=0;
@@ -269,7 +298,6 @@
 																}else{
 																	echo '<td>Y</td>';
 																}
-
 															}
 														}
 														
@@ -282,6 +310,7 @@
 											}
 											
 										}
+					
 						
 						
 						?>	
@@ -694,7 +723,6 @@
 													</data_block>
 												</body>
 											</OPS_envelope>';
-
 											echo $api->xml_output($xml,"expire_time_".$_SESSION['user_id']);
 											if (file_exists("expire_time_".$_SESSION['user_id'].".xml")) {
 																			
@@ -803,7 +831,6 @@
 											}
 												
 											}
-
 										}
 								}
 							
@@ -811,7 +838,6 @@
 						<?php
 						//click in modified domain;
 							if(isset($_POST['uid'])){
-
 								
 								$xml='<OPS_envelope>
 									<header>
@@ -845,7 +871,6 @@
 									</body>
 								</OPS_envelope>';
 								
-
 									/*$file = fopen("archivo.xml", "w");
 									fwrite($file, $xml);
 									fclose($file);*/
@@ -859,10 +884,11 @@
 						?>
 					
 						<div id="change_owner_domain" hidden>
-							<form action="intoDomain.php" method="POST">
+							<form action="validateChanngeDomain.php" method="POST">
 								<table border="1"> 
 									<tr><th colspan="2">Change owership</th></tr>
 									<input hidden readonly type="text" id="user_id1" name="user_id1" >
+									<input hidden readonly type="text" id="domain" name="domain" value="<?php echo $_SESSION['domain']; ?>">
 									<tr><td>Username</td><td><input type="text" id="user" name="user" required></td></tr>
 									<tr><td>Password</td><td><input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" minlength=10 maxlength="20" type="password" id="pass" name="pass" required></td></tr>
 									<tr><td>Confirm</td><td><input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();"  minlength=10 maxlength="20" type="password" id="pass_confirm" name="pass_confirm" required></td></tr>									
@@ -878,49 +904,7 @@
 								
 							</form>
 						</div>
-						<?php 
-							if(isset($_POST['user'])){
-								//echo nl2br($_POST['user']."\n".$_POST['pass']."\n".$_POST['dom']."\n".$_POST['previous']."\n");
-								
-								switch($_POST['dom']){
-																		
-									case "dom_exist":
-									$xml='<OPS_envelope>
-											<header>
-												<version>0.9</version>
-											</header>
-											<body>
-												<data_block>
-													<dt_assoc>
-														<item key="protocol">XCP</item>
-														<item key="domain">'.$_SESSION['domain'].'</item>
-														<item key="object">OWNERSHIP</item>
-														<item key="action">CHANGE</item>
-														<item key="attributes">
-															<dt_assoc>
-																<item key="reg_domain">'.$_POST['previous'].'</item>
-																<item key="password">'.$_POST['pass'].'</item>
-																<item key="username">'.$_POST['user'].'</item>
-															</dt_assoc>
-														</item>
-														<item key="registrant_ip">10.0.10.138</item>
-													</dt_assoc>
-												</data_block>
-											</body>
-										</OPS_envelope>';
-										echo $api -> xml_output($xml,"trasfering");
-										
-										$_SESSION['domain'] = $_POST['previous'];
-										$_SESSION['user'] =$_POST['user'] ;
-										$_SESSION['pass']= $_POST['pass'];
-									break;
-								}
-								
-								
-								
-								
-							}
-						?>
+						
 					</div>
 				</div>
 			
@@ -959,7 +943,6 @@
 										</body>
 									</OPS_envelope>';
 			echo $api->xml_output($xml,"retreive_data_".$_SESSION['user_id']);
-
 		}else{
 			$xml='<OPS_envelope>
 													<header>
@@ -1030,39 +1013,20 @@
 		
 		<?php 
 		
-		unlink("domain_list_".$_SESSION['user_id'].".xml");
+		//unlink("domain_list_".$_SESSION['user_id'].".xml");
 		unlink( "renew_domain_".$_SESSION['user_id'].".xml");
 		unlink( "update_".$_SESSION['user_id'].".xml");
 		unlink( "retreive_data_".$_SESSION['user_id'].".xml");
 		unlink( "expire_time_".$_SESSION['user_id'].".xml");
-		unlink( "trasfering.xml");
-
-			$xml='<OPS_envelope>
-													<header>
-														<version>0.9</version>
-													</header>
-													<body>
-														<data_block>
-															<dt_assoc>
-																<item key="protocol">XCP</item>
-																<item key="object">DOMAIN</item>
-															   <item key="action">GET</item>
-																<item key="attributes">
-																	<dt_assoc>
-																		<item key="clean_ca_subset">1</item>
-																		<item key="domain">'.$_SESSION['domain'].'</item>
-																		 <item key="reg_username">'.$_SESSION['user'].'</item>
-																		<item key="reg_password">'.$_SESSION['pass'].'</item>
-																		<item key="type">list</item>
-																	</dt_assoc>
-																</item>
-																<item key="registrant_ip">10.0.62.128</item>
-															</dt_assoc>
-														</data_block>
-													</body>
-												</OPS_envelope>';
-
-												echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
+		unlink( "dnslook_".$_SESSION['user_id'].".xml");
+		unlink( "transfer_domain_".$_SESSION['user_id'].".xml");
+		
+		?>
+		
+		<?php 
+			if(isset($_POST['error'])){
+				echo "<script> alert('Invalid profile or password.'); </script>";
+			}
 		?>
 		
 		<script>
@@ -1182,10 +1146,9 @@
 		}
 		 
 		function case_dom(){
-			var check = document.getElementById("dom_same").checked;
 			var check1 = document.getElementById("dom_exist").checked;
 			
-			if(check == true || check1 == true){
+			if(check1 == true){
 				$('tr.row_dom').show();				
 			}else{
 				$('tr.row_dom').hide();

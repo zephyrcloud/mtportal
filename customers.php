@@ -169,7 +169,6 @@
                             <col width="150px">
                             <col width="150px">
                             <col width="170px">
-							<col width="210px">
 							<tr>
 								<th style="border: 1px solid;">Name</th>
 								<th style="border: 1px solid;">Username</th>
@@ -187,13 +186,11 @@
 									
 									if($line['id'] != '1' || $line['id'] != '2' ){
 									echo "<tr id='tr" . $line['id'] . "'>";
-									
 									echo "<td style='border: 1px solid;'><span id='spanName" . $line['id'] . "'>" . $line['name'] . "</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanUserName" . $line['id'] . "'>" . $line['username'] . "</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanPassword" . $line['id'] . "'>" . $line['password'] . "</span></td>";
 									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'] . "' href='#'>Edit</a></td>";
 									echo "<td style='border: 1px solid;'><a id='aDelete" . $line['id'] . "' href='#'>Delete</a></td>";
-									
 									echo "</tr>";
 									}
 								}
