@@ -24,7 +24,7 @@ ini_set('display_errors',1);
 			if(isset($_POST["idUserLog"])){
 				$id_user = $_POST["idUserLog"];			
 			}else{
-				$id_user = $_GET["id"];
+				$id_user = base64_decode(html_entity_decode($_GET["id"]));
 				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,12,4,".$id_user.")";
 				$insert_result = mysql_query($insert_query);
 				//Message for login 
@@ -281,8 +281,8 @@ ini_set('display_errors',1);
 									First Name: <input id="firstNameNewUserFld" name="firstNameNewUserFld" type="text" required="required"><br />
 									Last Name: <input id="lastNameNewUserFld" name="lastNameNewUserFld" type="text" required="required"><br /><br />
 									Default Email: <input id="emailNewUserFld" name="emailNewUserFld" type="email" required="required"><br /><br />
-									Outbound Did: <input onkeypress="return justNumbers(event);" id="outbound" name="outbound" type="text" required="required" ><br /><br />
-									Extension: <input onkeypress="return justNumbers(event);" id="extension" name="extension" type="text" required="required" maxlength="4"  ><br /><br />
+									Outbound DID: <input onkeypress="return justNumbers(event);" id="outbound" name="outbound" type="text" ><br /><br />
+									Extension: <input onkeypress="return justNumbers(event);" id="extension" name="extension" type="text" maxlength="4"  ><br /><br />
 									<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Add">
 									<input id="cancelNewUserBtn" name="cancelNewUserBtn" type="button" value="Cancel">
 								    <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">';

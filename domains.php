@@ -83,10 +83,12 @@
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
+										<col width="300px">
 										<tr>
 											<th style="border: 1px solid;">Customer</th>
 											<th style="border: 1px solid;">Username</th>
 											<th style="border: 1px solid;">Quota</th>
+											<th style="border: 1px solid;">Remaining</th>
 										</tr>
 										<form method="POST" action="domains.php">
 										<input type="submit" value="Update" />

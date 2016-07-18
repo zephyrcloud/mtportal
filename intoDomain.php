@@ -54,6 +54,8 @@
 						<?php
 						
 							if(isset($_GET['p']) && isset($_GET['pa']) && isset($_GET['us']) ){
+									$_SESSION['pass'] = base64_decode(html_entity_decode($_GET['pa']));
+									$_SESSION['user'] = base64_decode(html_entity_decode($_GET['us']));
 								$xml='<OPS_envelope>
 											<header>
 												<version>0.9</version>
@@ -81,6 +83,7 @@
 										
 										echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
 										echo "<script> alert('Login as the new domain transfer.'); </script>";
+										
 										
 							}
 						

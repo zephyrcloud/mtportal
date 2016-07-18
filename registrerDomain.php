@@ -39,6 +39,13 @@
 				 switch($status){
 					 case 210:
 					 //echo "Available";
+					/* var txt;
+var r = confirm("Press a button!");
+if (r == true) {
+    txt = "You pressed OK!";
+} else {
+    txt = "You pressed Cancel!";
+}		*/					
 							// look for the qoutas for the 
 							$quota=0;
 							$select_customers_query = 'SELECT `quota_domain` FROM `customer` WHERE `id` = '.$_POST['user_id_registrer_1'];
@@ -59,10 +66,15 @@
 							if($quota > $counter){
 								//if true, permit the div
 								// send header to a page of registrer
+								echo "<script> var r = confirm('The domain is available, if you want to registrer press OK, else press CANCEL to back to lookup domain'); </script>";
+								echo "<script> if (r == true) { ";
 					?>
 					
-					<?php											
-							}else{
+					<?php	
+					echo "}else{ 
+								window.location='domainscustomers.php';
+							} </script>";					
+						}else{
 								// show a message or redirect to principal look for domain
 								$code=404;
 								//$message = " <script> alert('You over the quota and do not have permited to regitrer more domains, please contact the administrator'); </script>";
@@ -114,6 +126,9 @@
 		<div id="pagecontents">
 			<div class="wrapper" >
 				<div id="post">
+					<div>
+						<center> <a href="domainscustomers.php" > Click here if you want to back to domain lookup </a> </center>
+					</div>	
 					<div id="retreive" hidden>
 								<form action="registrerDomain.php" method="POST">						
 									<table border="1">

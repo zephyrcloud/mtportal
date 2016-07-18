@@ -31,7 +31,7 @@
 				$query= "SELECT id FROM customer WHERE username = '$username'";
 				$select_result = mysql_query($query);
 				$row = mysql_fetch_assoc($select_result);
-				header("Location: users.php?id=".$row["id"]."");
+				header("Location: users.php?id=".htmlentities(base64_encode($row["id"]))."");
 				
 				if($_SESSION['idUsuario'] == '1' || $_SESSION['idUsuario'] == '2' ){
 						header('Location: index.php?error=401');

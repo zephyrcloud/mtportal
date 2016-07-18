@@ -51,7 +51,7 @@ include("config/connection.php");
                     </ul>
                     <div id="my-tab-content" class="tab-content">
                         <div class="tab-pane active" id="red"> <!--begin red -->
-                            <h1>Reports</h1>
+                            
                             <hr>
 
                             <div id="post">

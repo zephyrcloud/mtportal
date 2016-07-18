@@ -568,10 +568,12 @@
 			// insert registrer on db for auditory
 			$insert_query = "INSERT INTO `created_domains`(`customer_id`, `domain`) VALUES (".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
 			//echo nl2br($insert_query."\n");
-			$insert_result = mysql_query($insert_query);}else{
-			echo "<script> alert('".$message."'); </script>";		
+			$insert_result = mysql_query($insert_query);
+			echo "<script> alert('".$message."'); </script>";}
+			else{
+			echo "<script> alert('it was a mistake with the information.'); </script>";		
 			}
-			unlink($xml_name.".xml");			
+			
 			
 		}
 		
