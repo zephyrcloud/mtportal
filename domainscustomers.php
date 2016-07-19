@@ -45,6 +45,74 @@
 						</form>	
 						<br>
 						<a href="profileScreen.php" > Click here for going to the screen profile </a>
+						<div>
+								<?php 
+		if(isset($_GET['code'])){
+			if($_GET['code'] == "404"){
+				echo " <script> alert('You over the quota and do not have permited to regitrer more domains, please contact the administrator'); </script>";}
+			if($_GET['code'] == "403"){
+				echo " <script> alert('This domain has been taken , please try other domain'); </script>";
+				// list of posible domains.
+				$domains = array(".com", ".net", ".org", ".info", ".biz", ".name", ".us");
+				$dom= base64_decode(html_entity_decode($_GET['dom']));
+				$dom= explode(".",$dom);
+							$table='';
+							$table.='<table>
+										<col width="300px">
+										<col width="300px">
+										<col width="300px">
+										<tr>
+											<th style="border: 1px solid;">Domain</th>
+											<th style="border: 1px solid;">Status</th>
+											<th style="border: 1px solid;">Action</th>
+										</tr>';
+											
+							for($i=0; $i < count($domains); $i++){
+								$xml='<OPS_envelope>
+									 <header>
+									  <version>0.9</version>
+									  </header>
+									 <body>
+									  <data_block>
+									   <dt_assoc>
+										<item key="protocol">XCP</item>
+										<item key="object">DOMAIN</item>
+										<item key="action">LOOKUP</item>
+										<item key="attributes">
+										 <dt_assoc>
+										  <item key="domain">'.$dom[0].''.$domains[$i].'</item>
+										  <item key="no_cache">1</item>
+										 </dt_assoc>
+										</item>
+										<item key="registrant_ip">111.121.121.121</item>
+									   </dt_assoc>
+									  </data_block>
+									 </body>
+									</OPS_envelope>';
+								//echo nl2br(htmlentities($xml) . "\n\n");
+								$api->xml_output($xml,"verify_domain_".$i);
+								if (file_exists("verify_domain_".$i.".xml")) {
+									//echo nl2br("verify_domain_".$i.".xml\n");
+									if(!$obj1 = simplexml_load_file("verify_domain_".$i.".xml")){
+										$message= "Error!";
+									} else {
+										
+										if($obj1->body->data_block->dt_assoc->item[5] == "210"){
+											//echo nl2br('deka'.$domains[$i] ." Available \n" );
+											$table.='<tr><td>'.$dom[0].''.$domains[$i].'</td><td> Available </td><td><a href="registrerDomain.php?dom='.$dom[0].''.$domains[$i].'"> Registrer </a></td></tr>';
+										}
+									}
+								}
+								unlink("verify_domain_".$i.".xml");
+							}// here ends the for
+							$table.='</table></div>';
+							echo $table;
+			}
+		}
+		?>
+	
+						</div>
+						
 					</div>
 				</div>
 			</div>
@@ -129,15 +197,6 @@
 			}
 		?>
 		
-		<?php 
-		if(isset($_GET['code'])){
-			if($_GET['code'] == "404"){
-				echo " <script> alert('You over the quota and do not have permited to regitrer more domains, please contact the administrator'); </script>";}
-			if($_GET['code'] == "403"){
-				echo " <script> alert('This domain has been taken , please try other domain'); </script>";
-			}
-		}
-		?>
 		<script>
 		var id = document.getElementById('id_user').value;
 		document.getElementById('user_id_registrer_1').value = id;

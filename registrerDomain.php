@@ -89,7 +89,8 @@ if (r == true) {
 					 //echo " <script> $('#lookupDomain').hide(); $('#domain_available').show(); $('#registrer').hide(); </script>";
 					// echo " <script> alert('This domain has been taken , please try other domain'); </script>";
 					 $code=403;
-					 header('Location: domainscustomers.php?code='.$code);								
+					 $domain= htmlentities(base64_encode($_POST['domainFld']));
+					 header('Location: domainscustomers.php?code='.$code."&dom=".$domain);								
 					 break;
 				 }
 			}
@@ -121,6 +122,14 @@ if (r == true) {
 		<?php
 			include("header.php");
 			include("menucustomer.php");
+			
+			if(isset($_POST['domainFld'])){
+				$_SESSION['domain'] = $_POST['domainFld'];}
+				else{
+					if($_GET['dom']){
+						$_SESSION['domain'] = $_GET['dom'];
+					}
+				}
 		?>
 		
 		<div id="pagecontents">
@@ -134,7 +143,7 @@ if (r == true) {
 									<table border="1">
 									<tr><th colspan="3">Retrieve Order information</th></tr>
 									<tr><td rowspan="3">Lookfor or registrer domains</td>
-									<input hidden type="text" name="id_domain" id="id_domain" readonly value="<?php if(isset($_POST['domainFld'])){echo $_POST['domainFld']; $_SESSION['domain'] = $_POST['domainFld'];}else{echo $_SESSION['domain'];} ?>" >							
+									<input hidden type="text" name="id_domain" id="id_domain" readonly value="<?php echo $_SESSION['domain']; ?>" >							
 									<td>Previous Domain: <input  type="text" id="domain_exits" name="domain_exits"></td>
 									<tr><td>Username: <input required type="text" name="username" id="username" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>
 									<tr><td>Password: <input required minlength=10 maxlength="20"  type="password" name="password" id="password" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>

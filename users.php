@@ -241,8 +241,6 @@ ini_set('display_errors',1);
 		<?php
 			include("header.php");
 			include("menucustomer.php");
-			
-			
 		?>
 		
 		<div id="pagecontents">
@@ -253,7 +251,27 @@ ini_set('display_errors',1);
 						<div class="floatright righttext tpad"></div>
 						<div class="clear">&nbsp;</div>
 					</div>
-					
+					<?php 
+						$select_users_query = 'SELECT COUNT(U.extension) as ext FROM user U, customer C WHERE C.id = U.customer AND U.extension IS NOT NULL  AND C.name = "' . $_SESSION['usuario'] . '"';
+						$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+											
+						while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+							$count=$line['ext'];
+						}
+						
+						$select_users_query = 'SELECT U.extension as ext FROM user U, customer C WHERE C.id = U.customer AND U.extension IS NOT NULL  AND C.name = "' . $_SESSION['usuario'] . '"';
+						$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+						$i=0;
+						echo "<script> var data= new Array(".$count.")</script>"; 						
+						while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+							echo "<script>  
+									data[".$i."] = ".$line['ext'].";
+								 </script>";
+							$i++;
+							
+						}
+						
+					?>
 					<div id="postcontent">
 						
 						<div id="tables" name="tables">
@@ -282,7 +300,7 @@ ini_set('display_errors',1);
 									Last Name: <input id="lastNameNewUserFld" name="lastNameNewUserFld" type="text" required="required"><br /><br />
 									Default Email: <input id="emailNewUserFld" name="emailNewUserFld" type="email" required="required"><br /><br />
 									Outbound DID: <input onkeypress="return justNumbers(event);" id="outbound" name="outbound" type="text" ><br /><br />
-									Extension: <input onkeypress="return justNumbers(event);" id="extension" name="extension" type="text" maxlength="4"  ><br /><br />
+									Extension: <input onkeydown="validate_extension();" onkeyup ="validate_extension();" onkeypress="return justNumbers(event);validate_extension();" id="extension" name="extension" type="text" maxlength="4"  ><br /><br />
 									<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Add">
 									<input id="cancelNewUserBtn" name="cancelNewUserBtn" type="button" value="Cancel">
 								    <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">';
@@ -299,7 +317,7 @@ ini_set('display_errors',1);
 									First Name: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
 									Last Name: <input id="lastNameEditUserFld" name="lastNameEditUserFld" type="text" required="required"><br /><br />
 									Outbound Did: <input onkeypress="return justNumbers(event);" id="outboundEditFld" name="outboundEditFld" type="text" required="required" ><br /><br />
-									Extension: <input onkeypress="return justNumbers(event);" id="extensionEditFld" name="extensionEditFld" type="text" required="required" maxlength="4"><br /><br />
+									Extension: <input onkeydown="validate_extension_edit();" onkeyup ="validate_extension_edit();" onkeypress="return justNumbers(event);validate_extension_edit();" id="extensionEditFld" name="extensionEditFld" type="text" maxlength="4"  ><br /><br />
 									<input id="saveEditUserBtn" name="saveEditUserBtn" type="submit" value="Edit">
 									<input id="cancelEditUserBtn" name="cancelEditUserBtn" type="button" value="Cancel">
 									   <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">'; ?>
@@ -562,6 +580,45 @@ ini_set('display_errors',1);
 		
 	});
 
+	function validate_extension(){
+	 var exten=document.getElementById("extension").value;
+		var found= false;
+		 for(i=0;i< data.length; i++){
+			if(data[i] == exten){
+				//alert('This extension is not available, please use other.');
+				//alert(data[i]);
+				found= true;
+			} 
+		 }
+		 
+		 if(found){
+				$('#saveNewUserBtn').hide();
+				document.getElementById("extension").style.backgroundColor = "#FF0000"; 
+		 }else{
+				$('#saveNewUserBtn').show();
+				document.getElementById("extension").style.backgroundColor = "#FFFFFF";
+			}
+	}
+	
+	function validate_extension_edit(){
+	 var exten=document.getElementById("extensionEditFld").value;
+		var found= false;	 
+		 for(i=0;i< data.length; i++){
+			if(data[i] == exten){
+				//alert('This extension is not available, please use other.');
+				//alert(data[i]);
+				found= true;
+			} 
+		 }
+		  if(found){
+				$('#saveEditUserBtn').hide();
+				document.getElementById("extensionEditFld").style.backgroundColor = "#FF0000";
+		 }else{
+				$('#saveEditUserBtn').show();
+				document.getElementById("extensionEditFld").style.backgroundColor = "#FFFFFF";
+			}
+
+	}
 
 </script>
 
