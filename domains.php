@@ -79,7 +79,7 @@
 							</div>
 							<div class="tab-pane" id="orange">
 								<div id="quotasPerUser">
-									<table>
+									<table id="table">
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
@@ -90,32 +90,37 @@
 											<th style="border: 1px solid;">Quota</th>
 											<th style="border: 1px solid;">Remaining</th>
 										</tr>
-										<form method="POST" action="domains.php">
-										<input type="submit" value="Update" />
-										<?php
-										$select_customers_query = 'SELECT * FROM customer ';
-										$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
-										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-											echo "<tr id='tr" . $line['id'] . "'>";
-											echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['username'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['name'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><input id='quotaValue_" . $line['id'] . "' name='quotaValue_" . $line['id'] . "' type='text' value='" . $line['quota_domain'] . "'></td>";
-											echo "</tr>";
-										}
-										$select_customers_query = 'SELECT min(id) as min FROM customer ';
-										$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
-										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-											$min=$line['min'];
-										}
-										$select_customers_query = 'SELECT max(id) as max FROM customer ';
-										$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
-										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-											$max=$line['max'];
-										}
+										<form method="POST" action="domains.php?a=1">
 										
-										echo " <input hidden id='minusNumber' name='minusNumber' type='text' value='" . $min . "'>";
-										echo " <input hidden id='maxNumber' name='maxNumber' type='text' value='" . $max . "'>";
+										<input id="buttonUpdate" type="submit" value="Update" >
+										<?php
+									
+											$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
+											$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+											while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+												$update_user_query = 'UPDATE `customer` SET `remaining`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
+												$update_user_result = mysql_query($update_user_query);
+											}
+											
+											$select_customers_query = 'SELECT * FROM customer ';
+											$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+											$id = Array();
+											$i=0;
+											while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+												echo "<tr id='tr" . $line['id'] . "'>";
+												echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['username'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['name'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><input id='quotaValue_" . $line['id'] . "' name='quotaValue_" . $line['id'] . "' type='text' value='" . $line['quota_domain'] . "'></td>";
+												echo "<td style='border: 1px solid;'><input readonly id='remainingValue_" . $line['id'] . "' name='remainingValue_" . $line['id'] . "' type='text' value='" . $line['remaining'] . "'></td>";
+												echo "</tr>";
+												$id[$i] = $line['id'];
+												$i++;
+												
+											}
+											
+											
 										?>
+										 <input hidden id='minusNumber' name='minusNumber' type='text' value=''>
 										
 									</table>
 									</form>
@@ -131,13 +136,18 @@
 					<?php
 					if(isset($_POST['minusNumber'])){
 						
-						for($i=$_POST['minusNumber']; $i <= $_POST['maxNumber']; $i++){
-							$update_user_query = 'UPDATE `customer` SET quota_domain='.$_POST['quotaValue_'.$i].'  WHERE `id`= '.$i;
-							//echo nl2br("Query = " .$update_user_query . "\n");
+						for($i=0; $i <= count($id); $i++){
+							$update_user_query = 'UPDATE `customer` SET quota_domain='.$_POST['quotaValue_'.$id[$i]].'  WHERE `id`= '.$id[$i];
 							$update_user_result = mysql_query($update_user_query);
 						}
-						echo "<script> alert('update quotas succesfully'); </script>";
+						
+						echo "<script>location.href = 'domains.php?a=1' </script>";
 					}
+					
+					if($_GET['a']){
+						echo "<script> alert('Quotas updated succesfully'); </script>";
+					}
+					
 					?>
 					</div>	<!-- here ends the container -->		
 				</div>
@@ -150,6 +160,7 @@
 			include("footer.php");
 		?>
 		<script>
+	
 		$( "#detailUserPnl" ).dialog({
 			autoOpen: false,
 			modal: true,

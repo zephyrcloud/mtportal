@@ -12,6 +12,7 @@ ini_set('display_errors',1);
 	
 	if(isset($_POST["idtest"])){
 		$id_user = $_POST["idtest"];
+		$_SESSION['user'] = $id_user;
 	}else{
 		if(isset($_POST["idlogin"])){
 			$id_user = $_POST["idlogin"];
@@ -19,14 +20,17 @@ ini_set('display_errors',1);
 			$insert_result = mysql_query($insert_query);
 			//Message for login 
 			$field=$_POST["idUserFld"];
+			$_SESSION['user'] = $id_user;
 			////$email-> body_email_cus("Email user update",$ip_capture->getRealIP(),4,16,2,$field);
 		}else{
 			if(isset($_POST["idUserLog"])){
-				$id_user = $_POST["idUserLog"];			
+				$id_user = $_POST["idUserLog"];
+				$_SESSION['user'] = $id_user;				
 			}else{
 				$id_user = base64_decode(html_entity_decode($_GET["id"]));
-				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,12,4,".$id_user.")";
+				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,12,4,".$_SESSION['user'].")";
 				$insert_result = mysql_query($insert_query);
+				$_SESSION['user'] = $id_user;
 				//Message for login 
 				////$email-> body_email("Login Succesfully",$ip_capture->getRealIP(),1,12,4,$id_user);	
 			}		
@@ -39,39 +43,27 @@ ini_set('display_errors',1);
 	}
 	// Valida si proviene del boton de add new user
 	if (isset($_POST["saveNewUserBtn"])) {
-		$count=0;
-		$select_users_query = 'SELECT U.extension FROM user U';
-		$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
-		while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
-			if($line['extension'] == $_POST['extension'] && $line['extension'] != 0){
-				$count++;
-			}
-		}
-		
-		if($count == 0){
-			
-			// Inserta en la base de datos el nuevo user
-		$insert_user_query = 'INSERT INTO user (firstName, lastName, customer, email1, email2, email3, extension,outbound_did) VALUES ("' . $_POST["firstNameNewUserFld"] . '","' . $_POST["lastNameNewUserFld"] . '", ' . $_SESSION['idUsuario'] . ', "' . $_POST['emailNewUserFld'] . '",NULL,NULL,'.$_POST['extension'].','.$_POST['outbound'].')';
+					
+		// Inserta en la base de datos el nuevo user
+		$insert_user_query = 'INSERT INTO user (firstName, lastName, customer, email1, email2, email3, extension,outbound_did) VALUES ("' . $_POST["firstNameNewUserFld"] . '","' . $_POST["lastNameNewUserFld"] . '", ' . $_SESSION['user'] . ', "' . $_POST['emailNewUserFld'] . '",NULL,NULL,"'.$_POST['extension'].'","'.$_POST['outbound'].'")';
 		$insert_user_result = mysql_query($insert_user_query);
 		
 		if($insert_user_result){
 			$message = "User successfully created";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,7,2,".$id_user.")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,7,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			
 			////$email-> body_email($message,$ip_capture->getRealIP(),4,7,2,$id_user);
 			
 		}else{
 			$message = "Failed action";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$id_user.")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 			////$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
 		}
 			
-		}else{
-			$message = "Error, the extension already exists, please use other number.";
-		}		
+			
 	}
 	
 	// Valida si proviene del boton de edit user
@@ -83,13 +75,13 @@ ini_set('display_errors',1);
 		
 		if($update_user_result){
 			$message = "User successfully updated";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,8,2,".$id_user.")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,8,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,8,2,$id_user);
 		}else{
 			$message = "Failed action";
 			//$message = $update_user_query;
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$id_user.")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
@@ -106,12 +98,12 @@ ini_set('display_errors',1);
 		
 		if($delete_user_result){
 			$message = "User successfully deleted";
-				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,9,2,".$id_user.")";
+				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,9,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,9,2,$id_user);
 		}else{
 			$message = "Failed action";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,10,2,".$id_user.")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,10,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
@@ -158,7 +150,7 @@ ini_set('display_errors',1);
 						// Insertar el registro de que checkeo una asignacion de la lista apps
 											
 						
-						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,14,5,".$id_user.")";
+						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,14,5,".$_SESSION['user'].")";
 						$insert_result = mysql_query($insert_query);
 						$selected++;
 					}
@@ -172,7 +164,7 @@ ini_set('display_errors',1);
 						$update_app_query = 'UPDATE appuser SET endDate = NOW() WHERE id = ' . $idAppUser;
 						$update_app_result = mysql_query($update_app_query) or die('Remover la asignación fallida: ' . mysql_error());
 						
-						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,15,5,".$id_user.")";
+						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,15,5,".$_SESSION['user'].")";
 						$insert_result = mysql_query($insert_query);
 						$not_selected++;
 					}
@@ -312,11 +304,11 @@ ini_set('display_errors',1);
 						<!-- DIV Edit User -->
 						<div id="editUserPnl" name="editUserPnl" class="modalDialog" title="Edit User">
 							<div id="post">
-								<form id="editUserFrm" name="editUserFrm" method="POST" action="users.php?id=".$id_user."">
+								<form id="editUserFrm" name="editUserFrm" method="POST" action="users.php">
 									<input id="idEditUserFld" name="idEditUserFld" type="hidden" required="required">
 									First Name: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
 									Last Name: <input id="lastNameEditUserFld" name="lastNameEditUserFld" type="text" required="required"><br /><br />
-									Outbound Did: <input onkeypress="return justNumbers(event);" id="outboundEditFld" name="outboundEditFld" type="text" required="required" ><br /><br />
+									Outbound Did: <input onkeypress="return justNumbers(event);" id="outboundEditFld" name="outboundEditFld" type="text" ><br /><br />
 									Extension: <input onkeydown="validate_extension_edit();" onkeyup ="validate_extension_edit();" onkeypress="return justNumbers(event);validate_extension_edit();" id="extensionEditFld" name="extensionEditFld" type="text" maxlength="4"  ><br /><br />
 									<input id="saveEditUserBtn" name="saveEditUserBtn" type="submit" value="Edit">
 									<input id="cancelEditUserBtn" name="cancelEditUserBtn" type="button" value="Cancel">
@@ -328,7 +320,7 @@ ini_set('display_errors',1);
 						<!-- DIV Delete User -->
 						<div id="deleteUserPnl" name="deleteUserPnl" class="modalDialog" title="Delete User">
 							<div id="post">
-								<form id="deleteUserFrm" name="deleteUserFrm" method="POST" action="users.php?id=".$id_user."">
+								<form id="deleteUserFrm" name="deleteUserFrm" method="POST" action="users.php">
 									<input id="idDeleteUserFld" name="idDeleteUserFld" type="hidden" required="required">
 									¿Delete the user <span id="firstNameDeleteUserLbl" name="firstNameDeleteUserLbl"></span>&nbsp;<span id="lastNameDeleteUserLbl" name="lastNameDeleteUserLbl"></span>?<br /><br />
 									<input id="saveDeleteUserBtn" name="saveDeleteUserBtn" type="submit" value="Delete">
@@ -339,14 +331,17 @@ ini_set('display_errors',1);
 						</div>
 						
 						<table>
-							<col width="">
-							<col width="">
+							<col width="150px">
+							<col width="150px">
+							<col width="150px">
+							<col width="80px">
 							<col width="20px">
 							<col width="20px">
 							<col width="20px">
 							<col width="20px">
 							<tr>
-								<th style="border: 1px solid;">Name</th>
+								<th style="border: 1px solid;">First Name</th>
+								<th style="border: 1px solid;">Last Name</th>
 								<th style="border: 1px solid;">Outbound DID</th>
 								<th style="border: 1px solid;">Extension</th>
 								<th colspan="4" style="border: 1px solid;">Actions</th>
@@ -362,9 +357,9 @@ ini_set('display_errors',1);
 									
 									echo "<tr id='" . $line['id'] . "'>";
 									
-									echo "<td style='border: 1px solid;'><span id='spanFirstName" . $line['id'] . "'>" . $line['firstName']. " ". $line['lastName'] ."</span></td>";
+									echo "<td style='border: 1px solid;'><span id='spanFirstName" . $line['id'] . "'>" . $line['firstName'] ."</span></td>";
+									echo "<td style='border: 1px solid;'><span id='spanLastName" . $line['id'] . "'>" . $line['lastName'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanOutboundDid" . $line['id'] . "'>" . $line['outbound_did'] ."</span></td>";
-									echo "<td hidden style='border: 1px solid;'><span id='spanLastName" . $line['id'] . "'>" . $line['lastName'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanExtension" . $line['id'] . "'>" . $line['extension'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'] . "' href='#'>Edit</a></td>";
 									echo "<td style='border: 1px solid;'><a id='aEmails" . $line['id'] . "' href='#'>Emails</a></td>";
@@ -385,13 +380,13 @@ ini_set('display_errors',1);
 						
 						<div id="emailsPerUserPnl" style="display: none;">
 							<div id="emailsPerUserUpdate">
-							 <?php echo '<input hidden id="id_login" name="idtest" type="text" value="'.$id_user.'">'; ?>
+							 <?php echo '<input hidden id="id_login" name="idtest" type="text" value="'.$_SESSION['user'].'">'; ?>
 							</div>
 						</div>
 						
 						<div id="appsPerUserPnl" style="display: none;">
 							<div id="appsPerUserUpdate">
-							 <?php echo '<input hidden id="id_login" name="idtest" type="text" value="'.$id_user.'">'; ?>
+							 <?php echo '<input hidden id="id_login" name="idtest" type="text" value="'.$_SESSION['user'].'">'; ?>
 							</div>
 						</div>
 					

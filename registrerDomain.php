@@ -39,13 +39,7 @@
 				 switch($status){
 					 case 210:
 					 //echo "Available";
-					/* var txt;
-var r = confirm("Press a button!");
-if (r == true) {
-    txt = "You pressed OK!";
-} else {
-    txt = "You pressed Cancel!";
-}		*/					
+				
 							// look for the qoutas for the 
 							$quota=0;
 							$select_customers_query = 'SELECT `quota_domain` FROM `customer` WHERE `id` = '.$_POST['user_id_registrer_1'];
@@ -90,7 +84,8 @@ if (r == true) {
 					// echo " <script> alert('This domain has been taken , please try other domain'); </script>";
 					 $code=403;
 					 $domain= htmlentities(base64_encode($_POST['domainFld']));
-					 header('Location: domainscustomers.php?code='.$code."&dom=".$domain);								
+					 $id_dom= htmlentities(base64_encode($_POST['user_id_registrer_1']));
+					 header('Location: domainscustomers.php?code='.$code."&dom=".$domain."&i=".$id_dom);								
 					 break;
 				 }
 			}
@@ -380,16 +375,6 @@ if (r == true) {
 					if(check==true){
 						$('tr.row_a').hide();
 						$("#aci").val(check);
-						/*document.getElementById("first_name_12_0").removeAttribute("required");
-						document.getElementById("last_name_5_0").removeAttribute("required");
-						document.getElementById("org_name_2_0").removeAttribute("required");
-						document.getElementById("address1_11_0").removeAttribute("required");
-						document.getElementById("city_8_0").removeAttribute("required");
-						document.getElementById("state_6_0").removeAttribute("required");
-						document.getElementById("phone_3_0").removeAttribute("required");
-						document.getElementById("fax_10_0").removeAttribute("required");
-						document.getElementById("email_7_0").removeAttribute("required");
-						document.getElementById("postal_code_9_0").removeAttribute("required");*/
 							document.getElementById("first_name_12_0").required = false;
 							document.getElementById("last_name_5_0").required = false;
 							document.getElementById("org_name_2_0").required = false;
@@ -400,8 +385,6 @@ if (r == true) {
 							document.getElementById("fax_10_0").required = false;
 							document.getElementById("email_7_0").required = false;
 							document.getElementById("postal_code_9_0").required = false;				
-						//document.getElementById("city").removeAttribute("required");
-						//document.getElementById("row[]").style.display = 'none';
 					}else{
 							document.getElementById("first_name_12_0").required = true;
 							document.getElementById("last_name_5_0").required = true;
@@ -420,17 +403,6 @@ if (r == true) {
 			var check_1 = document.getElementById("bci_1").checked;
 			if(check==true || check_1==true ){
 				$('tr.row_b').hide();
-				//document.getElementById("row[]").style.display = 'none';
-				/*document.getElementById("first_name_12_3").removeAttribute("required");
-				document.getElementById("last_name_5_3").removeAttribute("required");
-				document.getElementById("org_name_2_3").removeAttribute("required");
-				document.getElementById("address1_11_3").removeAttribute("required");
-				document.getElementById("city_8_3").removeAttribute("required");
-				document.getElementById("state_4_3").removeAttribute("required");
-				document.getElementById("postal_code_9_3").removeAttribute("required");
-				document.getElementById("phone_3_3").removeAttribute("required");
-				document.getElementById("fax_10_3").removeAttribute("required");
-				document.getElementById("email_7_3").removeAttribute("required");*/
 				document.getElementById("first_name_12_3").required = false;
 							document.getElementById("last_name_5_3").required = false;
 							document.getElementById("org_name_2_3").required = false;
@@ -455,10 +427,7 @@ if (r == true) {
 							document.getElementById("email_7_3").required = true;
 							document.getElementById("postal_code_9_3").required = true;			
 			}
-
-			
-			//alert(check + " --- " + check_1)
-			
+	
 		}	
 		function checked_tci(){
 			var check = document.getElementById("tci").checked;
@@ -466,17 +435,6 @@ if (r == true) {
 			var check_2 = document.getElementById("tci_2").checked;
 			if(check==true || check_1==true  || check_2 == true){
 				$('tr.row_t').hide();
-				//document.getElementById("row[]").style.display = 'none';
-				/*document.getElementById("first_name_12_2").removeAttribute("required");
-				document.getElementById("last_name_6_2").removeAttribute("required");
-				document.getElementById("org_name_2_2").removeAttribute("required");
-				document.getElementById("address1_11_2").removeAttribute("required");
-				document.getElementById("city_8_2").removeAttribute("required");
-				document.getElementById("state_5_2").removeAttribute("required");
-				document.getElementById("postal_code_9_2").removeAttribute("required");
-				document.getElementById("phone_3_2").removeAttribute("required");
-				document.getElementById("fax_10_2").removeAttribute("required");
-				document.getElementById("email_7_2").removeAttribute("required");*/
 				document.getElementById("first_name_12_2").required = false;
 							document.getElementById("last_name_6_2").required = false;
 							document.getElementById("org_name_2_2").required = false;

@@ -51,12 +51,28 @@
 			if($_GET['code'] == "404"){
 				echo " <script> alert('You over the quota and do not have permited to regitrer more domains, please contact the administrator'); </script>";}
 			if($_GET['code'] == "403"){
-				echo " <script> alert('This domain has been taken , please try other domain'); </script>";
+				//echo " <script> alert('This domain has been taken , please try other domain'); </script>";
 				// list of posible domains.
 				$domains = array(".com", ".net", ".org", ".info", ".biz", ".name", ".us");
 				$dom= base64_decode(html_entity_decode($_GET['dom']));
 				$dom= explode(".",$dom);
-							$table='';
+				$domId= base64_decode(html_entity_decode($_GET['i']));
+				//look for remaining.
+				$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id AND c.id= '.$domId.' GROUP BY cd.`customer_id` ';
+				$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+					//echo " <script> alert('".$line['cid']."---".$line['remaining']."'); </script>";
+					$quota= $line['remaining'];
+				}
+				if($quota > 0){
+					$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
+					$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+							$update_user_query = 'UPDATE `customer` SET `remaining`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
+							$update_user_result = mysql_query($update_user_query);
+						}
+					echo " <script> alert('This domain has been taken , please try other domain of this list or another you choose.'); </script>";
+								$table='';
 							$table.='<table>
 										<col width="300px">
 										<col width="300px">
@@ -107,6 +123,17 @@
 							}// here ends the for
 							$table.='</table></div>';
 							echo $table;
+				}else{
+					$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
+					$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+							$update_user_query = 'UPDATE `customer` SET `remaining`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
+							$update_user_result = mysql_query($update_user_query);
+						}
+					echo " <script> alert('This domain has been taken and you over the quotas permited to regitrer more domains'); </script>";
+				}
+				
+				
 			}
 		}
 		?>
@@ -118,9 +145,6 @@
 			</div>
 		</div>
 		
-		
-		
-
 		<?php
 			include("footer.php");
 		?>
