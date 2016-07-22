@@ -1,9 +1,11 @@
 ﻿<?php
-ini_set('display_errors',1);
+
 	// Connect to database
 	include("config/connection.php");
 	include("config/ip_capture.php");
 	include("emails.php");
+	include("dictionary.php");
+	$dict= new dictionary();
 	$ip_capture = new ip_capture();
 	$email= new emails();
 	
@@ -49,14 +51,14 @@ ini_set('display_errors',1);
 		$insert_user_result = mysql_query($insert_user_query);
 		
 		if($insert_user_result){
-			$message = "User successfully created";
+			$message =  $dict->words("2");
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,7,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			
 			////$email-> body_email($message,$ip_capture->getRealIP(),4,7,2,$id_user);
 			
 		}else{
-			$message = "Failed action";
+			$message =  $dict->words("3");
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
@@ -74,12 +76,12 @@ ini_set('display_errors',1);
 		$update_user_result = mysql_query($update_user_query);
 		
 		if($update_user_result){
-			$message = "User successfully updated";
+			$message =  $dict->words("4");
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,8,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,8,2,$id_user);
 		}else{
-			$message = "Failed action";
+			$message =  $dict->words("3");
 			//$message = $update_user_query;
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
@@ -97,12 +99,12 @@ ini_set('display_errors',1);
 		$delete_user_result = mysql_query($delete_user_query);
 		
 		if($delete_user_result){
-			$message = "User successfully deleted";
-				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,9,2,".$_SESSION['user'].")";
+			$message =  $dict->words("5");
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,9,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,9,2,$id_user);
 		}else{
-			$message = "Failed action";
+			$message =  $dict->words("3");
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,10,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
@@ -118,7 +120,7 @@ ini_set('display_errors',1);
 		
 		// Lista toas las apps 
 		$select_apps_query = 'SELECT id FROM app';
-		$select_apps_result = mysql_query($select_apps_query) or die('Listado de apps fallido: ' . mysql_error());
+		$select_apps_result = mysql_query($select_apps_query) or die($dict->words("6").' '. mysql_error());
 		
 		$selected = 0;
 		$not_selected =0;
@@ -146,7 +148,7 @@ ini_set('display_errors',1);
 						
 						// Asignacion de una aplicacion 
 						$insert_app_query = 'INSERT INTO appuser (app, user, initDate, endDate) VALUES (' . $line['id'] . ', ' . $user . ', NOW(), NULL)';
-						$insert_app_result = mysql_query($insert_app_query) or die('Creación de la asignación fallida: ' . mysql_error());						
+						$insert_app_result = mysql_query($insert_app_query) or die($dict->words("7").' ' . mysql_error());						
 						// Insertar el registro de que checkeo una asignacion de la lista apps
 											
 						
@@ -162,7 +164,7 @@ ini_set('display_errors',1);
 						
 						// Quitar asignacion de una aplicacion 
 						$update_app_query = 'UPDATE appuser SET endDate = NOW() WHERE id = ' . $idAppUser;
-						$update_app_result = mysql_query($update_app_query) or die('Remover la asignación fallida: ' . mysql_error());
+						$update_app_result = mysql_query($update_app_query) or die($dict->words("8").' ' . mysql_error());
 						
 						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,15,5,".$_SESSION['user'].")";
 						$insert_result = mysql_query($insert_query);
@@ -186,7 +188,7 @@ ini_set('display_errors',1);
 			
 		}
 		
-		$message = "Apps successfully assigned";
+		$message = $dict->words("9");
 		//$email-> body_email_apps($message,$ip_capture->getRealIP(),2,14,5,$id_user,$selected,$not_selected);
 	}
 	
@@ -200,9 +202,9 @@ ini_set('display_errors',1);
 		$update_user_result = mysql_query($update_user_query);
 		
 		if($update_user_result){
-			$message = "Emails successfully updated";
+			$message = $dict->words("10");
 		}else{
-			$message = "Failed action";
+			$message = $dict->words("3");
 		}
 		
 	}
@@ -214,7 +216,7 @@ ini_set('display_errors',1);
 
 <html>
 	<head>
-		<title>Users</title>
+		<title><?php echo $dict->words("11");?></title>
 		<link href="style/style.css" rel="stylesheet" type="text/css">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script>
@@ -239,20 +241,20 @@ ini_set('display_errors',1);
 			<div class="wrapper">
 				<div id="post">
 					<div id="postitle">
-						<div class="floatleft"><h1>Users</h1></div>
+						<div class="floatleft"><h1><?php echo $dict->words("11");?></h1></div>
 						<div class="floatright righttext tpad"></div>
 						<div class="clear">&nbsp;</div>
 					</div>
 					<?php 
 						$select_users_query = 'SELECT COUNT(U.extension) as ext FROM user U, customer C WHERE C.id = U.customer AND U.extension IS NOT NULL  AND C.name = "' . $_SESSION['usuario'] . '"';
-						$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+						$select_users_result = mysql_query($select_users_query) or die($dict->words("12").' ' . mysql_error());
 											
 						while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
 							$count=$line['ext'];
 						}
 						
 						$select_users_query = 'SELECT U.extension as ext FROM user U, customer C WHERE C.id = U.customer AND U.extension IS NOT NULL  AND C.name = "' . $_SESSION['usuario'] . '"';
-						$select_users_result = mysql_query($select_users_query) or die('Consulta fallida: ' . mysql_error());
+						$select_users_result = mysql_query($select_users_query) or die($dict->words("12").' ' . mysql_error());
 						$i=0;
 						echo "<script> var data= new Array(".$count.")</script>"; 						
 						while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
@@ -267,7 +269,7 @@ ini_set('display_errors',1);
 					<div id="postcontent">
 						
 						<div id="tables" name="tables">
-						<input id="newUserBtn" name="newUserBtn" type="submit" value="Add user">
+						<input id="newUserBtn" name="newUserBtn" type="submit" value="<?php echo $dict->words("23"); ?>">
 						
 						<!-- DIV Message -->
 						<?php
@@ -288,11 +290,11 @@ ini_set('display_errors',1);
 							<div id="post">
 						
 								<form method="POST" action="users.php">								
-									First Name: <input id="firstNameNewUserFld" name="firstNameNewUserFld" type="text" required="required"><br />
-									Last Name: <input id="lastNameNewUserFld" name="lastNameNewUserFld" type="text" required="required"><br /><br />
-									Default Email: <input id="emailNewUserFld" name="emailNewUserFld" type="email" required="required"><br /><br />
-									Outbound DID: <input onkeypress="return justNumbers(event);" id="outbound" name="outbound" type="text" ><br /><br />
-									Extension: <input onkeydown="validate_extension();" onkeyup ="validate_extension();" onkeypress="return justNumbers(event);validate_extension();" id="extension" name="extension" type="text" maxlength="4"  ><br /><br />
+									<?php echo $dict->words("13"); ?>: <input id="firstNameNewUserFld" name="firstNameNewUserFld" type="text" required="required"><br />
+									<?php echo $dict->words("14"); ?>: <input id="lastNameNewUserFld" name="lastNameNewUserFld" type="text" required="required"><br /><br />
+									<?php echo $dict->words("15"); ?>: <input id="emailNewUserFld" name="emailNewUserFld" type="email" required="required"><br /><br />
+									<?php echo $dict->words("16"); ?>: <input onkeypress="return justNumbers(event);" id="outbound" name="outbound" type="text" ><br /><br />
+									<?php echo $dict->words("17"); ?>: <input onkeydown="validate_extension();" onkeyup ="validate_extension();" onkeypress="return justNumbers(event);validate_extension();" id="extension" name="extension" type="text" maxlength="4"  ><br /><br />
 									<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Add">
 									<input id="cancelNewUserBtn" name="cancelNewUserBtn" type="button" value="Cancel">
 								    <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">';
@@ -306,10 +308,10 @@ ini_set('display_errors',1);
 							<div id="post">
 								<form id="editUserFrm" name="editUserFrm" method="POST" action="users.php">
 									<input id="idEditUserFld" name="idEditUserFld" type="hidden" required="required">
-									First Name: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
-									Last Name: <input id="lastNameEditUserFld" name="lastNameEditUserFld" type="text" required="required"><br /><br />
-									Outbound Did: <input onkeypress="return justNumbers(event);" id="outboundEditFld" name="outboundEditFld" type="text" ><br /><br />
-									Extension: <input onkeydown="validate_extension_edit();" onkeyup ="validate_extension_edit();" onkeypress="return justNumbers(event);validate_extension_edit();" id="extensionEditFld" name="extensionEditFld" type="text" maxlength="4"  ><br /><br />
+									<?php echo $dict->words("13"); ?>: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
+									<?php echo $dict->words("14"); ?>: <input id="lastNameEditUserFld" name="lastNameEditUserFld" type="text" required="required"><br /><br />
+									<?php echo $dict->words("16"); ?>: <input onkeypress="return justNumbers(event);" id="outboundEditFld" name="outboundEditFld" type="text" ><br /><br />
+									<?php echo $dict->words("17"); ?>: <input onkeydown="validate_extension_edit();" onkeyup ="validate_extension_edit();" onkeypress="return justNumbers(event);validate_extension_edit();" id="extensionEditFld" name="extensionEditFld" type="text" maxlength="4"  ><br /><br />
 									<input id="saveEditUserBtn" name="saveEditUserBtn" type="submit" value="Edit">
 									<input id="cancelEditUserBtn" name="cancelEditUserBtn" type="button" value="Cancel">
 									   <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">'; ?>
@@ -340,11 +342,11 @@ ini_set('display_errors',1);
 							<col width="20px">
 							<col width="20px">
 							<tr>
-								<th style="border: 1px solid;">First Name</th>
-								<th style="border: 1px solid;">Last Name</th>
-								<th style="border: 1px solid;">Outbound DID</th>
-								<th style="border: 1px solid;">Extension</th>
-								<th colspan="4" style="border: 1px solid;">Actions</th>
+								<th style="border: 1px solid;"><?php echo $dict->words("13"); ?></th>
+								<th style="border: 1px solid;"><?php echo $dict->words("14"); ?></th>
+								<th style="border: 1px solid;"><?php echo $dict->words("16"); ?></th>
+								<th style="border: 1px solid;"><?php echo $dict->words("17"); ?></th>
+								<th colspan="4" style="border: 1px solid;"><?php echo $dict->words("18"); ?></th>
 							</tr>
 							
 							<?php 
@@ -361,10 +363,10 @@ ini_set('display_errors',1);
 									echo "<td style='border: 1px solid;'><span id='spanLastName" . $line['id'] . "'>" . $line['lastName'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanOutboundDid" . $line['id'] . "'>" . $line['outbound_did'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanExtension" . $line['id'] . "'>" . $line['extension'] ."</span></td>";
-									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'] . "' href='#'>Edit</a></td>";
-									echo "<td style='border: 1px solid;'><a id='aEmails" . $line['id'] . "' href='#'>Emails</a></td>";
-									echo "<td style='border: 1px solid;'><a id='aApps" . $line['id'] . "' href='#'>Apps</a></td>";
-									echo "<td style='border: 1px solid;'><a id='aDelete" . $line['id'] . "' href='#'>Delete</a></td>";
+									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'] . "' href='#'>".$dict->words("19")."</a></td>";
+									echo "<td style='border: 1px solid;'><a id='aEmails" . $line['id'] . "' href='#'>".$dict->words("20")."</a></td>";
+									echo "<td style='border: 1px solid;'><a id='aApps" . $line['id'] . "' href='#'>".$dict->words("21")."</a></td>";
+									echo "<td style='border: 1px solid;'><a id='aDelete" . $line['id'] . "' href='#'>".$dict->words("22")."</a></td>";
 									
 									echo "</tr>";
 								}

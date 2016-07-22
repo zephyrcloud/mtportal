@@ -3,6 +3,8 @@
 	include("config/connection.php");
 	include("api_opensrs.php");
 	include("config/ip_capture.php");
+	include("dictionary.php");
+	$dict= new dictionary();
 	$ip_capture = new ip_capture();
 	$api = new api_opensrs();
 	// Errores
@@ -12,7 +14,7 @@
 		// 401
 		if (isset($_GET["error"])) {
 			$error = "401";
-			echo "<script> alert('Authentication Error in transfer domain, please verify the information'); </script>";
+			echo "<script> alert('".$dict->words("88")."'); </script>";
 		}
 		
 	}
@@ -41,12 +43,12 @@
 					
 					<div id="postcontent" align="center">
 							 <table border="1">
-								<tr><th colspan="7"><h2 style="color:#FFFFFF">Your are logged with the <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> domain </h2></th></tr>
+								<tr><th colspan="7"><h2 style="color:#FFFFFF">You are logged with the <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> domain </h2></th></tr>
 								<td><a href="#" onclick="show_organization();" >Organization</a></td>
 								<td><a href="#" onclick="show_admin();" >Admin</a></td>
 								<td><a href="#" onclick="show_billing();" >Billing</a></td>
 								<td><a href="#" onclick="show_technical();" >Technical</a></td>
-								<td><a href="#" onclick="show_renew();" >Renew this domain</a></td>
+								<td><a href="#" onclick="show_renew();" ><?php echo $dict->words("86"); ?></a></td>
 								<td><a href="#" onclick="show_dns_manager_panel();" >Domain manager</a></td>
 								<td><a href="#" onclick="show_owner_change();" >Change owership domain</a></td>
 							 </table>
@@ -322,20 +324,21 @@
 							<form action="intoDomain.php" method="POST">
 							<input hidden readonly type="text" id="user_id" name="user_id" >
 								<table border="1">  
-									<tr><th colspan="2">Owner Contact Information</th></tr>
-									<tr><td>First Name </td><td><input type="text" id="first_name_12_1" name="first_name_12_1" required></td></tr>
-									<tr><td>Last Name </td><td><input type="text" id="last_name_5_1" name="last_name_5_1" required></td></tr>
-									<tr><td>Organization Name </td><td><input type="text" id="org_name_2_1"  name="org_name_2_1" required></td></tr>
-									<tr><td>Street Address </td><td><input type="text" id="address1_11_1" name="address1_11_1" required></td></tr>
-									<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_6_1" name="address2_6_1" ></td></tr>
-									<tr><td>Address 3 [optional] </td><td><input type="text" id="address3_1_1" name="address3_1_1" ></td></tr>
-									<tr><td>City </td><td><input type="text" id="city_8_1" name="city_8_1" required></td></tr>
-									<tr><td>State </td><td><input type="text" id="state_4_1" name="state_4_1" required></td></tr>
-									<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-									<tr><td>Postal Code </td><td><input type="text" id="postal_code_9_1" name="postal_code_9_1" required></td></tr>
-									<tr><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_1')"; onkeypress= "telephone_extension('phone_3_1')"; onkeyup = "telephone_extension('phone_3_1')"; type="text" id="phone_3_1" name="phone_3_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-									<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_10_1" name="fax_10_1" ></td></tr>
-									<tr><td>Email </td><td><input type="email" id="email_7_1" name="email_7_1" required><br>Must be a current valid address</td></tr>
+									<tr><th colspan="2"><?php echo $dict->words("47"); ?></th></tr>
+									<tr><td><?php echo $dict->words("48"); ?> </td><td><input type="text" id="first_name_12_1" name="first_name_12_1" required></td></tr>
+									<tr><td><?php echo $dict->words("49"); ?> </td><td><input type="text" id="last_name_5_1" name="last_name_5_1" required></td></tr>
+									<tr><td><?php echo $dict->words("50"); ?> </td><td><input type="text" id="org_name_2_1"  name="org_name_2_1" required></td></tr>
+									<tr><td><?php echo $dict->words("51"); ?> </td><td><input type="text" id="address1_11_1" name="address1_11_1" required></td></tr>
+									<tr><td><?php echo $dict->words("52"); ?> </td><td><input type="text" id="address2_6_1" name="address2_6_1" ></td></tr>
+									<tr><td><?php echo $dict->words("53"); ?> </td><td><input type="text" id="address3_1_1" name="address3_1_1" ></td></tr>
+									<tr><td><?php echo $dict->words("54"); ?> </td><td><input type="text" id="city_8_1" name="city_8_1" required></td></tr>
+									<tr><td><?php echo $dict->words("55"); ?> </td><td><input type="text" id="state_4_1" name="state_4_1" required></td></tr>
+									<tr><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+									<tr><td><?php echo $dict->words("57"); ?> </td><td><input type="text" id="postal_code_9_1" name="postal_code_9_1" required></td></tr>
+									<tr><td><?php echo $dict->words("58"); ?> </td><td><input onkeydown= "telephone_extension('phone_3_1')"; onkeypress= "telephone_extension('phone_3_1')"; onkeyup = "telephone_extension('phone_3_1')"; type="text" id="phone_3_1" name="phone_3_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+									<tr><td><?php echo $dict->words("59"); ?> </td><td><input type="text" id="fax_10_1" name="fax_10_1" ></td></tr>
+									<tr><td><?php echo $dict->words("60"); ?> </td><td><input type="email" id="email_7_1" name="email_7_1" required><br>Must be a current valid address</td></tr>
+							
 									<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"></th></tr>
 								</table>							
 							</form>
@@ -415,20 +418,20 @@
 							<form action="intoDomain.php" method="POST">
 							<input hidden readonly type="text" id="user_id" name="user_id" >
 								<table border="1"> 
-									<tr><th colspan="2">Admin Contact Information</th></tr>
-									<tr class="row_a"><td>First Name </td><td><input type="text" id="first_name_12_0" name="first_name_12_0" required></td></tr>
-									<tr><td>Last Name </td><td><input type="text" id="last_name_5_0" name="last_name_5_0" required></td></tr>
-									<tr><td>Organization Name </td><td><input type="text" id="org_name_2_0"  name="org_name_2_0" required></td></tr>
-									<tr><td>Street Address </td><td><input type="text" id="address1_11_0" name="address1_11_0" required></td></tr>
-									<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_0" name="address2_4_0" ></td></tr>
-									<tr><td>Address 3 [optional] </td><td><input type="text" id="address3_1_0" name="address3_1_0" ></td></tr>
-									<tr><td>City </td><td><input type="text" id="city_8_0" name="city_8_0" required></td></tr>
-									<tr><td>State </td><td><input type="text" id="state_6_0" name="state_6_0" required></td></tr>
-									<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-									<tr><td>Postal Code </td><td><input type="text" id="postal_code_9_0" name="postal_code_9_0" required></td></tr>
-									<tr><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_0')"; onkeypress= "telephone_extension('phone_3_0')"; onkeyup = "telephone_extension('phone_3_0')"; type="text" id="phone_3_0" name="phone_3_0" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-									<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_10_0" name="fax_10_0" ></td></tr>
-									<tr><td>Email </td><td><input type="email" id="email_7_0" name="email_7_0" required><br>Must be a current valid address</td></tr>
+									<tr><th colspan="2"><?php echo $dict->words("61"); ?></th></tr>
+									<tr><td><?php echo $dict->words("48"); ?> </td><td><input type="text" id="first_name_12_0" name="first_name_12_0" required></td></tr>
+									<tr><td><?php echo $dict->words("49"); ?> </td><td><input type="text" id="last_name_5_0" name="last_name_5_0" required></td></tr>
+									<tr><td><?php echo $dict->words("50"); ?> </td><td><input type="text" id="org_name_2_0"  name="org_name_2_0" required ></td></tr>
+									<tr><td><?php echo $dict->words("51"); ?> </td><td><input type="text" id="address1_11_0" name="address1_11_0" required></td></tr>
+									<tr><td><?php echo $dict->words("52"); ?> </td><td><input type="text" id="address2_4_0" name="address2_4_0" ></td></tr>
+									<tr><td><?php echo $dict->words("53"); ?> </td><td><input type="text" id="address3_1_0" name="address3_1_0" ></td></tr>
+									<tr><td><?php echo $dict->words("54"); ?> </td><td><input type="text" id="city_8_0" name="city_8_0" required ></td></tr>
+									<tr><td><?php echo $dict->words("55"); ?> </td><td><input type="text" id="state_6_0" name="state_6_0" required ></td></tr>
+									<tr><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+									<tr><td><?php echo $dict->words("57"); ?> </td><td><input required type="text" id="postal_code_9_0" name="postal_code_9_0" ></td></tr>
+									<tr><td><?php echo $dict->words("58"); ?> </td><td><input onkeydown= "telephone_extension('phone_3_0')"; onkeypress= "telephone_extension('phone_3_0')"; onkeyup = "telephone_extension('phone_3_0')"; type="text" id="phone_3_0" name="phone_3_0" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+									<tr><td><?php echo $dict->words("59"); ?> </td><td><input  type="text" id="fax_10_0" name="fax_10_0" ></td></tr>
+									<tr><td><?php echo $dict->words("60"); ?> </td><td><input type="email" id="email_7_0" name="email_7_0" required><br>Must be a current valid address</td></tr>
 									<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"></th></tr>
 								</table>
 							</form>						
@@ -508,20 +511,21 @@
 							<form action="intoDomain.php" method="POST">
 							<input hidden readonly type="text" id="user_id" name="user_id" >
 								<table border="1">
-									<tr><th colspan="2">Billing Contact Information</th></tr>
-									<tr><td>First Name </td><td><input type="text" id="first_name_12_3" name="first_name_12_3" required></td></tr>
-									<tr><td>Last Name </td><td><input type="text" id="last_name_5_3" name="last_name_5_3" required></td></tr>
-									<tr><td>Organization Name </td><td><input type="text" id="org_name_2_3"  name="org_name_2_3" required></td></tr>
-									<tr><td>Street Address </td><td><input type="text" id="address1_11_3" name="address1_11_3" required></td></tr>
-									<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_6_3" name="address2_6_3" ></td></tr>
-									<tr><td>Address 3 [optional] </td><td><input type="text" id="address3_1_3" name="address3_1_3" ></td></tr>
-									<tr><td>City </td><td><input type="text" id="city_8_3" name="city_8_3" required></td></tr>
-									<tr><td>State </td><td><input type="text" id="state_4_3" name="state_4_3" required></td></tr>
-									<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-									<tr><td>Postal Code </td><td><input type="text" id="postal_code_9_3" name="postal_code_9_3" required></td></tr>
-									<tr><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_3')"; onkeypress= "telephone_extension('phone_3_3')"; onkeyup = "telephone_extension('phone_3_3')"; type="text" id="phone_3_3" name="phone_3_3" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-									<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_10_3" name="fax_10_3" ></td></tr>
-									<tr><td>Email </td><td><input type="email" id="email_7_3" name="email_7_3" required><br>Must be a current valid address</td></tr>
+									<tr><th colspan="2"><?php echo $dict->words("62"); ?></th></tr>
+									<tr><td><?php echo $dict->words("48"); ?> </td><td><input type="text" id="first_name_12_3" name="first_name_12_3" required ></td></tr>
+									<tr><td><?php echo $dict->words("49"); ?> </td><td><input type="text" id="last_name_5_3" name="last_name_5_3" required></td></tr>
+									<tr><td><?php echo $dict->words("50"); ?> </td><td><input type="text" id="org_name_2_3"  name="org_name_2_3" required ></td></tr>
+									<tr><td><?php echo $dict->words("51"); ?> </td><td><input  type="text" id="address1_11_3" name="address1_11_3" required ></td></tr>
+									<tr><td><?php echo $dict->words("52"); ?> </td><td><input type="text" id="address2_6_3" name="address2_6_3" ></td></tr>
+									<tr><td><?php echo $dict->words("53"); ?> </td><td><input type="text" id="address3_1_3" name="address3_1_3" ></td></tr>
+									<tr><td><?php echo $dict->words("54"); ?> </td><td><input required type="text" id="city_8_3" name="city_8_3" ></td></tr>
+									<tr><td><?php echo $dict->words("55"); ?> </td><td><input required type="text" id="state_4_3" name="state_4_3" ></td></tr>
+									<tr><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United States </option></select></td></tr>
+									<tr><td><?php echo $dict->words("57"); ?> </td><td><input required type="text" id="postal_code_9_3" name="postal_code_9_3" ></td></tr>
+									<tr><td><?php echo $dict->words("58"); ?> </td><td><input required onkeydown= "telephone_extension('phone_3_3')"; onkeypress= "telephone_extension('phone_3_3')"; onkeyup = "telephone_extension('phone_3_3')"; type="text" id="phone_3_3" name="phone_3_3" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+									<tr><td><?php echo $dict->words("59"); ?> </td><td><input  type="text" id="fax_10_3" name="fax_10_3" ></td></tr>
+									<tr><td><?php echo $dict->words("60"); ?> </td><td><input type="email" id="email_7_3" name="email_7_3" required><br>Must be a current valid address</td></tr>
+							
 									<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"></th></tr>
 								</table>
 							</form>						
@@ -601,20 +605,20 @@
 							<form action="intoDomain.php" method="POST">
 							<input hidden readonly type="text" id="user_id" name="user_id" >
 								<table border="1">
-									<tr><th colspan="2">Technical Contact Information</th></tr>
-									<tr><td>First Name </td><td><input type="text" id="first_name_12_2" name="first_name_12_2" required></td></tr>
-									<tr><td>Last Name </td><td><input type="text" id="last_name_6_2" name="last_name_6_2" required></td></tr>
-									<tr><td>Organization Name </td><td><input type="text" id="org_name_2_2"  name="org_name_2_2" required></td></tr>
-									<tr><td>Street Address </td><td><input type="text" id="address1_11_2" name="address1_11_2" required></td></tr>
-									<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_2 " name="address2_4_2 " ></td></tr>
-									<tr><td>Address 3 [optional] </td><td><input type="text" id="address3_1_2" name="address3_1_2" ></td></tr>
-									<tr><td>City </td><td><input type="text" id="city_8_2" name="city_8_2" required></td></tr>
-									<tr><td>State </td><td><input type="text" id="state_5_2" name="state_5_2" required></td></tr>
-									<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-									<tr><td>Postal Code </td><td><input type="text" id="postal_code_9_2" name="postal_code_9_2" required></td></tr>
-									<tr><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_2')"; onkeypress= "telephone_extension('phone_3_2')"; onkeyup = "telephone_extension('phone_3_2')"; type="text" id="phone_3_2" name="phone_3_2" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-									<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_10_2" name="fax_10_2" ></td></tr>
-									<tr><td>Email </td><td><input type="email" id="email_7_2" name="email_7_2" required><br>Must be a current valid address</td></tr>
+									<tr><th colspan="2"><?php echo $dict->words("63"); ?></th></tr>
+									<tr><td><?php echo $dict->words("48"); ?> </td><td><input required type="text" id="first_name_12_2" name="first_name_12_2" ></td></tr>
+									<tr><td><?php echo $dict->words("49"); ?> </td><td><input required type="text" id="last_name_6_2" name="last_name_6_2" ></td></tr>
+									<tr><td><?php echo $dict->words("50"); ?> </td><td><input  required type="text" id="org_name_2_2"  name="org_name_2_2" ></td></tr>
+									<tr><td><?php echo $dict->words("51"); ?> </td><td><input required type="text" id="address1_11_2" name="address1_11_2" ></td></tr>
+									<tr><td><?php echo $dict->words("52"); ?> </td><td><input type="text" id="address2_4_2 " name="address2_4_2 " ></td></tr>
+									<tr><td><?php echo $dict->words("53"); ?> </td><td><input type="text" id="address3_1_2" name="address3_1_2" ></td></tr>
+									<tr><td><?php echo $dict->words("54"); ?> </td><td><input required type="text" id="city_8_2" name="city_8_2" ></td></tr>
+									<tr><td><?php echo $dict->words("55"); ?> </td><td><input required type="text" id="state_5_2" name="state_5_2" ></td></tr>
+									<tr><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+									<tr><td><?php echo $dict->words("57"); ?> </td><td><input required type="text" id="postal_code_9_2" name="postal_code_9_2" ></td></tr>
+									<tr><td><?php echo $dict->words("58"); ?> </td><td><input required onkeydown= "telephone_extension('phone_3_2')"; onkeypress= "telephone_extension('phone_3_2')"; onkeyup = "telephone_extension('phone_3_2')"; type="text" id="phone_3_2" name="phone_3_2" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+									<tr><td><?php echo $dict->words("59"); ?> </td><td><input  type="text" id="fax_10_2" name="fax_10_2" ></td></tr>
+									<tr><td><?php echo $dict->words("60"); ?> </td><td><input required type="email" id="email_7_2" name="email_7_2" ><br>Must be a current valid address</td></tr>
 									<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"></th></tr>
 								</table>
 							</form>						
@@ -695,11 +699,11 @@
 						<div id="renew" hidden >
 							<form action="intoDomain.php" method="POST">
 							<table border="1">
-							<tr><th colspan="3">Renew this domain</th></tr>
+							<tr><th colspan="3"><?php echo $dict->words("86"); ?></th></tr>
 							<input hidden readonly type="text" id="user_id" name="user_id" ></td></tr>
 							<tr hidden ><td><input readonly type="text" id="domainName" name="domainName" value="<?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser'];}else{echo $_SESSION['domain'];} ?>" ></td></tr>
 							<tr hidden ><td><input readonly type="text" id="expireTime" name="expireTime" ></td></tr>
-							<td colspan="2"> Are you sure that you want to renew this domain ? </td>
+							<td colspan="2"> <?php echo $dict->words("87"); ?> </td>
 							<tr><td>Yes <input onclick="show_button();" type="radio"  name="tci" id="tci" ></td>
 								<td>No <input onclick="hide_panel();" type="radio"  name="tci" id="tci_1" ></td></tr>
 							<input hidden readonly type="text" id="user_id" name="user_id" ></td></tr>

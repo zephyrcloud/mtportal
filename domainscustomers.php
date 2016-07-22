@@ -2,6 +2,8 @@
 	include("config/connection.php");
 	include("api_opensrs.php");
 	include("config/ip_capture.php");
+	include("dictionary.php");
+	$dict= new dictionary();
 	$api = new api_opensrs();
 	$ip_capture = new ip_capture();
 	$message = "";
@@ -9,7 +11,7 @@
 
 <html>
 	<head>
-		<title>Domains</title>
+		<title><?php echo $dict->words("24"); ?></title>
 		<link href="style/style.css" rel="stylesheet" type="text/css">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script>
@@ -39,48 +41,48 @@
 				<div id="post">
 					<div id="lookupDomain">
 						<form method="POST" action="registrerDomain.php">
-							Lookup Domain: <input required id="domainFld" name="domainFld" type="text" ><br />
+							<?php echo $dict->words("25"); ?>: <input onkeydown="domain_validate();" onkeyup ="domain_validate();" onkeypress="domain_validate();" required id="domainFld" name="domainFld" type="text" ><br />
 							<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Check Available">
 							<input type="text" name="user_id_registrer_1" id="user_id_registrer_1" readonly hidden >
 						</form>	
 						<br>
-						<a href="profileScreen.php" > Click here for going to the screen profile </a>
+						<a href="profileScreen.php" > <?php echo $dict->words("27"); ?> </a>
 						<div>
 								<?php 
 		if(isset($_GET['code'])){
 			if($_GET['code'] == "404"){
-				echo " <script> alert('You over the quota and do not have permited to regitrer more domains, please contact the administrator'); </script>";}
+				echo " <script> alert('".$dict->words("26")."'); </script>";}
 			if($_GET['code'] == "403"){
 				//echo " <script> alert('This domain has been taken , please try other domain'); </script>";
 				// list of posible domains.
-				$domains = array(".com", ".net", ".org", ".info", ".biz", ".name", ".us");
+				$domains = array(".com", ".net", ".org", ".info", ".biz", ".name", ".us", ".co", ".com.co");
 				$dom= base64_decode(html_entity_decode($_GET['dom']));
 				$dom= explode(".",$dom);
 				$domId= base64_decode(html_entity_decode($_GET['i']));
 				//look for remaining.
 				$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id AND c.id= '.$domId.' GROUP BY cd.`customer_id` ';
-				$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+				$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12"));
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 					//echo " <script> alert('".$line['cid']."---".$line['remaining']."'); </script>";
 					$quota= $line['remaining'];
 				}
 				if($quota > 0){
 					$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
-					$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+					$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12"));
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 							$update_user_query = 'UPDATE `customer` SET `remaining`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
 							$update_user_result = mysql_query($update_user_query);
 						}
-					echo " <script> alert('This domain has been taken , please try other domain of this list or another you choose.'); </script>";
+					echo " <script> alert('".$dict->words("28")."'); </script>";
 								$table='';
 							$table.='<table>
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
 										<tr>
-											<th style="border: 1px solid;">Domain</th>
-											<th style="border: 1px solid;">Status</th>
-											<th style="border: 1px solid;">Action</th>
+											<th style="border: 1px solid;">'.$dict->words("29").'</th>
+											<th style="border: 1px solid;">'.$dict->words("30").'</th>
+											<th style="border: 1px solid;">'.$dict->words("31").'</th>
 										</tr>';
 											
 							for($i=0; $i < count($domains); $i++){
@@ -115,7 +117,7 @@
 										
 										if($obj1->body->data_block->dt_assoc->item[5] == "210"){
 											//echo nl2br('deka'.$domains[$i] ." Available \n" );
-											$table.='<tr><td>'.$dom[0].''.$domains[$i].'</td><td> Available </td><td><a href="registrerDomain.php?dom='.$dom[0].''.$domains[$i].'"> Registrer </a></td></tr>';
+											$table.='<tr><td>'.$dom[0].''.$domains[$i].'</td><td> Available </td><td><a href="registrerDomain.php?dom='.$dom[0].''.$domains[$i].'"> Register </a></td></tr>';
 										}
 									}
 								}
@@ -125,12 +127,12 @@
 							echo $table;
 				}else{
 					$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
-					$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+					$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12"));
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 							$update_user_query = 'UPDATE `customer` SET `remaining`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
 							$update_user_result = mysql_query($update_user_query);
 						}
-					echo " <script> alert('This domain has been taken and you over the quotas permited to regitrer more domains'); </script>";
+					echo " <script> alert('".$dict->words("32")."'); </script>";
 				}
 				
 				
@@ -184,7 +186,7 @@
 							// look for the qoutas for the 
 							$quota=0;
 							$select_customers_query = 'SELECT `quota_domain` FROM `customer` WHERE `id` = '.$_POST['user_id_registrer_1'];
-							$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+							$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12"));
 							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 											$quota=$line['quota_domain'];
 							}
@@ -192,7 +194,7 @@
 							// look for the table of create domains if the user has domains and count item
 							$counter=0;
 							$select_customers_query = 'SELECT COUNT(*) as counter FROM `created_domains` WHERE `customer_id` ='.$_POST['user_id_registrer_1'];
-							$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+							$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12"));
 							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 											$counter=$line['counter'];
 							}
@@ -205,7 +207,7 @@
 								
 							}else{
 								// show a message or redirect to principal look for domain
-								echo " <script> alert('You over the quota and do not have permited to regitrer more domains, please contact the administrator'); </script>";
+								echo " <script> alert('".$dict->words("33")."'); </script>";
 								//echo "false";
 							}
 							
@@ -214,17 +216,60 @@
 					 case 211:
 					 //echo "Taken";
 					 //echo " <script> $('#lookupDomain').hide(); $('#domain_available').show(); $('#registrer').hide(); </script>";
-					 echo " <script> alert('This domain has been taken , please try other domain'); </script>";
-								
+					 echo " <script> alert('".$dict->words("28")."'); </script>";
 					 break;
 				 }
 			}
 		?>
 		
 		<script>
+		
+		$('form').on('keyup keypress', function(e) {
+		  var keyCode = e.keyCode || e.which;
+		  if (keyCode === 13) { 
+			e.preventDefault();
+			return false;
+		  }
+		});
+		
 		var id = document.getElementById('id_user').value;
 		document.getElementById('user_id_registrer_1').value = id;
-	   
+		$("#saveNewUserBtn").hide();
+		function domain_validate(){
+			var dom = ["com", "net", "org", "info", "biz", "name", "us","co"];
+			var dom1 = $("#domainFld").val();
+			var res = dom1.split(".");
+			var n = dom1.includes(".");
+			var tr= false;
+						
+			if(res.length == 3){
+				if(n == true){
+					if(res[1] != ""  && res[1] == "com" && res[2] == "co"){
+						tr=true;
+					}
+				}
+				
+			}else{
+				if(n == true){
+				if(res[1] != ""){
+					for(i=0;i<dom.length;i++){
+						if(res[1] == dom[i]){
+							tr=true;
+						}
+						
+					}
+				}else{
+					$("#saveNewUserBtn").hide();
+				}
+			}
+			}
+			
+			if(tr){
+				$("#saveNewUserBtn").show();				
+			}else{
+				$("#saveNewUserBtn").hide();
+			}
+		}
 	   
 		</script>
 				<!-- Domain Registrer -->
@@ -654,7 +699,8 @@
 			$insert_result = mysql_query($insert_query);
 			echo "<script> alert('".$message."'); </script>";}
 			else{
-			echo "<script> alert('it was a mistake with the information.'); </script>";		
+				
+			echo "<script> alert('".$dict->words("34")."'); </script>";		
 			}
 			
 			

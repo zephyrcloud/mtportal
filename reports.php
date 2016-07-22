@@ -1,5 +1,7 @@
 <?php
 include("config/connection.php");
+include("dictionary.php");
+$dict= new dictionary();
 ?>
 
 <html>
@@ -38,15 +40,15 @@ include("config/connection.php");
 
                 <!-------->
                 <div id="postitle">
-                    <div class="floatleft"><h1>Reports</h1></div>
+                    <div class="floatleft"><h1><?php echo $dict->words("68");?></h1></div>
                     <div class="floatright righttext tpad"></div>
                     <div class="clear">&nbsp;</div>
                 </div>
 
                 <div id="content">
                     <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-                        <li class="active"><a href="#red" data-toggle="tab">Reports</a></li>
-                        <li><a href="#orange" data-toggle="tab">Archive reports</a></li>
+                        <li class="active"><a href="#red" data-toggle="tab"><?php echo $dict->words("68");?></a></li>
+                        <li><a href="#orange" data-toggle="tab"><?php echo $dict->words("69");?></a></li>
 
                     </ul>
                     <div id="my-tab-content" class="tab-content">
@@ -59,29 +61,29 @@ include("config/connection.php");
                                 <div id="menu_list">
                                         
                                         <div id="find" >
-                                Filter by:
+                               <?php echo $dict->words("70");?>
                                         <select id="opciones" name="opciones" onclick="apply()" >
-                                         <option value="0">Select a option</option>
-                                         <option value="1">User</option>
-                                         <option value="2">Action type</option>
-                                         <option value="3">Table modified</option>
-                                         <option value="4">Result</option>
-                                         <option value="5">Especific day </option>                                         
+                                         <option value="0"><?php echo $dict->words("71");?></option>
+                                         <option value="1"><?php echo $dict->words("72");?></option>
+                                         <option value="2"><?php echo $dict->words("73");?></option>
+                                         <option value="3"><?php echo $dict->words("74");?></option>
+                                         <option value="4"><?php echo $dict->words("75");?></option>
+                                         <option value="5"><?php echo $dict->words("76");?></option>                                         
                                         </select>
                                         <form method="POST" action="reports.php">	
                                         <input id="especific_day" name="especific_day" type="text" size="4" style="display:none;">
-                                        <input hidden id="save" type="submit" value="Apply" />
+                                        <input hidden id="save" type="submit" value=" <?php echo $dict->words("78");?>" />
                                         </form>
                                         <br>
                                 </div>
                                 
                                 <div id="user_parameter" style='display:none;'>
-                                Filter by parameter:
+                               <?php echo $dict->words("77");?>:
                                         <select id="opciones_user" name="opciones_user"  onclick="buscar('user')"  >
-                                         <option value="0">Select a option</option>
+                                         <option value="0"><?php echo $dict->words("71");?></option>
                 <?php
                 $select_customers_query = 'SELECT `id`, `name` FROM `customer`';
-                $select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
+                $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
                 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 
@@ -92,17 +94,17 @@ include("config/connection.php");
                                         <br>
                                         <form method="POST" action="reports.php">
                                                 <input id="user_id_field" name="user_id_field" type="text" style="display:none;">
-                                                <input type="submit" value="Apply" />
+                                                <input type="submit" value="<?php echo $dict->words("78");?>" />
                                         </form>
                                 </div>
                         
                                 <div id="actionType_parameter" style='display:none;'>
-                                Filter by parameter:
+                               <?php echo $dict->words("77");?>:
                                         <select id="opciones_actionType" name="opciones_actionType"  onclick="buscar('actionType')"  >
-                                         <option value="0">Select a option</option>
+                                         <option value="0"><?php echo $dict->words("71");?></option>
 <?php
 $select_customers_query = 'SELECT `id`, `action_name` FROM `action_type`';
-$select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
+$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 
@@ -113,17 +115,17 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
                                         <br>
                                         <form method="POST" action="reports.php">
                                                 <input id="actionType_id_field" name="actionType_id_field" type="text" style="display:none;">
-                                                <input type="submit" value="Apply" />
+                                                <input type="submit" value="<?php echo $dict->words("78");?>" />
                                         </form>
                                 </div>
                         
                                 <div id="table_modified_parameter" style='display:none;'>
-                                Filter by parameter:
+                               <?php echo $dict->words("77");?>:
                                         <select id="opciones_table_modified" name="opciones_actionType"  onclick="buscar('table_modified')"  >
-                                         <option value="0">Select a option</option>
+                                         <option value="0"><?php echo $dict->words("71");?></option>
 <?php
 $select_customers_query = 'SELECT `id`, `table_name` FROM `table_modified`';
-$select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
+$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 
@@ -141,12 +143,12 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
                                 </div>
                                 
                                 <div id="result_parameter" style='display:none;'>
-                                Filter by parameter:
+                               <?php echo $dict->words("77");?>:
                                         <select id="opciones_result" name="opciones_result"  onclick="buscar('result')"  >
-                                         <option value="0">Select a option</option>
+                                         <option value="0"><?php echo $dict->words("71");?></option>
 <?php
 $select_customers_query = 'SELECT `id`, `result_name` FROM `result`';
-$select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
+$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 
@@ -166,18 +168,18 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
                                         <br>						
                                         <form method="POST" action="reports.php">
                                         <input id="close" name="close" type="text" size="4" style="display:none;" value="1">						
-                                        <input  id="end_report" type="submit" value="Archive Logs" />
+                                        <input  id="end_report" type="submit" value="<?php echo $dict->words("79");?>" />
 <?php
 $select_customers_query = 'SELECT min(id) as minimo FROM `log` WHERE id_counter = 0';
 
-$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+$select_customers_result = mysql_query($select_customers_query)or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
     $minimo = $line['minimo'];
     echo '<input id="minimo" name="minimo" type="text" size="4" style="display:none;" value="' . $minimo . '">';
 }
 $select_customers_query = 'SELECT max(id) as maximo FROM `log` WHERE id_counter = 0';
-$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 
@@ -195,12 +197,12 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
                                                 <col width="170px">
 												<col width="190px">
                                                 <tr>
-                                                        <th style="border: 1px solid;">Time</th>
-                                                        <th style="border: 1px solid;">Ip Address</th>
-                                                        <th style="border: 1px solid;">User</th>
-                                                        <th style="border: 1px solid;">Action Type</th>
-                                                        <th style="border: 1px solid;">Table modified</th>
-                                                        <th style="border: 1px solid;">Result</th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("80");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("81");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("82");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("83");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("84");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("85");?></th>
                                                 </tr>
                                                 
 <?php
@@ -220,7 +222,7 @@ if (isset($_POST["rep_history"])) {
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
 														   AND l.timeStamp < NOW() AND id_counter <> 0  ORDER BY l.timeStamp ';
 
-    $select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+    $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
     while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 
@@ -319,7 +321,7 @@ if (isset($_POST["especific_day"])) {
 														   AND l.timeStamp LIKE "%' . $_POST["especific_day"] . '%" AND id_counter <> 1 ORDER BY l.timeStamp ';
 }
 
-$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 
@@ -346,7 +348,7 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
                         </div> <!--end red -->
 
                         <div class="tab-pane" id="orange"> <!-- begin orange -->
-                            <h1>Archive logs</h1>
+                            
                             <hr>
 							<div id="post">
 							<table>
@@ -357,12 +359,12 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
                                                 <col width="170px">
 												<col width="190px">
                                                 <tr>
-                                                        <th style="border: 1px solid;">Time</th>
-                                                        <th style="border: 1px solid;">Ip Address</th>
-                                                        <th style="border: 1px solid;">User</th>
-                                                        <th style="border: 1px solid;">Action Type</th>
-                                                        <th style="border: 1px solid;">Table modified</th>
-                                                        <th style="border: 1px solid;">Result</th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("80");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("81");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("82");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("83");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("84");?></th>
+                                                        <th style="border: 1px solid;"><?php echo $dict->words("85");?></th>
                                                 </tr>
                                                 
 <?php
@@ -371,7 +373,7 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
 														   AND l.timeStamp < NOW() AND id_counter <> 0  ORDER BY l.timeStamp ';
 
-    $select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+    $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
     while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 

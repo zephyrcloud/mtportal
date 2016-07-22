@@ -1,8 +1,4 @@
 <?php
-ini_set('display_errors',1);
-ini_set('SMTP', "localhost");
-ini_set('smtp_port', "25");
-ini_set('sendmail_from', "jbriceno@zephyrcloud.com");
 
 
 	// Connect to database
@@ -10,8 +6,10 @@ ini_set('sendmail_from', "jbriceno@zephyrcloud.com");
 	include("config/ip_capture.php");
 	include("config/PHPMailer-master/PHPMailerAutoload.php");
 	include("emails.php");
+	include("dictionary.php");
 	$ip_capture = new ip_capture();
 	$email= new emails();
+	$dict= new dictionary();
 	// Errores
 	$error = "00";
 	if (isset($_GET["error"])) {
@@ -57,12 +55,12 @@ ini_set('sendmail_from', "jbriceno@zephyrcloud.com");
 								<input id="passwordFld" name="passwordFld" type="password" placeholder="Password" required="required" style="text-align: center;">
 							</div>
 							<div>
-								<input id="loginBtn" name="loginBtn" type="submit" value="LogIn">
+								<input id="loginBtn" name="loginBtn" type="submit" value="<?php echo $dict->words("0"); ?>">
 							</div>
 							<?php
 								
 								if($error == "401"){
-									echo "<div><span style='font-style: italic; color: red;'>Username and/or password incorrect</span></div>";
+									echo "<div><span style='font-style: italic; color: red;'>".$dict->words("1")."</span></div>";
 									$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_user,id_tableModified) VALUES('".$ip_capture->getRealIP()."',1,10,2,4)";
 									$insert_result = mysql_query($insert_query);					
 									$subject="Login failed";

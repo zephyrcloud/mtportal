@@ -2,6 +2,8 @@
 	include("config/connection.php");
 	include("api_opensrs.php");
 	include("config/ip_capture.php");
+	include("dictionary.php");
+	$dict= new dictionary();
 	$api = new api_opensrs();
 	$ip_capture = new ip_capture();
 	$message = "";
@@ -94,7 +96,7 @@
 
 <html>
 	<head>
-		<title>Registrer domain</title>
+		<title>Register domain</title>
 		<link href="style/style.css" rel="stylesheet" type="text/css">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script>
@@ -131,18 +133,18 @@
 			<div class="wrapper" >
 				<div id="post">
 					<div>
-						<center> <a href="domainscustomers.php" > Click here if you want to back to domain lookup </a> </center>
+						<center> <a href="domainscustomers.php" > <?php echo $dict->words("35"); ?> </a> </center>
 					</div>	
 					<div id="retreive" hidden>
 								<form action="registrerDomain.php" method="POST">						
 									<table border="1">
-									<tr><th colspan="3">Retrieve Order information</th></tr>
-									<tr><td rowspan="3">Lookfor or registrer domains</td>
+									<tr><th colspan="3"><?php echo $dict->words("36"); ?></th></tr>
+									<tr><td rowspan="3"><?php echo $dict->words("37"); ?></td>
 									<input hidden type="text" name="id_domain" id="id_domain" readonly value="<?php echo $_SESSION['domain']; ?>" >							
-									<td>Previous Domain: <input  type="text" id="domain_exits" name="domain_exits"></td>
-									<tr><td>Username: <input required type="text" name="username" id="username" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>
-									<tr><td>Password: <input required minlength=10 maxlength="20"  type="password" name="password" id="password" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>
-									<tr><th colspan="3"><input id="retreive_data" type="submit" value="retrieve data"></th></tr>
+									<td><?php echo $dict->words("38"); ?>: <input  type="text" id="domain_exits" name="domain_exits"></td>
+									<tr><td><?php echo $dict->words("39"); ?>: <input required type="text" name="username" id="username" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>
+									<tr><td><?php echo $dict->words("40"); ?>: <input required minlength=10 maxlength="20"  type="password" name="password" id="password" onkeydown="cp_text();" onkeypress="cp_text();" onkeyup ="cp_text();"> </td></tr>
+									<tr><th colspan="3"><input id="retreive_data" type="submit" value="<?php echo $dict->words("41"); ?>"></th></tr>
 									</table>
 								</form>
 							</div>
@@ -151,93 +153,93 @@
 						<form action="domainscustomers.php" method="POST">
 							<input type="text" name="user_id_registrer" id="user_id_registrer" readonly hidden >
 							<table border="1">
-							<tr><th colspan="2">Domain information</th></tr>
-							<tr><td>Domain Name</td><td><input type="text" name="domain_name" id="domain_name" readonly value="<?php if(isset($_POST['domainFld'])){echo $_POST['domainFld']; $_SESSION['domain'] = $_POST['domainFld'];}else{echo $_SESSION['domain'];} ?>" ></td>
-							<tr><td>Registration Type</td><td> <input type="text" name="type_registrer" id="type_registrer" readonly value="New Domain Registration" > </td></tr>
+							<tr><th colspan="2"><?php echo $dict->words("42"); ?></th></tr>
+							<tr><td><?php echo $dict->words("43"); ?></td><td><input type="text" name="domain_name" id="domain_name" readonly value="<?php if(isset($_POST['domainFld'])){echo $_POST['domainFld']; $_SESSION['domain'] = $_POST['domainFld'];}else{echo $_SESSION['domain'];} ?>" ></td>
+							<tr><td><?php echo $dict->words("44"); ?></td><td> <input type="text" name="type_registrer" id="type_registrer" readonly value="New Domain Registration" > </td></tr>
 							<tr class="prev_dom" hidden><td>Previous domain </td><td><input readonly type="text" name="previous_domain" id="previous_domain" > </td></tr>
-							<tr class="data_own"><td>Username registrer</td><td> <input type="text" name="Registrant_Username" id="Registrant_Username" required> </td></tr>
-							<tr class="data_own"><td>Password registrer</td><td> <input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" type="password" name="Registrant_Password" id="Registrant_Password" required> </td></tr>
-							<tr class="data_own"><td>Confirm Password</td><td> <input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" type="password" name="Password_confirm" id="Password_confirm" required> </td></tr>
-							<tr><td colspan="2"><center><input onDblClick="retreive_disapear(this);" onclick="retreive_apear();" type="radio" id="dom" name="dom"> I want retreive data from previous domain </center></td></tr>
+							<tr class="data_own"><td><?php echo $dict->words("39"); ?></td><td> <input type="text" name="Registrant_Username" id="Registrant_Username" required> </td></tr>
+							<tr class="data_own"><td><?php echo $dict->words("40"); ?></td><td> <input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" type="password" name="Registrant_Password" id="Registrant_Password" required> </td></tr>
+							<tr class="data_own"><td><?php echo $dict->words("45"); ?></td><td> <input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" type="password" name="Password_confirm" id="Password_confirm" required> </td></tr>
+							<tr><td colspan="2"><center><input onDblClick="retreive_disapear(this);" onclick="retreive_apear();" type="radio" id="dom" name="dom"> <?php echo $dict->words("46"); ?> </center></td></tr>
 							</table>
 							
 							<table border="1">  
-							<tr><th colspan="2">Owner Contact Information</th></tr>
-							<tr><td>First Name </td><td><input type="text" id="first_name_12_1" name="first_name_12_1" required></td></tr>
-							<tr><td>Last Name </td><td><input type="text" id="last_name_5_1" name="last_name_5_1" required></td></tr>
-							<tr><td>Organization Name </td><td><input type="text" id="org_name_2_1"  name="org_name_2_1" required></td></tr>
-							<tr><td>Street Address </td><td><input type="text" id="address1_11_1" name="address1_11_1" required></td></tr>
-							<tr><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_6_1" name="address2_6_1" ></td></tr>
-							<tr><td>Address 3 [optional] </td><td><input type="text" id="address3_1_1" name="address3_1_1" ></td></tr>
-							<tr><td>City </td><td><input type="text" id="city_8_1" name="city_8_1" required></td></tr>
-							<tr><td>State </td><td><input type="text" id="state_4_1" name="state_4_1" required></td></tr>
-							<tr><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-							<tr><td>Postal Code </td><td><input type="text" id="postal_code_9_1" name="postal_code_9_1" required></td></tr>
-							<tr><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_1')"; onkeypress= "telephone_extension('phone_3_1')"; onkeyup = "telephone_extension('phone_3_1')"; type="text" id="phone_3_1" name="phone_3_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-							<tr><td>Fax Number[optional] </td><td><input type="text" id="fax_10_1" name="fax_10_1" ></td></tr>
-							<tr><td>Email </td><td><input type="email" id="email_7_1" name="email_7_1" required><br>Must be a current valid address</td></tr>
+							<tr><th colspan="2"><?php echo $dict->words("47"); ?></th></tr>
+							<tr><td><?php echo $dict->words("48"); ?> </td><td><input type="text" id="first_name_12_1" name="first_name_12_1" required></td></tr>
+							<tr><td><?php echo $dict->words("49"); ?> </td><td><input type="text" id="last_name_5_1" name="last_name_5_1" required></td></tr>
+							<tr><td><?php echo $dict->words("50"); ?> </td><td><input type="text" id="org_name_2_1"  name="org_name_2_1" required></td></tr>
+							<tr><td><?php echo $dict->words("51"); ?> </td><td><input type="text" id="address1_11_1" name="address1_11_1" required></td></tr>
+							<tr><td><?php echo $dict->words("52"); ?> </td><td><input type="text" id="address2_6_1" name="address2_6_1" ></td></tr>
+							<tr><td><?php echo $dict->words("53"); ?> </td><td><input type="text" id="address3_1_1" name="address3_1_1" ></td></tr>
+							<tr><td><?php echo $dict->words("54"); ?> </td><td><input type="text" id="city_8_1" name="city_8_1" required></td></tr>
+							<tr><td><?php echo $dict->words("55"); ?> </td><td><input type="text" id="state_4_1" name="state_4_1" required></td></tr>
+							<tr><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+							<tr><td><?php echo $dict->words("57"); ?> </td><td><input type="text" id="postal_code_9_1" name="postal_code_9_1" required></td></tr>
+							<tr><td><?php echo $dict->words("58"); ?> </td><td><input onkeydown= "telephone_extension('phone_3_1')"; onkeypress= "telephone_extension('phone_3_1')"; onkeyup = "telephone_extension('phone_3_1')"; type="text" id="phone_3_1" name="phone_3_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<tr><td><?php echo $dict->words("59"); ?> </td><td><input type="text" id="fax_10_1" name="fax_10_1" ></td></tr>
+							<tr><td><?php echo $dict->words("60"); ?> </td><td><input type="email" id="email_7_1" name="email_7_1" required><br>Must be a current valid address</td></tr>
 							</table>
 							
 							<table border="1"> 
-							<tr><th colspan="2">Admin Contact Information</th></tr>
-							<tr><td>Same As Owner Contact Information </td><td><input type="radio" id="aci" name="aci"  onDblClick="uncheckRadio_aci(this)" onclick="checked_aci();"> </td> </tr>
-							<tr class="row_a"><td>First Name </td><td><input type="text" id="first_name_12_0" name="first_name_12_0" required></td></tr>
-							<tr class="row_a"><td>Last Name </td><td><input type="text" id="last_name_5_0" name="last_name_5_0" required></td></tr>
-							<tr class="row_a"><td>Organization Name </td><td><input type="text" id="org_name_2_0"  name="org_name_2_0" required ></td></tr>
-							<tr class="row_a"><td>Street Address </td><td><input type="text" id="address1_11_0" name="address1_11_0" required></td></tr>
-							<tr class="row_a"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_0" name="address2_4_0" ></td></tr>
-							<tr class="row_a"><td>Address 3 [optional] </td><td><input type="text" id="address3_1_0" name="address3_1_0" ></td></tr>
-							<tr class="row_a"><td>City </td><td><input type="text" id="city_8_0" name="city_8_0" required ></td></tr>
-							<tr class="row_a"><td>State </td><td><input type="text" id="state_6_0" name="state_6_0" required ></td></tr>
-							<tr class="row_a"><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-							<tr class="row_a"><td>Postal Code </td><td><input required type="text" id="postal_code_9_0" name="postal_code_9_0" ></td></tr>
-							<tr class="row_a"><td>Phone Number </td><td><input onkeydown= "telephone_extension('phone_3_0')"; onkeypress= "telephone_extension('phone_3_0')"; onkeyup = "telephone_extension('phone_3_0')"; type="text" id="phone_3_0" name="phone_3_0" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-							<tr class="row_a"><td>Fax Number[optional] </td><td><input  type="text" id="fax_10_0" name="fax_10_0" ></td></tr>
-							<tr class="row_a"><td>Email </td><td><input type="email" id="email_7_0" name="email_7_0" required><br>Must be a current valid address</td></tr>
+							<tr><th colspan="2"><?php echo $dict->words("61"); ?></th></tr>
+							<tr><td><?php echo $dict->words("64"); ?> </td><td><input type="radio" id="aci" name="aci"  onDblClick="uncheckRadio_aci(this)" onclick="checked_aci();"> </td> </tr>
+							<tr class="row_a"><td><?php echo $dict->words("48"); ?> </td><td><input type="text" id="first_name_12_0" name="first_name_12_0" required></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("49"); ?> </td><td><input type="text" id="last_name_5_0" name="last_name_5_0" required></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("50"); ?> </td><td><input type="text" id="org_name_2_0"  name="org_name_2_0" required ></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("51"); ?> </td><td><input type="text" id="address1_11_0" name="address1_11_0" required></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("52"); ?> </td><td><input type="text" id="address2_4_0" name="address2_4_0" ></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("53"); ?> </td><td><input type="text" id="address3_1_0" name="address3_1_0" ></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("54"); ?> </td><td><input type="text" id="city_8_0" name="city_8_0" required ></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("55"); ?> </td><td><input type="text" id="state_6_0" name="state_6_0" required ></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("57"); ?> </td><td><input required type="text" id="postal_code_9_0" name="postal_code_9_0" ></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("58"); ?> </td><td><input onkeydown= "telephone_extension('phone_3_0')"; onkeypress= "telephone_extension('phone_3_0')"; onkeyup = "telephone_extension('phone_3_0')"; type="text" id="phone_3_0" name="phone_3_0" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("59"); ?> </td><td><input  type="text" id="fax_10_0" name="fax_10_0" ></td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("60"); ?> </td><td><input type="email" id="email_7_0" name="email_7_0" required><br>Must be a current valid address</td></tr>
 							</table> 
 							
 							<table border="1">
-							<tr><th colspan="2">Billing Contact Information</th></tr>
-							<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci" name="bci" value="1" ></td></tr>
-							<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci_1" name="bci" value="2"></td></tr>
-							<tr class="row_b"><td>First Name </td><td><input type="text" id="first_name_12_3" name="first_name_12_3" required ></td></tr>
-							<tr class="row_b"><td>Last Name </td><td><input type="text" id="last_name_5_3" name="last_name_5_3" required></td></tr>
-							<tr class="row_b"><td>Organization Name </td><td><input type="text" id="org_name_2_3"  name="org_name_2_3" required ></td></tr>
-							<tr class="row_b"><td>Street Address </td><td><input  type="text" id="address1_11_3" name="address1_11_3" required ></td></tr>
-							<tr class="row_b"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_6_3" name="address2_6_3" ></td></tr>
-							<tr class="row_b"><td>Address 3 [optional] </td><td><input type="text" id="address3_1_3" name="address3_1_3" ></td></tr>
-							<tr class="row_b"><td>City </td><td><input required type="text" id="city_8_3" name="city_8_3" ></td></tr>
-							<tr class="row_b"><td>State </td><td><input required type="text" id="state_4_3" name="state_4_3" ></td></tr>
-							<tr class="row_b"><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-							<tr class="row_b"><td>Postal Code </td><td><input required type="text" id="postal_code_9_3" name="postal_code_9_3" ></td></tr>
-							<tr class="row_b"><td>Phone Number </td><td><input required onkeydown= "telephone_extension('phone_3_3')"; onkeypress= "telephone_extension('phone_3_3')"; onkeyup = "telephone_extension('phone_3_3')"; type="text" id="phone_3_3" name="phone_3_3" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-							<tr class="row_b"><td>Fax Number[optional] </td><td><input  type="text" id="fax_10_3" name="fax_10_3" ></td></tr>
-							<tr class="row_b"><td>Email </td><td><input type="email" id="email_7_3" name="email_7_3" required><br>Must be a current valid address</td></tr>
+							<tr><th colspan="2"><?php echo $dict->words("62"); ?></th></tr>
+							<tr><td><?php echo $dict->words("65"); ?> </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci" name="bci" value="1" ></td></tr>
+							<tr><td><?php echo $dict->words("64"); ?> </td><td><input onDblClick="uncheckRadio_bci(this);" onclick="checked_bci();" type="radio" id="bci_1" name="bci" value="2"></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("48"); ?> </td><td><input type="text" id="first_name_12_3" name="first_name_12_3" required ></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("49"); ?> </td><td><input type="text" id="last_name_5_3" name="last_name_5_3" required></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("50"); ?> </td><td><input type="text" id="org_name_2_3"  name="org_name_2_3" required ></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("51"); ?> </td><td><input  type="text" id="address1_11_3" name="address1_11_3" required ></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("52"); ?> </td><td><input type="text" id="address2_6_3" name="address2_6_3" ></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("53"); ?> </td><td><input type="text" id="address3_1_3" name="address3_1_3" ></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("54"); ?> </td><td><input required type="text" id="city_8_3" name="city_8_3" ></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("55"); ?> </td><td><input required type="text" id="state_4_3" name="state_4_3" ></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United States </option></select></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("57"); ?> </td><td><input required type="text" id="postal_code_9_3" name="postal_code_9_3" ></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("58"); ?> </td><td><input required onkeydown= "telephone_extension('phone_3_3')"; onkeypress= "telephone_extension('phone_3_3')"; onkeyup = "telephone_extension('phone_3_3')"; type="text" id="phone_3_3" name="phone_3_3" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("59"); ?> </td><td><input  type="text" id="fax_10_3" name="fax_10_3" ></td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("60"); ?> </td><td><input type="email" id="email_7_3" name="email_7_3" required><br>Must be a current valid address</td></tr>
 							</table>
 							
 							<table border="1">
 							
-							<tr><th colspan="2">Technical Contact Information</th></tr>
-							<tr><td>Same As Billing Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci" name="tci" value="1" ></td></tr>
-							<tr><td>Same As Admin Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_1" name="tci" value="2" ></td></tr>
-							<tr><td>Same As Owner Contact Information </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_2" name="tci" value="3" ></td></tr>
-							<tr class="row_t"><td>First Name </td><td><input required type="text" id="first_name_12_2" name="first_name_12_2" ></td></tr>
-							<tr class="row_t"><td>Last Name </td><td><input required type="text" id="last_name_6_2" name="last_name_6_2" ></td></tr>
-							<tr class="row_t"><td>Organization Name </td><td><input  required type="text" id="org_name_2_2"  name="org_name_2_2" ></td></tr>
-							<tr class="row_t"><td>Street Address </td><td><input required type="text" id="address1_11_2" name="address1_11_2" ></td></tr>
-							<tr class="row_t"><td>(eg: Suite #245) [optional] </td><td><input type="text" id="address2_4_2 " name="address2_4_2 " ></td></tr>
-							<tr class="row_t"><td>Address 3 [optional] </td><td><input type="text" id="address3_1_2" name="address3_1_2" ></td></tr>
-							<tr class="row_t"><td>City </td><td><input required type="text" id="city_8_2" name="city_8_2" ></td></tr>
-							<tr class="row_t"><td>State </td><td><input required type="text" id="state_5_2" name="state_5_2" ></td></tr>
-							<tr class="row_t"><td>2 Letter Country Code </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
-							<tr class="row_t"><td>Postal Code </td><td><input required type="text" id="postal_code_9_2" name="postal_code_9_2" ></td></tr>
-							<tr class="row_t"><td>Phone Number </td><td><input required onkeydown= "telephone_extension('phone_3_2')"; onkeypress= "telephone_extension('phone_3_2')"; onkeyup = "telephone_extension('phone_3_2')"; type="text" id="phone_3_2" name="phone_3_2" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
-							<tr class="row_t"><td>Fax Number[optional] </td><td><input  type="text" id="fax_10_2" name="fax_10_2" ></td></tr>
-							<tr class="row_t"><td>Email </td><td><input required type="email" id="email_7_2" name="email_7_2" ><br>Must be a current valid address</td></tr>
+							<tr><th colspan="2"><?php echo $dict->words("63"); ?></th></tr>
+							<tr><td><?php echo $dict->words("66"); ?> </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci" name="tci" value="1" ></td></tr>
+							<tr><td><?php echo $dict->words("65"); ?> </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_1" name="tci" value="2" ></td></tr>
+							<tr><td><?php echo $dict->words("64"); ?> </td><td><input onDblClick="uncheckRadio(this);" onclick="checked_tci();" type="radio" id="tci_2" name="tci" value="3" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("48"); ?> </td><td><input required type="text" id="first_name_12_2" name="first_name_12_2" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("49"); ?> </td><td><input required type="text" id="last_name_6_2" name="last_name_6_2" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("50"); ?> </td><td><input  required type="text" id="org_name_2_2"  name="org_name_2_2" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("51"); ?> </td><td><input required type="text" id="address1_11_2" name="address1_11_2" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("52"); ?> </td><td><input type="text" id="address2_4_2 " name="address2_4_2 " ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("53"); ?> </td><td><input type="text" id="address3_1_2" name="address3_1_2" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("54"); ?> </td><td><input required type="text" id="city_8_2" name="city_8_2" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("55"); ?> </td><td><input required type="text" id="state_5_2" name="state_5_2" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("57"); ?> </td><td><input required type="text" id="postal_code_9_2" name="postal_code_9_2" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("58"); ?> </td><td><input required onkeydown= "telephone_extension('phone_3_2')"; onkeypress= "telephone_extension('phone_3_2')"; onkeyup = "telephone_extension('phone_3_2')"; type="text" id="phone_3_2" name="phone_3_2" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("59"); ?> </td><td><input  type="text" id="fax_10_2" name="fax_10_2" ></td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("60"); ?> </td><td><input required type="email" id="email_7_2" name="email_7_2" ><br>Must be a current valid address</td></tr>
 							</table>
 
 							<table border="1">  
-							<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"> </th></tr>
+							<tr><th colspan="2"><input id="submit_boton" type="submit" value="<?php echo $dict->words("67"); ?>"> </th></tr>
 							</table>
 							
 						</form>
@@ -379,22 +381,22 @@
 							document.getElementById("last_name_5_0").required = false;
 							document.getElementById("org_name_2_0").required = false;
 							document.getElementById("address1_11_0").required = false;
-							document.getElementById("city_8_0").required = false;
-							document.getElementById("state_6_0").required = false;
+							document.getElementById("<?php echo $dict->words("54"); ?>_8_0").required = false;
+							document.getElementById("<?php echo $dict->words("55"); ?>_6_0").required = false;
 							document.getElementById("phone_3_0").required = false;
 							document.getElementById("fax_10_0").required = false;
-							document.getElementById("email_7_0").required = false;
+							document.getElementById("<?php echo $dict->words("60"); ?>_7_0").required = false;
 							document.getElementById("postal_code_9_0").required = false;				
 					}else{
 							document.getElementById("first_name_12_0").required = true;
 							document.getElementById("last_name_5_0").required = true;
 							document.getElementById("org_name_2_0").required = true;
 							document.getElementById("address1_11_0").required = true;
-							document.getElementById("city_8_0").required = true;
-							document.getElementById("state_6_0").required = true;
+							document.getElementById("<?php echo $dict->words("54"); ?>_8_0").required = true;
+							document.getElementById("<?php echo $dict->words("55"); ?>_6_0").required = true;
 							document.getElementById("phone_3_0").required = true;
 							document.getElementById("fax_10_0").required = true;
-							document.getElementById("email_7_0").required = true;
+							document.getElementById("<?php echo $dict->words("60"); ?>_7_0").required = true;
 							document.getElementById("postal_code_9_0").required = true;
 					}
 				}	
@@ -407,11 +409,11 @@
 							document.getElementById("last_name_5_3").required = false;
 							document.getElementById("org_name_2_3").required = false;
 							document.getElementById("address1_11_3").required = false;
-							document.getElementById("city_8_3").required = false;
-							document.getElementById("state_4_3").required = false;
+							document.getElementById("<?php echo $dict->words("54"); ?>_8_3").required = false;
+							document.getElementById("<?php echo $dict->words("55"); ?>_4_3").required = false;
 							document.getElementById("phone_3_3").required = false;
 							document.getElementById("fax_10_3").required = false;
-							document.getElementById("email_7_3").required = false;
+							document.getElementById("<?php echo $dict->words("60"); ?>_7_3").required = false;
 							document.getElementById("postal_code_9_3").required = false;			
 			}
 			
@@ -420,11 +422,11 @@
 							document.getElementById("last_name_5_3").required = true;
 							document.getElementById("org_name_2_3").required = true;
 							document.getElementById("address1_11_3").required = true;
-							document.getElementById("city_8_3").required = true;
-							document.getElementById("state_4_3").required = true;
+							document.getElementById("<?php echo $dict->words("54"); ?>_8_3").required = true;
+							document.getElementById("<?php echo $dict->words("55"); ?>_4_3").required = true;
 							document.getElementById("phone_3_3").required = true;
 							document.getElementById("fax_10_3").required = true;
-							document.getElementById("email_7_3").required = true;
+							document.getElementById("<?php echo $dict->words("60"); ?>_7_3").required = true;
 							document.getElementById("postal_code_9_3").required = true;			
 			}
 	
@@ -439,11 +441,11 @@
 							document.getElementById("last_name_6_2").required = false;
 							document.getElementById("org_name_2_2").required = false;
 							document.getElementById("address1_11_2").required = false;
-							document.getElementById("city_8_2").required = false;
-							document.getElementById("state_5_2").required = false;
+							document.getElementById("<?php echo $dict->words("54"); ?>_8_2").required = false;
+							document.getElementById("<?php echo $dict->words("55"); ?>_5_2").required = false;
 							document.getElementById("phone_3_2").required = false;
 							document.getElementById("fax_10_2").required = false;
-							document.getElementById("email_7_2").required = false;
+							document.getElementById("<?php echo $dict->words("60"); ?>_7_2").required = false;
 							document.getElementById("postal_code_9_2").required = false;	
 				         
 			}
@@ -453,11 +455,11 @@
 							document.getElementById("last_name_6_2").required = true;
 							document.getElementById("org_name_2_2").required = true;
 							document.getElementById("address1_11_2").required = true;
-							document.getElementById("city_8_2").required = true;
-							document.getElementById("state_5_2").required = true;
+							document.getElementById("<?php echo $dict->words("54"); ?>_8_2").required = true;
+							document.getElementById("<?php echo $dict->words("55"); ?>_5_2").required = true;
 							document.getElementById("phone_3_2").required = true;
 							document.getElementById("fax_10_2").required = true;
-							document.getElementById("email_7_2").required = true;
+							document.getElementById("<?php echo $dict->words("60"); ?>_7_2").required = true;
 							document.getElementById("postal_code_9_2").required = true;	
 			}
 		
@@ -475,11 +477,11 @@
 			document.getElementById("last_name_5_0").setAttribute("required",true);
 			document.getElementById("org_name_2_0").setAttribute("required",true);
 			document.getElementById("address1_11_0").setAttribute("required",true);
-			document.getElementById("city_8_0").setAttribute("required",true);
-			document.getElementById("state_6_0").setAttribute("required",true);
+			document.getElementById("<?php echo $dict->words("54"); ?>_8_0").setAttribute("required",true);
+			document.getElementById("<?php echo $dict->words("55"); ?>_6_0").setAttribute("required",true);
 			document.getElementById("phone_3_0").setAttribute("required",true);
 			document.getElementById("fax_10_0").setAttribute("required",true);
-			document.getElementById("email_7_0").setAttribute("required",true);
+			document.getElementById("<?php echo $dict->words("60"); ?>_7_0").setAttribute("required",true);
 			document.getElementById("postal_code_9_0").setAttribute("required",true);
 			}			
 		}
