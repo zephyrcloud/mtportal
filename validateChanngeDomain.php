@@ -40,8 +40,7 @@
 											$message= "Error!";
 										} else {
 										if($obj->body->data_block->dt_assoc->item[5] == "Authentication Error."){
-											$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name,previous_domain)
-											VALUES('".$ip_capture->getRealIP()."',14,23,4,".$_POST['user_id1'].",'".$_POST['domain']."','".$_POST['previous']."')";
+											$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name,previous_domain) VALUES('".$ip_capture->getRealIP()."',14,2,4,".$_POST['user_id1'].",'".$_POST['domain']."','".$_POST['previous']."')";
 											$insert_result = mysql_query($insert_query);
 											header("Location: intoDomain.php?error=401");
 											//echo "<script> alert('Invalid profile or password.'); </script>";										
@@ -52,8 +51,7 @@
 											}else{
 											//echo "<script> alert('Domain ownership changed.'); </script>";
 											//log 
-											$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name,previous_domain)
-											VALUES('".$ip_capture->getRealIP()."',14,22,4,".$_POST['user_id1'].",'".$_POST['domain']."','".$_POST['previous']."')";
+											$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name,previous_domain) VALUES('".$ip_capture->getRealIP()."',14,1,4,".$_POST['user_id1'].",'".$_POST['domain']."','".$_POST['previous']."')";
 											$insert_result = mysql_query($insert_query);
 											//heaader
 											$header="p=".htmlentities(base64_encode($_POST['previous']))."&pa=".htmlentities(base64_encode($_POST['pass']))."&us=".htmlentities(base64_encode($_POST['user']));

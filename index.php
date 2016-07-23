@@ -61,7 +61,7 @@
 								
 								if($error == "401"){
 									echo "<div><span style='font-style: italic; color: red;'>".$dict->words("1")."</span></div>";
-									$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_user,id_tableModified) VALUES('".$ip_capture->getRealIP()."',1,10,2,4)";
+									$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_user,id_tableModified) VALUES('".$ip_capture->getRealIP()."',1,2,2,4)";
 									$insert_result = mysql_query($insert_query);					
 									$subject="Login failed";
 									$body_message="Login Failed From IP address: ". $ip_capture->getRealIP() ;

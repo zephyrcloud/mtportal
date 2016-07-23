@@ -18,11 +18,11 @@
 	}else{
 		if(isset($_POST["idlogin"])){
 			$id_user = $_POST["idlogin"];
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',7,16,4,".$id_user.")";
-			$insert_result = mysql_query($insert_query);
 			//Message for login 
 			$field=$_POST["idUserFld"];
 			$_SESSION['user'] = $id_user;
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',7,1,2,".$id_user.")";
+			$insert_result = mysql_query($insert_query);
 			////$email-> body_email_cus("Email user update",$ip_capture->getRealIP(),4,16,2,$field);
 		}else{
 			if(isset($_POST["idUserLog"])){
@@ -30,9 +30,9 @@
 				$_SESSION['user'] = $id_user;				
 			}else{
 				$id_user = base64_decode(html_entity_decode($_GET["id"]));
-				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,12,4,".$_SESSION['user'].")";
-				$insert_result = mysql_query($insert_query);
 				$_SESSION['user'] = $id_user;
+				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,1,4,".$_SESSION['user'].")";
+				$insert_result = mysql_query($insert_query);
 				//Message for login 
 				////$email-> body_email("Login Succesfully",$ip_capture->getRealIP(),1,12,4,$id_user);	
 			}		
@@ -52,14 +52,14 @@
 		
 		if($insert_user_result){
 			$message =  $dict->words("2");
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,7,2,".$_SESSION['user'].")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,1,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			
 			////$email-> body_email($message,$ip_capture->getRealIP(),4,7,2,$id_user);
 			
 		}else{
 			$message =  $dict->words("3");
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$_SESSION['user'].")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,2,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 			////$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
@@ -77,13 +77,13 @@
 		
 		if($update_user_result){
 			$message =  $dict->words("4");
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,8,2,".$_SESSION['user'].")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,1,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,8,2,$id_user);
 		}else{
 			$message =  $dict->words("3");
 			//$message = $update_user_query;
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,10,2,".$_SESSION['user'].")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',4,2,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
@@ -100,12 +100,12 @@
 		
 		if($delete_user_result){
 			$message =  $dict->words("5");
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,9,2,".$_SESSION['user'].")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,1,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,9,2,$id_user);
 		}else{
 			$message =  $dict->words("3");
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,10,2,".$_SESSION['user'].")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',8,2,2,".$_SESSION['user'].")";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
@@ -152,7 +152,7 @@
 						// Insertar el registro de que checkeo una asignacion de la lista apps
 											
 						
-						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,14,5,".$_SESSION['user'].")";
+						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,1,5,".$_SESSION['user'].")";
 						$insert_result = mysql_query($insert_query);
 						$selected++;
 					}
@@ -166,7 +166,7 @@
 						$update_app_query = 'UPDATE appuser SET endDate = NOW() WHERE id = ' . $idAppUser;
 						$update_app_result = mysql_query($update_app_query) or die($dict->words("8").' ' . mysql_error());
 						
-						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,15,5,".$_SESSION['user'].")";
+						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,1,5,".$_SESSION['user'].")";
 						$insert_result = mysql_query($insert_query);
 						$not_selected++;
 					}

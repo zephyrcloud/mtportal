@@ -3,8 +3,9 @@
 	// Connect to database
 	include("config/connection.php");
 	include("config/ip_capture.php");
+	include("dictionary.php");
 	$ip_capture = new ip_capture();
-	
+	$dict= new dictionary();
 	$message = "";
 	
 	// Valida si proviene del boton de add new customer
@@ -15,12 +16,12 @@
 		$insert_customer_result = mysql_query($insert_customer_query);
 		
 		if($insert_customer_result){
-			$message = "Customer successfully created";
+			$message = $dict->words("115");
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,1,1)";
 			$insert_result = mysql_query($insert_query);
 		}else{
-			$message = "Failed action";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,10,1)";
+			$message = $dict->words("3");
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,2,1)";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 		}
@@ -35,13 +36,13 @@
 		$update_customer_result = mysql_query($update_customer_query);
 		
 		if($update_customer_result){
-			$message = "Customer successfully updated";
+			$message = $dict->words("116");
 			
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,2,1)";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,1,1)";
 			$insert_result = mysql_query($insert_query);
 		}else{
-			$message = "Failed action";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,10,1)";
+			$message = $dict->words("3");
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,2,1)";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 		}
@@ -56,13 +57,13 @@
 		$delete_customer_result = mysql_query($delete_customer_query);
 		
 		if($delete_customer_result){
-			$message = "Customer successfully deleted";
+			$message = $dict->words("117");
 		
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,3,1)";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,1,1)";
 			$insert_result = mysql_query($insert_query);
 		}else{
-			$message = "Failed action";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,10,1)";
+			$message = $dict->words("3");
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',3,2,1)";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 		}

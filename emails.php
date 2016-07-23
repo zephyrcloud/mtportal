@@ -3,10 +3,10 @@
 include("config/PHPMailer-master/PHPMailerAutoload.php");
 include("config/connection.php");
 include("config/ip_capture.php");
+include("dictionary.php");
 
+	
 class emails{
-
-
 
 function send_email($subject,$body_message) {
 
@@ -43,7 +43,7 @@ function send_email($subject,$body_message) {
 }
 
 function body_email($message,$logout_time_out,$user){
-		
+		$dict= new dictionary();
 		
 		if($logout_time_out == "" || $logout_time_out == null ){
 			$logout_time_out = "unknown";
@@ -66,8 +66,8 @@ function body_email($message,$logout_time_out,$user){
 		//SELECT l.`ipAddress`,at.action_name ,tm.table_name ,r.result_name FROM `log` l, action_type at, table_modified tm, result r where l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$_POST["id_user"].' order by l.`timeStamp`			
 		$subject = $message. " from user ".$user_name;	
 		$now = date("F j, Y, g:i a");
-		$body_message= " <br> The login of the user ".$user_name." was <B>". $last_login . "</b> and the logout was <b>".$logout_time_out."</b><br>";
-		$body_message.= '<br> here is the activity report for the user <B>'.$user_name .'</b> today: <B>'.$now.'</B> <br>';
+		
+		$body_message= $dict->words("118",$user_name,$last_login,$logout_time_out,$now);
 		$body_message.= '<table>
                                                 <col width="170px">
                                                 <col width="150px">
@@ -76,11 +76,11 @@ function body_email($message,$logout_time_out,$user){
                                                 <col width="170px">
 												<col width="190px">
                                                 <tr>
-														<th style="border: 1px solid;">Hour</th>
-                                                        <th style="border: 1px solid;">Ip Address</th>
-                                                        <th style="border: 1px solid;">Action Type</th>
-                                                        <th style="border: 1px solid;">Table modified</th>
-                                                        <th style="border: 1px solid;">Result</th>
+														<th style="border: 1px solid;">'.$dict->words("119").'</th>
+                                                        <th style="border: 1px solid;">'.$dict->words("120").'</th>
+                                                        <th style="border: 1px solid;">'.$dict->words("121").'</th>
+                                                        <th style="border: 1px solid;">'.$dict->words("122").'</th>
+                                                        <th style="border: 1px solid;">'.$dict->words("123").'</th>
                                                 </tr>';
                                                 
 	$now = date("Y-m-d");

@@ -26,7 +26,7 @@
 			$_SESSION['rol'] = $row["rol"];
 											
 			if ($_SESSION['rol'] === "administrator") {
-				header('Location: apps.php?id=1');
+				header('Location: apps.php?val='.htmlentities(base64_encode("1")));
 			} else {
 				$query= "SELECT id FROM customer WHERE username = '$username'";
 				$select_result = mysql_query($query);

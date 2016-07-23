@@ -5,10 +5,11 @@
 	include("config/ip_capture.php");
 	$ip_capture = new ip_capture();
 
-	if(isset($_GET["id"])){
-		$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,12,4,".$_GET["id"].")";
+	/*if(isset($_GET["val"])){
+		$id= base64_decode(html_entity_decode($_GET["val"]));
+		$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,1,4,".$id.")";
 		$insert_result = mysql_query($insert_query);
-	}
+	}*/
 	
 	$message = "";
 	
@@ -21,11 +22,11 @@
 		
 		if($insert_app_result){
 			$message = "App successfully created";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,4,3)";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,1,3)";
 			$insert_result = mysql_query($insert_query);
 		}else{
 			$message = "Failed action";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,10,3)";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,2,3)";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 		}	
@@ -41,11 +42,11 @@
 		
 		if($update_app_result){
 			$message = "App successfully updated";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,5,3)";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,1,3)";
 			$insert_result = mysql_query($insert_query);
 		}else{
 			$message = "Failed action";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,10,3)";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,2,3)";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 		}	
@@ -61,11 +62,11 @@
 		
 		if($delete_app_result){
 			$message = "App successfully deleted";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,6,3)";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,1,3)";
 			$insert_result = mysql_query($insert_query);
 		}else{
 			$message = "Failed action";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,10,3)";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified) VALUES('".$ip_capture->getRealIP()."',2,2,3)";
 			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 		}	

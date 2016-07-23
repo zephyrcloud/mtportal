@@ -46,7 +46,9 @@
 							<input type="text" name="user_id_registrer_1" id="user_id_registrer_1" readonly hidden >
 						</form>	
 						<br>
-						<a href="profileScreen.php" > <?php echo $dict->words("27"); ?> </a>
+						
+						<?php echo "<a href='profileScreen.php'>".$dict->words("27")."</a>";  ?>
+						
 						<div>
 								<?php 
 		if(isset($_GET['code'])){
@@ -234,6 +236,8 @@
 		
 		var id = document.getElementById('id_user').value;
 		document.getElementById('user_id_registrer_1').value = id;
+		<?php $_SESSION['user'] = "<script> document.write(id);</script>";?>
+		
 		$("#saveNewUserBtn").hide();
 		function domain_validate(){
 			var dom = ["com", "net", "org", "info", "biz", "name", "us","co"];
@@ -689,9 +693,9 @@
 			
 			if($message=="Domain registration successfully completed. Whois Privacy successfully enabled."){
 			// log for knowing who made a registrer to new domain.
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',9,17,4,".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',9,1,4,".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
 			//echo nl2br($insert_query."\n");
-			$insert_result = mysql_query($insert_query);
+			//$insert_result = mysql_query($insert_query);
 		
 			// insert registrer on db for auditory
 			$insert_query = "INSERT INTO `created_domains`(`customer_id`, `domain`) VALUES (".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
@@ -700,9 +704,11 @@
 			echo "<script> alert('".$message."'); </script>";}
 			else{
 				
-			echo "<script> alert('".$dict->words("34")."'); </script>";		
+			echo "<script> alert('".$dict->words("34")."'); </script>";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',9,2,4,".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
+						
 			}
-			
+			$insert_result = mysql_query($insert_query);
 			
 		}
 		

@@ -34,7 +34,11 @@
 			include("header.php");
 			include("menucustomer.php");
 		?>
-		
+		<?php if(isset($_POST['domainFldUser'])){
+			$_SESSION['domain'] = $_POST['domainFldUser']; }else{ 
+			if(isset($_GET['domain'])){ 
+			$_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ 
+			echo $_SESSION['domain'];} } ?>
 		<div id="pagecontents">
 			
 			<div class="wrapper">
@@ -43,14 +47,14 @@
 					
 					<div id="postcontent" align="center">
 							 <table border="1">
-								<tr><th colspan="7"><h2 style="color:#FFFFFF">You are logged with the <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> domain </h2></th></tr>
-								<td><a href="#" onclick="show_organization();" >Organization</a></td>
-								<td><a href="#" onclick="show_admin();" >Admin</a></td>
-								<td><a href="#" onclick="show_billing();" >Billing</a></td>
-								<td><a href="#" onclick="show_technical();" >Technical</a></td>
+								<tr><th colspan="7"><h2 style="color:#FFFFFF"> <?php echo $dict->words("96",$_SESSION['domain']); ?> </h2></th></tr>
+								<td><a href="#" onclick="show_organization();" ><?php echo $dict->words("97"); ?></a></td>
+								<td><a href="#" onclick="show_admin();" ><?php echo $dict->words("98"); ?></a></td>
+								<td><a href="#" onclick="show_billing();" ><?php echo $dict->words("99"); ?></a></td>
+								<td><a href="#" onclick="show_technical();" ><?php echo $dict->words("100"); ?></a></td>
 								<td><a href="#" onclick="show_renew();" ><?php echo $dict->words("86"); ?></a></td>
-								<td><a href="#" onclick="show_dns_manager_panel();" >Domain manager</a></td>
-								<td><a href="#" onclick="show_owner_change();" >Change owership domain</a></td>
+								<td><a href="#" onclick="show_dns_manager_panel();" ><?php echo $dict->words("101"); ?></a></td>
+								<td><a href="#" onclick="show_owner_change();" ><?php echo $dict->words("102"); ?></a></td>
 							 </table>
 
 						<?php
@@ -84,7 +88,7 @@
 										</OPS_envelope>';
 										
 										echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
-										echo "<script> alert('Login as the new domain transfer.'); </script>";
+										echo "<script> alert('".$dict->words("89")."'); </script>";
 										
 										
 							}
@@ -131,10 +135,11 @@
 												// 0 admin , 1 owner , 2 tech ,3 billing
 												if($obj->body->data_block->dt_assoc->item[3] == "415"){
 													//echo $obj->body->data_block->dt_assoc->item[5];
-													header("Location: profileScreen.php?error=401");
+													$val=htmlentities(base64_encode($_POST['user_id']));
+													header("Location: profileScreen.php?error=401&val=".$val);
 												}else{
 													// log
-													$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',12,20,4,".$_POST['user_id'].",'".$_POST['domainFldUser']."')";
+													$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',12,1,4,".$_POST['user_id'].",'".$_POST['domainFldUser']."')";
 													$insert_result = mysql_query($insert_query);
 												}
 												
@@ -169,7 +174,7 @@
 											</OPS_envelope>';
 											echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
 											
-											$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',13,21,4,".$_SESSION['user_id'].",'".html_entity_decode(base64_decode($_GET['domain']))."')";
+											$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',13,1,4,".$_SESSION['user_id'].",'".html_entity_decode(base64_decode($_GET['domain']))."')";
 											$insert_result = mysql_query($insert_query);
 											
 													
@@ -210,9 +215,9 @@
 												$message= "Error!";
 											} else {
 												if($obj->body->data_block->dt_assoc->item[4]=="Command completed successfully"){
-													echo "<script> alert('Domain successfully renewed'); </script>";
+													echo "<script> alert('".$dict->words("90")."'); </script>";
 													//log for renew 
-													$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',10,18,4,".$_POST['user_id'].",'".$_POST['domainName']."')";
+													$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',10,1,4,".$_POST['user_id'].",'".$_POST['domainName']."')";
 													$insert_result = mysql_query($insert_query);
 												}
 												
@@ -265,8 +270,8 @@
 													$count = $obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[1];
 													
 													echo '<table border="1">';
-													echo '<tr><th colspan="4">You got '.$count.' domains, click <a href="#" onclick="show();">here</a> to show the table or <a href="#" onclick="hide();">here</a> to hide it</th></tr>';
-													echo '<tr hidden class="inf"><th>Domain information</th><th>Expire Day</th><th>Whois Privacy</th><th>WP Expiry Date</th></tr>';												
+													echo '<tr><th colspan="4">'.$dict->words("104",$count).'</th></tr>';
+													echo '<tr hidden class="inf"><th>'.$dict->words("105").'</th><th>'.$dict->words("106").'</th><th>'.$dict->words("107").'</th><th>'.$dict->words("108").'</th></tr>';												
 													//$obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[3]->dt_array->item --> list of domains that the user has.
 													for($j=0; $j < $count ;$j++){
 														foreach($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_array->item[$j]->dt_assoc->item as $items){ // name of domains
@@ -404,10 +409,13 @@
 													}else{
 														
 															if($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_assoc->item[0]->dt_assoc -> item[0] == "Command completed successfully"){
-																echo "<script> alert('Update successfully'); </script>";
+																echo "<script> alert('".$dict->words("91")."'); </script>";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+															}else{
+																echo "<script> alert('".$dict->words("92")."'); </script>";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
 															}
-															$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,19,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
-															$insert_result = mysql_query($insert_query);	
+																$insert_result = mysql_query($insert_query);
 														}
 													}
 												}
@@ -496,10 +504,13 @@
 													}else{
 														
 															if($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_assoc->item[0]->dt_assoc -> item[0] == "Command completed successfully"){
-																echo "<script> alert('Update successfully'); </script>";
+																echo "<script> alert('".$dict->words("91")."'); </script>";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+															}else{
+																echo "<script> alert('".$dict->words("92")."'); </script>";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
 															}
-															$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,19,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
-															$insert_result = mysql_query($insert_query);
+																$insert_result = mysql_query($insert_query);
 																
 														}
 													}
@@ -590,11 +601,13 @@
 													}else{
 														
 															if($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_assoc->item[0]->dt_assoc -> item[0] == "Command completed successfully"){
-																echo "<script> alert('Update successfully'); </script>";
+																echo "<script> alert('".$dict->words("91")."'); </script>";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+															}else{
+																echo "<script> alert('".$dict->words("92")."'); </script>";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
 															}
-															
-															$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,19,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
-															$insert_result = mysql_query($insert_query);
+																$insert_result = mysql_query($insert_query);
 														}
 													}
 												}
@@ -684,10 +697,13 @@
 													}else{
 														
 															if($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_assoc->item[0]->dt_assoc -> item[0] == "Command completed successfully"){
-																echo "<script> alert('Update successfully'); </script>";
+																echo "<script> alert('".$dict->words("91")."'); </script>";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+															}else{
+																echo "<script> alert('".$dict->words("92")."'); </script>";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
 															}
-															$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,19,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
-															$insert_result = mysql_query($insert_query);
+																$insert_result = mysql_query($insert_query);
 																
 														}
 													}
@@ -745,7 +761,7 @@
 								?>
 							
 							<tr><th colspan="2" hidden id="button_panel"> 
-							<input id="submit_boton" type="submit" value="Renew Domain"> 
+							<input id="submit_boton" type="submit" value="<?php echo $dict->words("109"); ?>"> 
 							</th></tr>
 							</table>
 							</form>
@@ -755,32 +771,27 @@
 						<form action="intoDomain.php" method="POST">
 							<input hidden readonly type="text" id="uid" name="uid" >
 								<table border="1">  
-									<tr><th colspan="2">Manage Name Servers </th></tr>
-									<tr><td colspan="2"> Set custom name servers on your domain<br>
+									<tr><th colspan="2"><?php echo $dict->words("110"); ?></th></tr>
+									<tr><td colspan="2"><?php echo $dict->words("111"); ?><br>
 									<ul>
-									  <li>To replace a nameserver, simply edit the existing hostname.</li>
-									  <li>To remove a nameserver, simply cleanup the existing hostname.</li>
-									  <li>To add a nameserver, simply fill an empty field for hostname.</li>
-									  <li>IP addresses are not displayed by certain registries. This does not affect the operation of the nameserver.</li>
-									  <li>** IMPORTANT: Before adding additional name servers to your configuration, you should be sure that the name server has setup correctly. 24 - 48 hours after you submit a request for an additional name server, it will be in the rotation for authoritative lookups and if it is not setup correctly, your site will take a long time to resolve when visitors try to find you.</li>
-									  <li>The order of the nameservers is not relevant</li>
+									  <?php echo $dict->words("112"); ?>
 									</ul>
 								</td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_0' name='name_0' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_1' name='name_1' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_2' name='name_2' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_3' name='name_3' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_4' name='name_4' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_5' name='name_5' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_6' name='name_6' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_7' name='name_7' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_8' name='name_8' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_9' name='name_9' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_10' name='name_10' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_11' name='name_11' ></td></tr>
-								<tr><td>Nameserver </td><td><input type='text' id='name_12' name='name_12' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_0' name='name_0' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_1' name='name_1' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_2' name='name_2' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_3' name='name_3' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_4' name='name_4' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_5' name='name_5' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_6' name='name_6' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_7' name='name_7' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_8' name='name_8' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_9' name='name_9' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_10' name='name_10' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_11' name='name_11' ></td></tr>
+								<tr><td><?php echo $dict->words("113"); ?> </td><td><input type='text' id='name_12' name='name_12' ></td></tr>
 
-									<tr><th colspan="2"><input id="submit_boton" type="submit" value="Submit"></th></tr>
+									<tr><th colspan="2"><input id="submit_boton" type="submit" value="<?php echo $dict->words("114"); ?>"></th></tr>
 								</table>							
 						</form>
 							
@@ -800,7 +811,7 @@
 												<item key="attributes">
 													<dt_assoc>
 														<item key="domain">'.$_SESSION['domain'].'</item>
-														<item key="type">nameservers</item>
+														<item key="type"><?php echo $dict->words("113"); ?>s</item>
 													</dt_assoc>
 												</item>
 											</dt_assoc>
@@ -893,20 +904,20 @@
 						<div id="change_owner_domain" hidden>
 							<form action="validateChanngeDomain.php" method="POST">
 								<table border="1"> 
-									<tr><th colspan="2">Change owership</th></tr>
+									<tr><th colspan="2"><?php echo $dict->words("93"); ?></th></tr>
 									<input hidden readonly type="text" id="user_id1" name="user_id1" >
 									<input hidden readonly type="text" id="domain" name="domain" value="<?php echo $_SESSION['domain']; ?>">
-									<tr><td>Username</td><td><input type="text" id="user" name="user" required></td></tr>
-									<tr><td>Password</td><td><input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" minlength=10 maxlength="20" type="password" id="pass" name="pass" required></td></tr>
-									<tr><td>Confirm</td><td><input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();"  minlength=10 maxlength="20" type="password" id="pass_confirm" name="pass_confirm" required></td></tr>									
+									<tr><td><?php echo $dict->words("39"); ?></td><td><input type="text" id="user" name="user" required></td></tr>
+									<tr><td><?php echo $dict->words("40"); ?></td><td><input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();" minlength=10 maxlength="20" type="password" id="pass" name="pass" required></td></tr>
+									<tr><td><?php echo $dict->words("45"); ?></td><td><input onkeydown="validate_password();" onkeypress="validate_password();" onkeyup="validate_password();"  minlength=10 maxlength="20" type="password" id="pass_confirm" name="pass_confirm" required></td></tr>									
 								</table>
 								<hr>
 								
 								<table border="1"> 
 									<!--<tr colspan="2"><td><input onclick="validate_password();" type="radio"  name="dom" id="dom_same" value="dom_same"> Move other domains already in the same profile as <?php if(isset($_POST['domainFldUser'])){echo $_POST['domainFldUser']; $_SESSION['domain'] = $_POST['domainFldUser']; }else{ if(isset($_GET['domain'])){ echo html_entity_decode(base64_decode($_GET['domain'])); $_SESSION['domain'] =html_entity_decode(base64_decode($_GET['domain'])); }else{ echo $_SESSION['domain'];} } ?> </td></tr>-->
-									<tr colspan="2"><td><input onclick="validate_password();" type="radio"  name="dom" id="dom_exist" value="dom_exist"> Move to the existing profile of this previously registered domain</td></tr>
-									<tr colspan="2" id="p_domain" ><td>Previously registered domain: <input type="text" id="previous" name="previous" required></td></tr>
-									<tr hidden class="row_dom" ><th colspan="2"><input  id="submit_boton" type="submit" value="Submit"></th></tr>
+									<tr colspan="2"><td><input onclick="validate_password();" type="radio"  name="dom" id="dom_exist" value="dom_exist"> <?php echo $dict->words("94"); ?></td></tr>
+									<tr colspan="2" id="p_domain" ><td><?php echo $dict->words("95"); ?> <input type="text" id="previous" name="previous" required></td></tr>
+									<tr hidden class="row_dom" ><th colspan="2"><input  id="submit_boton" type="submit" value="<?php echo $dict->words("96"); ?>"></th></tr>
 								</table>
 								
 							</form>
@@ -1027,12 +1038,12 @@
 		unlink( "expire_time_".$_SESSION['user_id'].".xml");
 		unlink( "dnslook_".$_SESSION['user_id'].".xml");
 		unlink( "transfer_domain_".$_SESSION['user_id'].".xml");
-		
+		unlink( "updatedns_".$_SESSION['user_id'].".xml");
 		?>
 		
 		<?php 
 			if(isset($_POST['error'])){
-				echo "<script> alert('Invalid profile or password.'); </script>";
+				echo "<script> alert('".$dict->words("1")."'); </script>";
 			}
 		?>
 		
