@@ -32,14 +32,15 @@
 		<?php
 			include("header.php");
 			include("menucustomer.php");
+			$val=htmlentities(base64_encode($_SESSION['id']));
 		?>
 		
 		<div id="pagecontents">
 			<div class="wrapper">
 				<div id="post">
 					<div id="postcontent" align="center">
-						<form id="loginFrm" method="POST" action="intoDomain.php" style="text-align: center; width: 250px;">
-							<input hidden readonly type='text' id='user_id' name='user_id' >
+						<form id="loginFrm" method="POST" action="intoDomain.php?us=<?php echo $val;?>" style="text-align: center; width: 250px;">
+							<!--<input hidden readonly type='text' id='user_id' name='user_id' > -->
 							<div>
 								<img style="margin-top: 10px; margin-bottom: 10px;" src="images/manage.png" alt="">
 							</div>
@@ -59,11 +60,16 @@
 							<?php
 							echo "<div><span style='font-style: italic; color: red;'> * User Name and Password are case sensitive </span></div>";
 							echo "<div><span style='font-style: italic; color: red;'> * Do not put www. as part of your domain name </span></div>";
+							
 							if($error == "401"){
 									echo "<div><span style='font-style: italic; color: red;'>".$dict->words("103")."</span></div>";
 									echo "<script>
 											var id = document.getElementById('id_user').value;
-											document.getElementById('user_id').value= id;
+											document.getElementById('user_id').value= '".$val."';
+											</script>";
+								}else{
+									echo "<script>
+											document.getElementById('user_id').value= '".$val."';
 											</script>";
 								}
 							?>

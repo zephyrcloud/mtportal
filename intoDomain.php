@@ -94,7 +94,7 @@
 							}
 						
 							if(isset($_POST['passwordFldPass']) && isset($_POST['usernameFldUser'])  && isset($_POST['domainFldUser'])){
-										$_SESSION['user_id'] = $_POST['user_id'];
+										$_SESSION['user_id'] = base64_decode(html_entity_decode($_GET['us']));
 										$_SESSION['pass'] = $_POST['passwordFldPass'];
 										$_SESSION['user'] = $_POST['usernameFldUser'];
 										 
@@ -125,21 +125,21 @@
 										
 										echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
 										
-										if (file_exists("domain_list_".$_POST['user_id'].".xml")) {
+										if (file_exists("domain_list_".$_SESSION['user_id'].".xml")) {
 									
 											// GET THE THINGS FROM THE DATA BLOCK
-											if(!$obj = simplexml_load_file("domain_list_".$_POST['user_id'].".xml")){
+											if(!$obj = simplexml_load_file("domain_list_".$_SESSION['user_id'].".xml")){
 												$message= "Error!";
 											} else {
 											 
 												// 0 admin , 1 owner , 2 tech ,3 billing
 												if($obj->body->data_block->dt_assoc->item[3] == "415"){
 													//echo $obj->body->data_block->dt_assoc->item[5];
-													$val=htmlentities(base64_encode($_POST['user_id']));
+													$val=htmlentities(base64_encode($_SESSION['user_id']));
 													header("Location: profileScreen.php?error=401&val=".$val);
 												}else{
 													// log
-													$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',12,1,4,".$_POST['user_id'].",'".$_POST['domainFldUser']."')";
+													$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',12,1,4,".$_SESSION['user_id'].",'".$_POST['domainFldUser']."')";
 													$insert_result = mysql_query($insert_query);
 												}
 												
@@ -217,7 +217,7 @@
 												if($obj->body->data_block->dt_assoc->item[4]=="Command completed successfully"){
 													echo "<script> alert('".$dict->words("90")."'); </script>";
 													//log for renew 
-													$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',10,1,4,".$_POST['user_id'].",'".$_POST['domainName']."')";
+													$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',10,1,4,".$_SESSION['user_id'].",'".$_POST['domainName']."')";
 													$insert_result = mysql_query($insert_query);
 												}
 												
@@ -410,10 +410,10 @@
 														
 															if($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_assoc->item[0]->dt_assoc -> item[0] == "Command completed successfully"){
 																echo "<script> alert('".$dict->words("91")."'); </script>";
-																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_SESSION['user_id'].",'".$_SESSION['domain']."')";
 															}else{
 																echo "<script> alert('".$dict->words("92")."'); </script>";
-																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_SESSION['user_id'].",'".$_SESSION['domain']."')";
 															}
 																$insert_result = mysql_query($insert_query);
 														}
@@ -505,10 +505,10 @@
 														
 															if($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_assoc->item[0]->dt_assoc -> item[0] == "Command completed successfully"){
 																echo "<script> alert('".$dict->words("91")."'); </script>";
-																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_SESSION['user_id'].",'".$_SESSION['domain']."')";
 															}else{
 																echo "<script> alert('".$dict->words("92")."'); </script>";
-																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_SESSION['user_id'].",'".$_SESSION['domain']."')";
 															}
 																$insert_result = mysql_query($insert_query);
 																
@@ -602,10 +602,10 @@
 														
 															if($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_assoc->item[0]->dt_assoc -> item[0] == "Command completed successfully"){
 																echo "<script> alert('".$dict->words("91")."'); </script>";
-																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_SESSION['user_id'].",'".$_SESSION['domain']."')";
 															}else{
 																echo "<script> alert('".$dict->words("92")."'); </script>";
-																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_SESSION['user_id'].",'".$_SESSION['domain']."')";
 															}
 																$insert_result = mysql_query($insert_query);
 														}
@@ -698,10 +698,10 @@
 														
 															if($obj->body->data_block->dt_assoc->item[4]->dt_assoc->item[0]->dt_assoc->item[0]->dt_assoc -> item[0] == "Command completed successfully"){
 																echo "<script> alert('".$dict->words("91")."'); </script>";
-																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,1,4,".$_SESSION['user_id'].",'".$_SESSION['domain']."')";
 															}else{
 																echo "<script> alert('".$dict->words("92")."'); </script>";
-																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_POST['user_id'].",'".$_SESSION['domain']."')";
+																$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',11,2,4,".$_SESSION['user_id'].",'".$_SESSION['domain']."')";
 															}
 																$insert_result = mysql_query($insert_query);
 																

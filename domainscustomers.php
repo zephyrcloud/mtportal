@@ -7,6 +7,12 @@
 	$api = new api_opensrs();
 	$ip_capture = new ip_capture();
 	$message = "";
+	$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
+	$select_customers_result = mysql_query($select_customers_query) or die($dict->words("12"));
+	while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+		$update_user_query = 'UPDATE `customer` SET `remaining`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
+		$update_user_result = mysql_query($update_user_query);
+	}
 ?>
 
 <html>
@@ -41,13 +47,13 @@
 				<div id="post">
 					<div id="lookupDomain">
 						<form method="POST" action="registrerDomain.php">
-							<?php echo $dict->words("25"); ?>: <input onkeydown="domain_validate();" onkeyup ="domain_validate();" onkeypress="domain_validate();" required id="domainFld" name="domainFld" type="text" ><br />
-							<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Check Available">
-							<input type="text" name="user_id_registrer_1" id="user_id_registrer_1" readonly hidden >
+							<?php echo $dict->words("25"); ?>: <input onselect="domain_validate();" oninput="domain_validate();" onkeydown="domain_validate();" onkeyup ="domain_validate();" onkeypress="domain_validate();" required id="domainFld" name="domainFld" type="text" ><br />
+							<input hidden id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Check Available">
+							
 						</form>	
 						<br>
 						
-						<?php echo "<a href='profileScreen.php'>".$dict->words("27")."</a>";  ?>
+						<?php echo "<a href='profileScreen.php'>".$dict->words("27")."</a>";   ?>
 						
 						<div>
 								<?php 
@@ -239,6 +245,7 @@
 		<?php $_SESSION['user'] = "<script> document.write(id);</script>";?>
 		
 		$("#saveNewUserBtn").hide();
+		
 		function domain_validate(){
 			var dom = ["com", "net", "org", "info", "biz", "name", "us","co"];
 			var dom1 = $("#domainFld").val();
@@ -276,7 +283,7 @@
 		}
 	   
 		</script>
-				<!-- Domain Registrer -->
+		<!-- Domain Registrer -->
 		<?php
 		
 		if(isset($_POST['first_name_12_1'])){
@@ -692,23 +699,21 @@
 			$message = $status;
 			
 			if($message=="Domain registration successfully completed. Whois Privacy successfully enabled."){
-			// log for knowing who made a registrer to new domain.
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',9,1,4,".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
-			//echo nl2br($insert_query."\n");
-			//$insert_result = mysql_query($insert_query);
-		
-			// insert registrer on db for auditory
-			$insert_query = "INSERT INTO `created_domains`(`customer_id`, `domain`) VALUES (".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
-			//echo nl2br($insert_query."\n");
-			$insert_result = mysql_query($insert_query);
-			echo "<script> alert('".$message."'); </script>";}
+				// log for knowing who made a registrer to new domain.
+				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',9,1,4,".$_SESSION['id'].",'".$_POST['domain_name']."')";
+				$insert_result = mysql_query($insert_query);
+			
+				// insert registrer on db for auditory
+				$insert_query = "INSERT INTO `created_domains`(`customer_id`, `domain`) VALUES (".$_SESSION['id'].",'".$_POST['domain_name']."')";
+				$insert_result = mysql_query($insert_query);
+				echo "<script> alert('".$message."'); </script>";}
 			else{
 				
 			echo "<script> alert('".$dict->words("34")."'); </script>";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',9,2,4,".$_POST['user_id_registrer'].",'".$_POST['domain_name']."')";
-						
+				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,domain_name) VALUES('".$ip_capture->getRealIP()."',9,2,4,".$_SESSION['id'].",'".$_POST['domain_name']."')";
+				$insert_result = mysql_query($insert_query);		
 			}
-			$insert_result = mysql_query($insert_query);
+			
 			
 		}
 		

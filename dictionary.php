@@ -5,21 +5,21 @@ class dictionary{
 	function words($id,$atribute1="",$atribute2="",$atribute3="",$atribute4=""){
 		$word = Array();
 		/* index.php */
-		$word[0] = "LogIn"; // button login 
-		$word[1] = "Username and/or password incorrect"; // Message of error when there is a bad login.
+		$word[0] = "Log In"; // button login 
+		$word[1] = "Your username or password is incorrect"; // Message of error when there is a bad login.
 		
 		/*Users.php*/
 		$word[2] = "User successfully created"; // message insert user
 		$word[3] = "Failed action"; // If the action of insert or update is wrong
 		$word[4] = "User successfully updated"; // Message of update user
-		$word[5] = "User successfully deleted"; // message of deleted user
-		$word[6] = 'Listado de apps fallido: '; // if the app list has had a error
-		$word[7] = 'Creación de la asignación fallida: '; //API assign fail
-		$word[8] = 'Remover la asignación fallida: '; // Remove a app
+		$word[5] = "User deleted successfully"; // message of deleted user
+		$word[6] = 'Apps list failed: '; // if the app list has had a error
+		$word[7] = 'App check creation failed: '; //API assign fail
+		$word[8] = 'App checked remove failed: '; // Remove a app
 		$word[9] = "Apps successfully assigned"; // App created
 		$word[10] = "Emails successfully updated"; // update emails
 		$word[11] = "Users"; // Tittles of the page
-		$word[12] = "Consulta fallida: "; //fail queries
+		$word[12] = "Failed query: "; //fail queries
 		$word[13] = "First Name"; // title of the first column on add user,edit user,table
 		$word[14] = "Last Name"; // title of the second column on add user,edit user,table
 		$word[15] = "Default Email"; // title of the third column on add user,edit user
@@ -35,24 +35,24 @@ class dictionary{
 		/*domaincustomers.php*/
 		$word[24] = "Domains"; // tittle
 		$word[25] = "Lookup Domain"; // Text field tittle
-		$word[26] = "You over the quota and do not have permited to regitrer more domains, please contact the administrator"; // Message of over the permited quotas
+		$word[26] = "You can't register domains because you over your quota"; // Message of over the permited quotas
 		$word[27] = "Click here for going to the screen profile"; // Link text for going to screen profile
-		$word[28] = "This domain has been taken , please try other domain of this list or another you choose."; // Suggest domain when one isn't available 
+		$word[28] = "Domain unavailable, please pick one of our recommendation list or write other domain."; // Suggest domain when one isn't available 
 		$word[29] = "Domain"; // column table when suggest to the user others domains
 		$word[30] = "Status"; // column table when suggest to the user others domains
 		$word[31] = "Action"; // column table when suggest to the user others domains
-		$word[32] = "This domain has been taken and you over the quotas permited to regitrer more domains"; // message when the qouta is 0
-		$word[33] = "You over the quota and do not have permited to regitrer more domains, please contact the administrator"; // When the user doesn't have quotas and use lookup domain
-		$word[34] = "it was a mistake with the information."; // If something happens with the register of domain.
+		$word[32] = "Domain unavailable and exceeded quotas"; // message when the qouta is 0
+		$word[33] = "Quotas exceeded by the way you can't register domains"; // When the user doesn't have quotas and use lookup domain
+		$word[34] = "There was a error"; // If something happens with the register of domain.
 		
 		/*registrerDomain.php*/
 		$word[35] = "Click here for cancel order"; // Link text for go back
-		$word[36] = "Retrieve Order information"; // Title of table of retreive 
+		$word[36] = "Retrieve order data from previous domain"; // Title of table of retreive 
 		$word[37] = "Lookfor domains"; // Field of description 
 		$word[38] = "Previous Domain"; // Field of retreive data
 		$word[39] = "Username"; // Field of retreive data
 		$word[40] = "Password"; // Field of retreive data
-		$word[41] = "retrieve data"; // Button Field of retreive data
+		$word[41] = "Retrieve data"; // Button Field of retreive data
 		$word[42] = "Domain information"; // Title of table for registration
 		$word[43] = "Domain Name"; 
 		$word[44] = "Registration Type";
@@ -105,24 +105,24 @@ class dictionary{
 		$word[86] = "Renew this domain";  
 		$word[87] = "Are you sure that you want to renew this domain ?";  
 		$word[88] = "Authentication Error in transfer domain, please verify the information."; //if there is a mistake , report this message
-		$word[89] = "Login as the new domain transfer.";  // when the user made a owership change
+		$word[89] = "Logged as the domain transfer user.";  // when the user made a owership change
 		$word[90] = "Domain successfully renewed.";  // When renewed the domain
 		$word[91] = "Update successfully.";  // update information done 
 		$word[92] = "It was a mistake.";  // When the update of information fails.
 		$word[93] = "Change owership.";  // Title of the slide and div									
 		$word[94] = "Move to the existing profile of this previously registered domain";  // Text on $word[93]
 		$word[95] = "Previously registered domain:";  // Text on $word[93]
-		$word[96] = "You are logged with the ".$atribute1." domain";  //In this case the atribute1 is the session open on the profile screen
+		$word[96] = "You are logged in ".$atribute1." domain";  //In this case the atribute1 is the session open on the profile screen
 		$word[97] = "Organization";  // Atributes down the title $word[96]
 		$word[98] = "Admin";  // Atributes down the title $word[96]
 		$word[99] = "Billing";  // Atributes down the title $word[96]
 		$word[100] = "Technical"; // Atributes down the title $word[96]
 		$word[101] = "Domain manager"; // Atributes down the title $word[96]
-		$word[102] = "Change owership domain";  // Atributes down the title $word[96]
+		$word[102] = "Change ownership domain";  // Atributes down the title $word[96]
 		
 		/*Profile Screen*/
-		$word[103] = "Username and/or password incorrect and/or domain invalid or not exists";  // Error message when the login is wrong
-		$word[104] = "You got " . $atribute1 . ' domains, click <a href="#" onclick="show();">here</a> to show the table or <a href="#" onclick="hide();">here</a> to hide it'; // atribute1 is for knowing how many domains i got.
+		$word[103] = "Something is wrong,Verify your data and try again";  // Error message when the login is wrong
+		$word[104] = "You've been register " . $atribute1 . ' domains, click <a href="#" onclick="show();">here</a> to show the table or <a href="#" onclick="hide();">here</a> to hide it'; // atribute1 is for knowing how many domains i got.
 		$word[105] = "Domain information";
 		$word[106] = "Expire Day";
 		$word[107] = "Whois Privacy";
@@ -145,8 +145,14 @@ class dictionary{
 		$word[117] = "Customer successfully deleted"; // message
 		
 		/*emails.php*/
-		$word[118]="<br> The login of the user ".$atribute1." was <B>". $atribute2 . "</b> and the logout was <b>".$atribute3."</b>
-		<br><br> here is the activity report for the user <B>".$atribute4 ."</b> today: <B>".$atribute1."</B> <br>";
+		/*$word[118]="<br> The login of the user ".$atribute1." was <B>". $atribute2 . "</b> and the logout was <b>".$atribute3."</b>
+		<br><br> here is the activity report for the user <B>".$atribute1 ."</b> today: <B>".$atribute4."</B> <br>";*/
+		
+		$word[118]="<h2>Hi,Administrator</h2> <br> 
+		If you receive this report, it is because the user <b>".$atribute1 ."</b> has session closed. <br>
+		So, the las login for the user  <b>".$atribute1 ."</b> was <B>". $atribute2 . "</b> <br>
+		And the last login was <b>".$atribute3."</b> <br><br>
+		To continue, let's show you the activities made for the user today: <B>".$atribute4."</B><br><br>";
 		//Message body for emails incluide HTML ... $atribute1 = $user_name , $atribute2= $last_login, $atribute3=$logout_time_out, $atribute4=$now
 		
 		$word[119] = "Hour"; // Attributes for message table

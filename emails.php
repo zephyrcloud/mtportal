@@ -18,7 +18,7 @@ function send_email($subject,$body_message) {
 		$mail->Host = 'smtp.office365.com';  // Specify main and backup SMTP servers
 		$mail->SMTPAuth = true;                               // Enable SMTP authentication
 		$mail->Username = 'jbriceno@zephyrcloud.com';                 // SMTP username
-		$mail->Password = 'Zcc12345';                           // SMTP password
+		$mail->Password = 'Zcc-Zcc/12345';                           // SMTP password
 		$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
 		$mail->Port = 587;                                    // TCP port to connect to
 
@@ -65,7 +65,7 @@ function body_email($message,$logout_time_out,$user){
 		// it finds all that the user has made while he/she was in his/her account
 		//SELECT l.`ipAddress`,at.action_name ,tm.table_name ,r.result_name FROM `log` l, action_type at, table_modified tm, result r where l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$_POST["id_user"].' order by l.`timeStamp`			
 		$subject = $message. " from user ".$user_name;	
-		$now = date("F j, Y, g:i a");
+		$now = date("F j, Y");
 		
 		$body_message= $dict->words("118",$user_name,$last_login,$logout_time_out,$now);
 		$body_message.= '<table>
@@ -76,11 +76,11 @@ function body_email($message,$logout_time_out,$user){
                                                 <col width="170px">
 												<col width="190px">
                                                 <tr>
-														<th style="border: 1px solid;">'.$dict->words("119").'</th>
-                                                        <th style="border: 1px solid;">'.$dict->words("120").'</th>
-                                                        <th style="border: 1px solid;">'.$dict->words("121").'</th>
-                                                        <th style="border: 1px solid;">'.$dict->words("122").'</th>
-                                                        <th style="border: 1px solid;">'.$dict->words("123").'</th>
+														<th style="border: 1px solid; text-align: center;">'.$dict->words("119").'</th>
+                                                        <th style="border: 1px solid; text-align: center;">'.$dict->words("120").'</th>
+                                                        <th style="border: 1px solid; text-align: center;">'.$dict->words("121").'</th>
+                                                        <th style="border: 1px solid; text-align: center;">'.$dict->words("122").'</th>
+                                                        <th style="border: 1px solid; text-align: center;">'.$dict->words("123").'</th>
                                                 </tr>';
                                                 
 	$now = date("Y-m-d");
@@ -94,11 +94,11 @@ function body_email($message,$logout_time_out,$user){
     while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 		 $fecha = explode(" ", $line['time']);
 		 $body_message.= "<tr>";
-		 $body_message.= "<td style='border: 1px solid;'><span id='spanName'>" . $fecha[1] . "</span></td>";
-		 $body_message.= "<td style='border: 1px solid;'><span id='spanName'>" . $line['ip'] . "</span></td>";
-		 $body_message.= "<td style='border: 1px solid;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
-		 $body_message.= "<td style='border: 1px solid;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
-		 $body_message.= "<td style='border: 1px solid;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
+		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $fecha[1] . "</span></td>";
+		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
+		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
+		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
+		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
 		 $body_message.= "</tr>";
     }
         $body_message.= '  </table>';

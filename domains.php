@@ -63,15 +63,27 @@
 										WHERE `domain_name` NOT LIKE "NULL" AND l.id_user = c.id AND l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id';
 										$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-											echo "<tr id='tr" . $line['id'] . "'>";
-											echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['name'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['domain'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['time'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['action'] . "</span></td>";
-											echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+											if($line['result'] == 'Success'){
+												
+												echo "<tr bgcolor='#DFF2BF' id='tr" . $line['id'] . "'>";
+												echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['name'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['domain'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['time'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['action'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+												//echo "<td style='border: 1px solid;'><a id='aRegistrer" . $line['id'] . ",".$line['domain_name']."' href='#'>Registrer</a></td>";
+												echo "</tr>"; 
+											}else{
+												echo "<tr bgcolor='#FFBABA' id='tr" . $line['id'] . "'>";
+												echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['name'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['domain'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['time'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['action'] . "</span></td>";
+												echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+												//echo "<td style='border: 1px solid;'><a id='aRegistrer" . $line['id'] . ",".$line['domain_name']."' href='#'>Registrer</a></td>";
+												echo "</tr>"; 
+											}
 											
-											//echo "<td style='border: 1px solid;'><a id='aRegistrer" . $line['id'] . ",".$line['domain_name']."' href='#'>Registrer</a></td>";
-											echo "</tr>"; 
 										}
 										?>
 									</table>

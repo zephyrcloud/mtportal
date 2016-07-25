@@ -9,90 +9,6 @@
 	$message = "";
 ?>
 
-<!-- Domain Lookup -->
-		<?php 
-			if($_POST['domainFld']){
-				$xml_name="domain_lookup";
-				$xml='
-					<OPS_envelope>
-						 <header>
-						  <version>0.9</version>
-						  </header>
-						 <body>
-						  <data_block>
-						   <dt_assoc>
-							<item key="protocol">XCP</item>
-							<item key="object">DOMAIN</item>
-							<item key="action">LOOKUP</item>
-							<item key="attributes">
-							 <dt_assoc>
-							  <item key="domain">'.$_POST['domainFld'].'</item>
-							  <item key="no_cache">1</item>
-							 </dt_assoc>
-							</item>
-							<item key="registrant_ip">111.121.121.121</item>
-						   </dt_assoc>
-						  </data_block>
-						 </body>
-						</OPS_envelope>
-						';
-				 echo $api -> xml_output($xml,$xml_name);
-				 $status=$api -> xml_request_lookupDomain($xml_name);
-				 switch($status){
-					 case 210:
-					 //echo "Available";
-				
-							// look for the qoutas for the 
-							$quota=0;
-							$select_customers_query = 'SELECT `quota_domain` FROM `customer` WHERE `id` = '.$_POST['user_id_registrer_1'];
-							$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
-							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-											$quota=$line['quota_domain'];
-							}
-							
-							// look for the table of create domains if the user has domains and count item
-							$counter=0;
-							$select_customers_query = 'SELECT COUNT(*) as counter FROM `created_domains` WHERE `customer_id` ='.$_POST['user_id_registrer_1'];
-							$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
-							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-											$counter=$line['counter'];
-							}
-							
-							// Asking if qoutas is minus to counter
-							if($quota > $counter){
-								//if true, permit the div
-								// send header to a page of registrer
-								echo "<script> var r = confirm('The domain is available, if you want to registrer press OK, else press CANCEL to back to lookup domain'); </script>";
-								echo "<script> if (r == true) { ";
-					?>
-					
-					<?php	
-					echo "}else{ 
-								window.location='domainscustomers.php';
-							} </script>";					
-						}else{
-								// show a message or redirect to principal look for domain
-								$code=404;
-								//$message = " <script> alert('You over the quota and do not have permited to regitrer more domains, please contact the administrator'); </script>";
-								header('Location: domainscustomers.php?code='.$code);
-								//echo "false";
-							}
-							
-
-					 break;
-					 case 211:
-					 //echo "Taken";
-					 //echo " <script> $('#lookupDomain').hide(); $('#domain_available').show(); $('#registrer').hide(); </script>";
-					// echo " <script> alert('This domain has been taken , please try other domain'); </script>";
-					 $code=403;
-					 $domain= htmlentities(base64_encode($_POST['domainFld']));
-					 $id_dom= htmlentities(base64_encode($_POST['user_id_registrer_1']));
-					 header('Location: domainscustomers.php?code='.$code."&dom=".$domain."&i=".$id_dom);								
-					 break;
-				 }
-			}
-		?>
-		
 
 <html>
 	<head>
@@ -129,6 +45,91 @@
 				}
 		?>
 		
+		<!-- Domain Lookup -->
+		<?php 
+			if($_POST['domainFld']){
+				$xml_name="domain_lookup";
+				$xml='
+					<OPS_envelope>
+						 <header>
+						  <version>0.9</version>
+						  </header>
+						 <body>
+						  <data_block>
+						   <dt_assoc>
+							<item key="protocol">XCP</item>
+							<item key="object">DOMAIN</item>
+							<item key="action">LOOKUP</item>
+							<item key="attributes">
+							 <dt_assoc>
+							  <item key="domain">'.$_POST['domainFld'].'</item>
+							  <item key="no_cache">1</item>
+							 </dt_assoc>
+							</item>
+							<item key="registrant_ip">111.121.121.121</item>
+						   </dt_assoc>
+						  </data_block>
+						 </body>
+						</OPS_envelope>
+						';
+				 echo $api -> xml_output($xml,$xml_name);
+				 $status=$api -> xml_request_lookupDomain($xml_name);
+				 switch($status){
+					 case 210:
+					 //echo "Available";
+				
+							// look for the qoutas for the 
+							$quota=0;
+							$select_customers_query = 'SELECT `quota_domain` FROM `customer` WHERE `id` = '.$_SESSION['id'];
+							$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+											$quota=$line['quota_domain'];
+							}
+							
+							// look for the table of create domains if the user has domains and count item
+							$counter=0;
+							$select_customers_query = 'SELECT COUNT(*) as counter FROM `created_domains` WHERE `customer_id` ='.$_SESSION['id'];
+							$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+											$counter=$line['counter'];
+							}
+							
+							// Asking if qoutas is minus to counter
+							if($quota > $counter){
+								//if true, permit the div
+								// send header to a page of registrer
+								echo "<script> var r = confirm('The domain is available, if you want to registrer press OK, else press CANCEL to back to lookup domain'); </script>";
+								echo "<script> if (r == true) { ";
+					?>
+					
+					<?php	
+					echo "}else{ 
+								window.location='domainscustomers.php';
+							} </script>";					
+						}else{
+								// show a message or redirect to principal look for domain
+								$code=404;
+								//$message = " <script> alert('You over the quota and do not have permited to regitrer more domains, please contact the administrator'); </script>";
+								header('Location: domainscustomers.php?code='.$code);
+								//echo "false";
+							}
+							
+
+					 break;
+					 case 211:
+					 //echo "Taken";
+					 //echo " <script> $('#lookupDomain').hide(); $('#domain_available').show(); $('#registrer').hide(); </script>";
+					// echo " <script> alert('This domain has been taken , please try other domain'); </script>";
+					 $code=403;
+					 $domain= htmlentities(base64_encode($_POST['domainFld']));
+					 $id_dom= htmlentities(base64_encode($_SESSION['id']));
+					 header('Location: domainscustomers.php?code='.$code."&dom=".$domain."&i=".$id_dom);								
+					 break;
+				 }
+			}
+		?>
+		
+
 		<div id="pagecontents">
 			<div class="wrapper" >
 				<div id="post">
@@ -175,7 +176,8 @@
 							<tr><td><?php echo $dict->words("55"); ?> </td><td><input type="text" id="state_4_1" name="state_4_1" required></td></tr>
 							<tr><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
 							<tr><td><?php echo $dict->words("57"); ?> </td><td><input type="text" id="postal_code_9_1" name="postal_code_9_1" required></td></tr>
-							<tr><td><?php echo $dict->words("58"); ?> </td><td><input onkeydown= "telephone_extension('phone_3_1')"; onkeypress= "telephone_extension('phone_3_1')"; onkeyup = "telephone_extension('phone_3_1')"; type="text" id="phone_3_1" name="phone_3_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<tr><td><?php echo $dict->words("58"); ?> </td><td><input type="text" id="phone_3_1" name="phone_3_1" required><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<!-- onkeydown= "telephone_extension('phone_3_1')"; onkeypress= "telephone_extension('phone_3_1')"; onkeyup = "telephone_extension('phone_3_1')"; -->
 							<tr><td><?php echo $dict->words("59"); ?> </td><td><input type="text" id="fax_10_1" name="fax_10_1" ></td></tr>
 							<tr><td><?php echo $dict->words("60"); ?> </td><td><input type="email" id="email_7_1" name="email_7_1" required><br>Must be a current valid address</td></tr>
 							</table>
@@ -193,7 +195,8 @@
 							<tr class="row_a"><td><?php echo $dict->words("55"); ?> </td><td><input type="text" id="state_6_0" name="state_6_0" required ></td></tr>
 							<tr class="row_a"><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
 							<tr class="row_a"><td><?php echo $dict->words("57"); ?> </td><td><input required type="text" id="postal_code_9_0" name="postal_code_9_0" ></td></tr>
-							<tr class="row_a"><td><?php echo $dict->words("58"); ?> </td><td><input onkeydown= "telephone_extension('phone_3_0')"; onkeypress= "telephone_extension('phone_3_0')"; onkeyup = "telephone_extension('phone_3_0')"; type="text" id="phone_3_0" name="phone_3_0" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<tr class="row_a"><td><?php echo $dict->words("58"); ?> </td><td><input  type="text" id="phone_3_0" name="phone_3_0" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<!--onkeydown= "telephone_extension('phone_3_0')"; onkeypress= "telephone_extension('phone_3_0')"; onkeyup = "telephone_extension('phone_3_0')"; -->
 							<tr class="row_a"><td><?php echo $dict->words("59"); ?> </td><td><input  type="text" id="fax_10_0" name="fax_10_0" ></td></tr>
 							<tr class="row_a"><td><?php echo $dict->words("60"); ?> </td><td><input type="email" id="email_7_0" name="email_7_0" required><br>Must be a current valid address</td></tr>
 							</table> 
@@ -212,7 +215,8 @@
 							<tr class="row_b"><td><?php echo $dict->words("55"); ?> </td><td><input required type="text" id="state_4_3" name="state_4_3" ></td></tr>
 							<tr class="row_b"><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United States </option></select></td></tr>
 							<tr class="row_b"><td><?php echo $dict->words("57"); ?> </td><td><input required type="text" id="postal_code_9_3" name="postal_code_9_3" ></td></tr>
-							<tr class="row_b"><td><?php echo $dict->words("58"); ?> </td><td><input required onkeydown= "telephone_extension('phone_3_3')"; onkeypress= "telephone_extension('phone_3_3')"; onkeyup = "telephone_extension('phone_3_3')"; type="text" id="phone_3_3" name="phone_3_3" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<tr class="row_b"><td><?php echo $dict->words("58"); ?> </td><td><input required  type="text" id="phone_3_3" name="phone_3_3" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<!-- onkeydown= "telephone_extension('phone_3_3')"; onkeypress= "telephone_extension('phone_3_3')"; onkeyup = "telephone_extension('phone_3_3')"; -->
 							<tr class="row_b"><td><?php echo $dict->words("59"); ?> </td><td><input  type="text" id="fax_10_3" name="fax_10_3" ></td></tr>
 							<tr class="row_b"><td><?php echo $dict->words("60"); ?> </td><td><input type="email" id="email_7_3" name="email_7_3" required><br>Must be a current valid address</td></tr>
 							</table>
@@ -233,7 +237,8 @@
 							<tr class="row_t"><td><?php echo $dict->words("55"); ?> </td><td><input required type="text" id="state_5_2" name="state_5_2" ></td></tr>
 							<tr class="row_t"><td><?php echo $dict->words("56"); ?> </td><td><select name="country_1"><option id="country" value="1">United State</option></select></td></tr>
 							<tr class="row_t"><td><?php echo $dict->words("57"); ?> </td><td><input required type="text" id="postal_code_9_2" name="postal_code_9_2" ></td></tr>
-							<tr class="row_t"><td><?php echo $dict->words("58"); ?> </td><td><input required onkeydown= "telephone_extension('phone_3_2')"; onkeypress= "telephone_extension('phone_3_2')"; onkeyup = "telephone_extension('phone_3_2')"; type="text" id="phone_3_2" name="phone_3_2" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<tr class="row_t"><td><?php echo $dict->words("58"); ?> </td><td><input required  type="text" id="phone_3_2" name="phone_3_2" ><br>[eg. +1.4165551122x1234 for .info/.me/.biz/.org/.us/.name/.cn/.tv/.cc/.mobi/.asia domains]</td></tr>
+							<!-- onkeydown= "telephone_extension('phone_3_2')"; onkeypress= "telephone_extension('phone_3_2')"; onkeyup = "telephone_extension('phone_3_2')"; -->
 							<tr class="row_t"><td><?php echo $dict->words("59"); ?> </td><td><input  type="text" id="fax_10_2" name="fax_10_2" ></td></tr>
 							<tr class="row_t"><td><?php echo $dict->words("60"); ?> </td><td><input required type="email" id="email_7_2" name="email_7_2" ><br>Must be a current valid address</td></tr>
 							</table>

@@ -226,16 +226,25 @@ if (isset($_POST["rep_history"])) {
 
     while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 
-        echo "<tr id='tr" . $line['id'] . "'>";
-
-        echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['time'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['ip'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['name'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['action'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['table_name'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
-
-        echo "</tr>";
+       if($line['result'] == 'Success'){
+	        echo "<tr bgcolor='#DFF2BF' id='tr" . $line['id'] . "'>";
+			echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['time'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['ip'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['action'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['table_name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+			echo "</tr>";
+		}else{
+			 echo "<tr bgcolor='#FFBABA' id='tr" . $line['id'] . "'>";
+			echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['time'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['ip'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['action'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['table_name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+			echo "</tr>";
+		}
     }
 }
 
@@ -325,16 +334,25 @@ $select_customers_result = mysql_query($select_customers_query) or die($dict->wo
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 
-    echo "<tr id='tr" . $line['id'] . "'>";
-
-    echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['time'] . "</span></td>";
-    echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['ip'] . "</span></td>";
-    echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['name'] . "</span></td>";
-    echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['action'] . "</span></td>";
-    echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['table_name'] . "</span></td>";
-    echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
-
-    echo "</tr>";
+   if($line['result'] == 'Success'){
+	        echo "<tr bgcolor='#DFF2BF' id='tr" . $line['id'] . "'>";
+			echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['time'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['ip'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['action'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['table_name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+			echo "</tr>";
+		}else{
+			 echo "<tr bgcolor='#FFBABA' id='tr" . $line['id'] . "'>";
+			echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['time'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['ip'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['action'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['table_name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+			echo "</tr>";
+		}
 }
 ?>
                                                 
@@ -376,17 +394,26 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
     $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
     while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+		if($line['result'] == 'Success'){
+	        echo "<tr bgcolor='#DFF2BF' id='tr" . $line['id'] . "'>";
+			echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['time'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['ip'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['action'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['table_name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+			echo "</tr>";
+		}else{
+			 echo "<tr bgcolor='#FFBABA' id='tr" . $line['id'] . "'>";
+			echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['time'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['ip'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['action'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['table_name'] . "</span></td>";
+			echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
+			echo "</tr>";
+		}
 
-        echo "<tr id='tr" . $line['id'] . "'>";
-
-        echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['time'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['ip'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['name'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['action'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['table_name'] . "</span></td>";
-        echo "<td style='border: 1px solid;'><span id='spanPassword'>" . $line['result'] . "</span></td>";
-
-        echo "</tr>";
     }
 
 

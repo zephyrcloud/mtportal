@@ -25,25 +25,26 @@
 					if (isset($_SESSION['usuario'])) {
 						echo "<h5>Hi, " . $_SESSION['usuario'] . "</h5>";
 						
-						?>
-							<form id="logoutFrm" method="POST" action="logout.php" style="text-align: right;">
-								<input id="logoutBtn" name="logoutBtn" type="submit" value="LogOut">
-								<?php echo '<input id="user" hidden name="user" type="text" value="'.$_SESSION['usuario'].'">'; 
-								
 								if($_SESSION['usuario'] != "General Administrator" ){
 									$select_customers_query = 'SELECT `id` FROM `customer` WHERE `name` ="'.$_SESSION['usuario'].'"';
 									$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ' );
 								
 									while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 									
-									echo  '<input hidden id="id_user" name="id_user" type="text" value="'.$line['id'].'">' ;
+									//echo  '<input hidden id="id_user" name="id_user" type="text" value="'.$line['id'].'">' ;
+									$_SESSION['id'] = $line['id'];
+									$id= htmlentities(base64_encode($_SESSION['id']));
 									}	
 								}else{
-									echo  '<input hidden id="id_user" name="id_user" type="text" value="1">' ;	
+									//echo  '<input hidden id="id_user" name="id_user" type="text" value="1">' ;
+									$_SESSION['id']= "1";		
+									$id= htmlentities(base64_encode($_SESSION['id']));									
 								}
-																	
-														   
-								?>
+						
+						?>
+							<form id="logoutFrm" method="POST" action="logout.php?log=<?php echo $id; ?>" style="text-align: right;">
+								<input id="logoutBtn" name="logoutBtn" type="submit" value="LogOut">
+								<?php echo '<input id="user" hidden name="user" type="text" value="'.$_SESSION['usuario'].'">'; ?>
 							</form>
 						<?php
 						
