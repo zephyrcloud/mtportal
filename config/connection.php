@@ -1,7 +1,7 @@
 <?php
 
 	// Conection to server
-	$connect_host = mysql_connect('localhost', 'zephyrclouddb', 'Zcc12345$');
+	$connect_host = mysql_connect('localhost', 'zephyrclouddb', '0123456789898756453213');
 	
 	if($connect_host){
 		
