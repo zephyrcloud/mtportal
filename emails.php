@@ -18,7 +18,7 @@ function send_email($subject,$body_message) {
 		$mail->Host = 'smtp.office365.com';  // Specify main and backup SMTP servers
 		$mail->SMTPAuth = true;                               // Enable SMTP authentication
 		$mail->Username = 'jbriceno@zephyrcloud.com';                 // SMTP username
-		$mail->Password = 'Zcc-Zcc/12345';                           // SMTP password
+		$mail->Password = '70f84d74f8cb8ae73d1a787b8de071bddde2753b06e793d76662a8c93fa7ab4f49d2f37e629929fce46a6748477cd5fc2745da92647e8b25148efc9138ec6af2';                           // SMTP password
 		$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
 		$mail->Port = 587;                                    // TCP port to connect to
 
@@ -93,13 +93,23 @@ function body_email($message,$logout_time_out,$user){
 
     while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 		 $fecha = explode(" ", $line['time']);
-		 $body_message.= "<tr>";
-		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $fecha[1] . "</span></td>";
-		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
-		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
-		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
-		 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
-		 $body_message.= "</tr>";
+		  if($line['r_name'] == 'Success'){
+			 $body_message.= "<tr bgcolor='#DFF2BF'>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $fecha[1] . "</span></td>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
+			 $body_message.= "</tr>";
+		  }else{
+			 $body_message.= "<tr bgcolor='#FFBABA'>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $fecha[1] . "</span></td>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
+			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
+			 $body_message.= "</tr>";
+		  }
     }
         $body_message.= '  </table>';
 		

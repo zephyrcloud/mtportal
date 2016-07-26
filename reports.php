@@ -220,7 +220,7 @@ if (isset($_POST["rep_history"])) {
     $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 														   FROM log l , customer c , action_type at, table_modified tm , result r 
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-														   AND l.timeStamp < NOW() AND id_counter <> 0  ORDER BY l.timeStamp ';
+														   AND l.timeStamp < NOW() AND id_counter <> 0  ORDER BY l.timeStamp DESC ';
 
     $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
@@ -254,7 +254,7 @@ if (isset($_POST["user_id_field"])) {
         $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 														   FROM log l , customer c , action_type at, table_modified tm , result r 
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-														   AND id_user =' . $_POST["user_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp ';
+														   AND id_user =' . $_POST["user_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC ';
     }
 } else {
     if (isset($_POST["actionType_id_field"])) {
@@ -262,7 +262,7 @@ if (isset($_POST["user_id_field"])) {
             $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 															   FROM log l , customer c , action_type at, table_modified tm , result r 
 															   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-															   AND id_actionType =' . $_POST["actionType_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp ';
+															   AND id_actionType =' . $_POST["actionType_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC';
         }
     } else {
         if (isset($_POST["actionType_id_field"])) {
@@ -270,7 +270,7 @@ if (isset($_POST["user_id_field"])) {
                 $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 														   FROM log l , customer c , action_type at, table_modified tm , result r 
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-														   AND id_actionType =' . $_POST["actionType_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp ';
+														   AND id_actionType =' . $_POST["actionType_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC';
             }
         } else {
             if (isset($_POST["table_modified_id_field"])) {
@@ -278,7 +278,7 @@ if (isset($_POST["user_id_field"])) {
                     $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 																	   FROM log l , customer c , action_type at, table_modified tm , result r 
 																	   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-																	   AND id_tableModified =' . $_POST["table_modified_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp ';
+																	   AND id_tableModified =' . $_POST["table_modified_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC';
                 }
             } else {
                 if (isset($_POST["result_id_field"])) {
@@ -286,13 +286,13 @@ if (isset($_POST["user_id_field"])) {
                         $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 																		   FROM log l , customer c , action_type at, table_modified tm , result r 
 																		   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-																		   AND id_result =' . $_POST["result_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp ';
+																		   AND id_result =' . $_POST["result_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC';
                     }
                 } else {
                     $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 														   FROM log l , customer c , action_type at, table_modified tm , result r 
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1
-														   ORDER BY l.timeStamp ';
+														   ORDER BY l.timeStamp DESC';
                 }
             }
         }

@@ -60,7 +60,7 @@
 										<?php
 										$select_customers_query = 'SELECT `timeStamp` as time , c.name as name , at.action_name as action , r.result_name as result, `domain_name` as domain 
 										FROM `log` l , customer c , action_type at , table_modified tm, result r 
-										WHERE `domain_name` NOT LIKE "NULL" AND l.id_user = c.id AND l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id';
+										WHERE `domain_name` NOT LIKE "NULL" AND l.id_user = c.id AND l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id ORDER BY `timeStamp`  DESC ';
 										$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 											if($line['result'] == 'Success'){
