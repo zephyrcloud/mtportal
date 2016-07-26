@@ -80,7 +80,7 @@ class dictionary{
 		$word[66] = "Same As Billing Contact Information";
 		$word[67] = "Submit"; // button that make the action to register a domain.
 		
-		/*reportsphp*/
+		/*reports.php*/
 		
 		$word[68] = "Reports"; // Tittle of the section and slide
 		$word[69] = "Archive reports"; 
@@ -161,6 +161,12 @@ class dictionary{
 		$word[122] = "Table modified"; // Attributes for message table
 		$word[123] = "Result"; // Attributes for message table
 		
+		/*DomainCustomer.php*/
+		$word[124] = "Write a domain, ex: Mydomain.com "; // Attributes for message table
+		$word[125] = "<ul>
+						<li>Only available (.com, .net, .org, .info, .biz, .name, .us,.co). </li>
+						<li>When you type a domain valid, the button 'Check available' appears. </li>
+					  </ul>"; // Attributes for message table
 		return $word[$id];
 	}
 	

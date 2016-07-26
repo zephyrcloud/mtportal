@@ -46,14 +46,16 @@
 			<div class="wrapper" >
 				<div id="post">
 					<div id="lookupDomain">
+					<br>
 						<form method="POST" action="registrerDomain.php">
-							<?php echo $dict->words("25"); ?>: <input onselect="domain_validate();" oninput="domain_validate();" onkeydown="domain_validate();" onkeyup ="domain_validate();" onkeypress="domain_validate();" required id="domainFld" name="domainFld" type="text" ><br />
+							<?php echo $dict->words("25"); ?>: <input placeholder="<?php echo $dict->words("124"); ?>" onselect="domain_validate();" oninput="domain_validate();" onkeydown="domain_validate();" onkeyup ="domain_validate();" onkeypress="domain_validate();" required id="domainFld" name="domainFld" type="text" ><br />
+							<?php echo $dict->words("125"); ?>
 							<input hidden id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Check Available">
 							
 						</form>	
 						<br>
-						
-						<?php echo "<a href='profileScreen.php'>".$dict->words("27")."</a>";   ?>
+						<center> <input type="button" onclick="location.href='profileScreen.php';" value="<?php echo $dict->words("27");  ?>" /> </center>
+					    <?php /*echo "<a href='profileScreen.php' class='button' ><center>".$dict->words("27")."</center></a>";   */?> 
 						
 						<div>
 								<?php 

@@ -18,7 +18,7 @@ function send_email($subject,$body_message) {
 		$mail->Host = 'smtp.office365.com';  // Specify main and backup SMTP servers
 		$mail->SMTPAuth = true;                               // Enable SMTP authentication
 		$mail->Username = 'jbriceno@zephyrcloud.com';                 // SMTP username
-		$mail->Password = '70f84d74f8cb8ae73d1a787b8de071bddde2753b06e793d76662a8c93fa7ab4f49d2f37e629929fce46a6748477cd5fc2745da92647e8b25148efc9138ec6af2';                           // SMTP password
+		$mail->Password = '';                           // SMTP password
 		$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
 		$mail->Port = 587;                                    // TCP port to connect to
 
@@ -75,7 +75,7 @@ function body_email($message,$logout_time_out,$user){
                                                 <col width="150px">
                                                 <col width="170px">
 												<col width="190px">
-                                                <tr>
+                                                <tr bgcolor="#000000" style="color:#FFFFFF">
 														<th style="border: 1px solid; text-align: center;">'.$dict->words("119").'</th>
                                                         <th style="border: 1px solid; text-align: center;">'.$dict->words("120").'</th>
                                                         <th style="border: 1px solid; text-align: center;">'.$dict->words("121").'</th>
