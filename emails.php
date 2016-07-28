@@ -17,13 +17,13 @@ function send_email($subject,$body_message) {
 		$mail->isSMTP();                                      // Set mailer to use SMTP
 		$mail->Host = 'smtp.office365.com';  // Specify main and backup SMTP servers
 		$mail->SMTPAuth = true;                               // Enable SMTP authentication
-		$mail->Username = 'jbriceno@zephyrcloud.com';                 // SMTP username
+		$mail->Username = 'email@email.com';                 // SMTP username
 		$mail->Password = '';                           // SMTP password
 		$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
 		$mail->Port = 587;                                    // TCP port to connect to
 
-		$mail->setFrom('jbriceno@zephyrcloud.com', 'Mailer');
-		$mail->addAddress('jbriceno@zephyrcloud.com');               // Name is optional
+		$mail->setFrom('email@email.com', 'Mailer');
+		$mail->addAddress('email@email.com');               // Name is optional
 		
 		$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
 		$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
