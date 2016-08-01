@@ -93,7 +93,11 @@ class api_opensrs{
 				}*/
 				
 			//$status = $obj->body->data_block->dt_assoc[0]->item[4]->dt_assoc[0]->item[0];
+			if($obj->body->data_block->dt_assoc[0]->item[2] == "701"){
+			$status = "701";	
+			}else{
 			$status = $obj->body->data_block->dt_assoc[0]->item[5];
+			}
 			$message= $status;
 			}
 			

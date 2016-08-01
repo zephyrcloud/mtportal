@@ -36,7 +36,7 @@ class dictionary{
 		$word[24] = "Domains"; // tittle
 		$word[25] = "Lookup Domain"; // Text field tittle
 		$word[26] = "You can't register domains because you over your quota"; // Message of over the permited quotas
-		$word[27] = "Click here for going to the screen profile"; // Link text for going to screen profile
+		$word[27] = "Click me for going to the screen profile"; // Link text for going to screen profile
 		$word[28] = "Domain unavailable, please pick one of our recommendation list or write other domain."; // Suggest domain when one isn't available 
 		$word[29] = "Domain"; // column table when suggest to the user others domains
 		$word[30] = "Status"; // column table when suggest to the user others domains
@@ -46,7 +46,7 @@ class dictionary{
 		$word[34] = "There was a error"; // If something happens with the register of domain.
 		
 		/*registrerDomain.php*/
-		$word[35] = "Click here for cancel order"; // Link text for go back
+		$word[35] = "Cancel order"; // Link text for go back
 		$word[36] = "Retrieve order data from previous domain"; // Title of table of retreive 
 		$word[37] = "Lookfor domains"; // Field of description 
 		$word[38] = "Previous Domain"; // Field of retreive data
@@ -162,11 +162,18 @@ class dictionary{
 		$word[123] = "Result"; // Attributes for message table
 		
 		/*DomainCustomer.php*/
-		$word[124] = "Write a domain, ex: Mydomain.com "; // Attributes for message table
+		$word[124] = "Write a domain, ex: Mydomain.com, and press "; // Attributes for message table
 		$word[125] = "<ul>
-						<li>Only available (.com, .net, .org, .info, .biz, .name, .us,.co). </li>
 						<li>When you type a domain valid, the button 'Check available' appears. </li>
 					  </ul>"; // Attributes for message table
+					  
+		/*Users.php*/
+		$word[126] = "This extension is unvailable, please choose other extension.";
+		
+		/*DomainCustomer.php*/
+		$word[127] = "Invalid domain syntax, by the way we suggest the next domains availables "; // Attributes for message table
+		$word[128] = "Could not extract a TLD or TLD not serviced by OpenSRS, please write other domain. "; // Attributes for message table
+		
 		return $word[$id];
 	}
 	

@@ -56,6 +56,6 @@
 			<br />
 			
 			<input id="saveAppsPerUserBtn" name="saveAppsPerUserBtn" type="submit" value="Save apps">
-			<!--<input id="cancelEmailsPerUserBtn" name="cancelEmailsPerUserBtn" type="button" value="Cancel">-->
+			<input id="cancelAppPerUserBtn" name="cancelAppPerUserBtn" type="submit" value="Cancel">
 		
 		</form>

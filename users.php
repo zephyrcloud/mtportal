@@ -210,7 +210,11 @@
 	}
 	
 	if (isset($_POST["cancelEmailsPerUserBtn"])) {
-		echo "<script> $('#emailsPerUserPnl').hide(); $('#tables').hide(); </script> " ;
+		echo "<script> $('#emailsPerUserPnl').hide();$('#appsPerUserUpdate').hide();$('#tables').show(); </script> " ;
+	}
+	
+	if (isset($_POST["cancelAppPerUserBtn"])) {
+		echo "<script> $('#emailsPerUserPnl').hide();$('#appsPerUserUpdate').hide();$('#tables').show(); </script> " ;
 	}
 ?>
 
@@ -294,9 +298,15 @@
 									<?php echo $dict->words("14"); ?>: <input id="lastNameNewUserFld" name="lastNameNewUserFld" type="text" required="required"><br /><br />
 									<?php echo $dict->words("15"); ?>: <input id="emailNewUserFld" name="emailNewUserFld" type="email" required="required"><br /><br />
 									<?php echo $dict->words("16"); ?>: <input onkeypress="return justNumbers(event);" id="outbound" name="outbound" type="text" ><br /><br />
-									<?php echo $dict->words("17"); ?>: <input onkeydown="validate_extension();" onkeyup ="validate_extension();" onkeypress="return justNumbers(event);validate_extension();" id="extension" name="extension" type="text" maxlength="4"  ><br /><br />
+									<?php echo $dict->words("17"); ?>: <input oninput="validate_extension();" onkeydown="validate_extension();" onkeyup ="validate_extension();" onkeypress="return justNumbers(event);validate_extension();" id="extension" name="extension" type="text" maxlength="4"  ><br /><br />
+									<div hidden id="validate_action">
+									<?php echo $dict->words("126");?>
+									</div>
+									<div>
+									<br>
 									<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Add">
 									<input id="cancelNewUserBtn" name="cancelNewUserBtn" type="button" value="Cancel">
+									</div>
 								    <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">';
 									?>
 								</form> 
@@ -311,9 +321,15 @@
 									<?php echo $dict->words("13"); ?>: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
 									<?php echo $dict->words("14"); ?>: <input id="lastNameEditUserFld" name="lastNameEditUserFld" type="text" required="required"><br /><br />
 									<?php echo $dict->words("16"); ?>: <input onkeypress="return justNumbers(event);" id="outboundEditFld" name="outboundEditFld" type="text" ><br /><br />
-									<?php echo $dict->words("17"); ?>: <input onkeydown="validate_extension_edit();" onkeyup ="validate_extension_edit();" onkeypress="return justNumbers(event);validate_extension_edit();" id="extensionEditFld" name="extensionEditFld" type="text" maxlength="4"  ><br /><br />
+									<?php echo $dict->words("17"); ?>: <input oninput="validate_extension_edit();" onkeydown="validate_extension_edit();" onkeyup ="validate_extension_edit();" onkeypress="return justNumbers(event);validate_extension_edit();" id="extensionEditFld" name="extensionEditFld" type="text" maxlength="4"  ><br /><br />
+									<div hidden id="validate_action_edit">
+									<?php echo $dict->words("126");?>
+									</div>
+									<div>
+									<br>
 									<input id="saveEditUserBtn" name="saveEditUserBtn" type="submit" value="Edit">
 									<input id="cancelEditUserBtn" name="cancelEditUserBtn" type="button" value="Cancel">
+									</div>  
 									   <?php echo '<input hidden id="idtest" name="idtest" type="text" value="'.$id_user.'">'; ?>
 								</form>
 							</div>
@@ -493,9 +509,9 @@
 		
 		// Funcion asignar email
 		$("a[id^='aEmails']").click(function(event) {
+			$("#emailsPerUserPnl").show();
 			$("#tables").hide();
 			$("#appsPerUserPnl").hide();
-			$("#emailsPerUserPnl").show();
 			
 			$id = event.target.id.toString().split("aEmails")[1];
 			//$user = $("#spanFirstName".concat($id)).text().concat(" ").concat($("#spanLastName".concat($id)).text());
@@ -521,8 +537,10 @@
 		
 		// Funcion asignar apps
 		$("a[id^='aApps']").click(function(event) {
-			$("#emailsPerUserPnl").hide();
 			$("#appsPerUserPnl").show();
+			$("#tables").hide();
+			$("#emailsPerUserPnl").hide();
+			
 			
 			$id = event.target.id.toString().split("aApps")[1];
 			$user = $("#spanFirstName".concat($id)).text().concat(" ").concat($("#spanLastName".concat($id)).text());
@@ -590,9 +608,11 @@
 		 
 		 if(found){
 				$('#saveNewUserBtn').hide();
+				$('#validate_action').show();
 				document.getElementById("extension").style.backgroundColor = "#FF0000"; 
 		 }else{
 				$('#saveNewUserBtn').show();
+				$('#validate_action').hide();
 				document.getElementById("extension").style.backgroundColor = "#FFFFFF";
 			}
 	}
@@ -609,9 +629,11 @@
 		 }
 		  if(found){
 				$('#saveEditUserBtn').hide();
+				$('#validate_action_edit').show();
 				document.getElementById("extensionEditFld").style.backgroundColor = "#FF0000";
 		 }else{
 				$('#saveEditUserBtn').show();
+				$('#validate_action_edit').hide();
 				document.getElementById("extensionEditFld").style.backgroundColor = "#FFFFFF";
 			}
 

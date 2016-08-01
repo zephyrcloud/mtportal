@@ -125,6 +125,18 @@
 					 $id_dom= htmlentities(base64_encode($_SESSION['id']));
 					 header('Location: domainscustomers.php?code='.$code."&dom=".$domain."&i=".$id_dom);								
 					 break;
+					 
+					 case 465:
+					 $code=405;
+					 $domain= htmlentities(base64_encode($_POST['domainFld']));
+					 $id_dom= htmlentities(base64_encode($_SESSION['id']));
+					 header('Location: domainscustomers.php?code='.$code."&dom=".$domain."&i=".$id_dom);
+					 break;
+					 
+					 case 701:
+					 $code=406;
+					 header('Location: domainscustomers.php?code='.$code);	
+					 break;
 				 }
 			}
 		?>
@@ -134,7 +146,7 @@
 			<div class="wrapper" >
 				<div id="post">
 					<div>
-						<center> <a href="domainscustomers.php" > <?php echo $dict->words("35"); ?> </a> </center>
+					<input type="button" onclick="location.href='domainscustomers.php';" value="<?php echo $dict->words("35");  ?>" /> 
 					</div>	
 					<div id="retreive" hidden>
 								<form action="registrerDomain.php" method="POST">						
@@ -244,7 +256,8 @@
 							</table>
 
 							<table border="1">  
-							<tr><th colspan="2"><input id="submit_boton" type="submit" value="<?php echo $dict->words("67"); ?>"> </th></tr>
+							<tr><th colspan="2"><input id="submit_boton" type="submit" value="<?php echo $dict->words("67"); ?>"> 
+							<input type="button" onclick="location.href='domainscustomers.php';" value="<?php echo $dict->words("35");  ?>" /> </th></tr>
 							</table>
 							
 						</form>

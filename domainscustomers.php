@@ -48,21 +48,29 @@
 					<div id="lookupDomain">
 					<br>
 						<form method="POST" action="registrerDomain.php">
-							<?php echo $dict->words("25"); ?>: <input placeholder="<?php echo $dict->words("124"); ?>" onselect="domain_validate();" oninput="domain_validate();" onkeydown="domain_validate();" onkeyup ="domain_validate();" onkeypress="domain_validate();" required id="domainFld" name="domainFld" type="text" ><br />
-							<?php echo $dict->words("125"); ?>
-							<input hidden id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Check Available">
-							
+							<?php echo $dict->words("25"); ?>: <input required id="domainFld" name="domainFld" type="text" ><br />
+							<?php echo $dict->words("124"); ?>
+							<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Look Up">
 						</form>	
 						<br>
-						<center> <input type="button" onclick="location.href='profileScreen.php';" value="<?php echo $dict->words("27");  ?>" /> </center>
-					    <?php /*echo "<a href='profileScreen.php' class='button' ><center>".$dict->words("27")."</center></a>";   */?> 
 						
 						<div>
 								<?php 
 		if(isset($_GET['code'])){
+			//echo "<script>alert('".$_GET['code']."');</script>";
 			if($_GET['code'] == "404"){
 				echo " <script> alert('".$dict->words("26")."'); </script>";}
+			if($_GET['code'] == "406"){
+				echo " <script> alert('".$dict->words("128")."'); </script>";
+			}
+			if($_GET['code'] == "405"){
+				echo " <script> alert('".$dict->words("127")."'); </script>";
+			}
 			if($_GET['code'] == "403"){
+				echo " <script> alert('".$dict->words("28")."'); </script>";
+			}
+
+			if($_GET['code'] == "403" || $_GET['code'] == "405"){
 				//echo " <script> alert('This domain has been taken , please try other domain'); </script>";
 				// list of posible domains.
 				$domains = array(".com", ".net", ".org", ".info", ".biz", ".name", ".us", ".co", ".com.co");
@@ -83,7 +91,7 @@
 							$update_user_query = 'UPDATE `customer` SET `remaining`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
 							$update_user_result = mysql_query($update_user_query);
 						}
-					echo " <script> alert('".$dict->words("28")."'); </script>";
+											
 								$table='';
 							$table.='<table>
 										<col width="300px">
@@ -257,20 +265,20 @@
 						
 			if(res.length == 3){
 				if(n == true){
-					if(res[1] != ""  && res[1] == "com" && res[2] == "co"){
+					//if(res[1] != ""  && res[1] == "com" && res[2] == "co"){
 						tr=true;
-					}
+					//}
 				}
 				
 			}else{
 				if(n == true){
-				if(res[1] != ""){
-					for(i=0;i<dom.length;i++){
-						if(res[1] == dom[i]){
+				if(res[1] != "" && res[0] != ""){
+					//for(i=0;i<dom.length;i++){
+						//if(res[1] == dom[i]){
 							tr=true;
-						}
+						//}
 						
-					}
+					//}
 				}else{
 					$("#saveNewUserBtn").hide();
 				}
