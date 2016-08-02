@@ -24,6 +24,14 @@
 						</ul>
 					</li>
 					
+					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "telephonecustomer.php") { echo "current_page_item"; } ?>">
+						<a href="#"> Telephone </a>
+						<ul>
+							<li><a href="telephonecustomer.php">Lookup</a></li>
+							<li><a href="">Manage</a></li>
+						</ul>
+					</li>
+					
 					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "https://desktop.zephyrcloud.com/vpn/index.html") { echo "current_page_item"; } ?>">
 						<a href="#">Manage Service</a>
 						<ul>

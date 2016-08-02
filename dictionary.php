@@ -174,9 +174,53 @@ class dictionary{
 		$word[127] = "Invalid domain syntax, by the way we suggest the next domains availables "; // Attributes for message table
 		$word[128] = "Could not extract a TLD or TLD not serviced by OpenSRS, please write other domain. "; // Attributes for message table
 		
+		$word[129] = "<ul>
+						<li>Please enter the Phone Number(s) you wish to port in the box below and click Check Availability.</li>
+						<li>Please note all numbers must be on the same account with the existing service provider to be on a single order.</li>
+					  </ul>";
+		$word[130] = "Lookup Telephone"; // Text field tittle
+
+		/*registertelephone.php */
+		$word[131] = "Numbers to Port";
+		$word[132] = "Current Carrier";
+		$word[133] = "Username or Email";
+		$word[134] = "Partial Port";
+		$word[135] = "Wireless Number";
+		$word[136] = "Account Number";
+		$word[137] = "Company Name";
+		$word[138] = "End Users Name";
+		$word[139] = "Address";
+		$word[140] = "Street number";
+		$word[141] = "Prefix";
+		$word[142] = "Street name";
+		$word[143] = "Suffix";
+		$word[144] = "Unit/Suite Number";
+		$word[145] = "City";
+		$word[146] = "State";
+		$word[147] = "Zip Code";
+		$word[148] = "Billing Number (BTN)";
+		$word[149] = "Contact Number";
+		$word[150] = "Rateplan";
+		
 		return $word[$id];
 	}
 	
+	
+	function combo_prefix_suffix($name){
+		$combo = '<select name="'.$name.'">
+					<option value="None">None
+					<option value="N">N
+					<option value="NE">NE
+					<option value="E">E
+					<option value="SE">SE
+					<option value="S">S
+					<option value="SW">SW
+					<option value="W">W
+					<option value="NW">NW
+				   </select>';
+		
+		return $combo;
+	}
 }
 
 ?>
