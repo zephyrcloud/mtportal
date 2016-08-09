@@ -88,7 +88,7 @@
 										</OPS_envelope>';
 										
 										echo $api->xml_output($xml,"domain_list_".$_SESSION['user_id']);
-										echo "<script> alert('".$dict->words("89")."'); </script>";
+										//echo "<script> alert('".$dict->words("89")."'); </script>";
 										
 										
 							}

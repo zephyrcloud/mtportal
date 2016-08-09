@@ -4,7 +4,7 @@
 
 <html>
 	<head>
-		<title>Domains</title>
+		<title>Report domains</title>
 		<link href="style/style.css" rel="stylesheet" type="text/css">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script>
@@ -13,14 +13,9 @@
 			}
 
 		</script>
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-		<script type="text/javascript" src="../bootstrap/js/bootstrap.js"></script>
-        <link href="../bootstrap/css/bootstrap.css" rel="stylesheet">
 		<!-- JQuery UI -->
-		<!--<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
-		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>-->
+		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
+		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 		
 	</head>
 	<body>
@@ -33,17 +28,13 @@
 		<div id="pagecontents">
 			<div class="wrapper" >
 				<div id="post">
-				
-				
-				<!-------->
+					<div id="postitle">
+								<div class="floatleft"><h1>Report domains</h1></div>
+								<div class="floatright righttext tpad"></div>
+								<div class="clear">&nbsp;</div>
+							</div>   
 					<div id="content">
-						<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-							<li class="active"><a href="#red" data-toggle="tab">Report Domain</a></li>
-							<li><a href="#orange" data-toggle="tab">Change cuotas</a></li>
-						</ul>
-						<div id="my-tab-content" class="tab-content">
-							<div class="tab-pane active" id="red">
-								<div id="principal">
+							<div id="principal">
 									<table>
 										<col width="300px">
 										<col width="300px">
@@ -88,79 +79,11 @@
 										?>
 									</table>
 								</div>
-							</div>
-							<div class="tab-pane" id="orange">
-								<div id="quotasPerUser">
-									<table id="table">
-										<col width="300px">
-										<col width="300px">
-										<col width="300px">
-										<col width="300px">
-										<tr>
-											<th style="border: 1px solid;">Customer</th>
-											<th style="border: 1px solid;">Username</th>
-											<th style="border: 1px solid;">Quota</th>
-											<th style="border: 1px solid;">Remaining</th>
-										</tr>
-										<form method="POST" action="domains.php?a=1">
-										
-										<input id="buttonUpdate" type="submit" value="Update" >
-										<?php
-									
-											$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
-											$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
-											while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-												$update_user_query = 'UPDATE `customer` SET `remaining`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
-												$update_user_result = mysql_query($update_user_query);
-											}
-											
-											$select_customers_query = 'SELECT * FROM customer ';
-											$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
-											$id = Array();
-											$i=0;
-											while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-												echo "<tr id='tr" . $line['id'] . "'>";
-												echo "<td style='border: 1px solid;'><span id='spanName'>" . $line['username'] . "</span></td>";
-												echo "<td style='border: 1px solid;'><span id='spanUserName'>" . $line['name'] . "</span></td>";
-												echo "<td style='border: 1px solid;'><input id='quotaValue_" . $line['id'] . "' name='quotaValue_" . $line['id'] . "' type='text' value='" . $line['quota_domain'] . "'></td>";
-												echo "<td style='border: 1px solid;'><input readonly id='remainingValue_" . $line['id'] . "' name='remainingValue_" . $line['id'] . "' type='text' value='" . $line['remaining'] . "'></td>";
-												echo "</tr>";
-												$id[$i] = $line['id'];
-												$i++;
-												
-											}
-											
-											
-										?>
-										 <input hidden id='minusNumber' name='minusNumber' type='text' value=''>
-										
-									</table>
-									</form>
-								</div>
-							</div>
-						</div>
-						<script type="text/javascript">
-							jQuery(document).ready(function ($) {
-								$('#tabs').tab();
-							});
 							
-						</script> 
-					<?php
-					if(isset($_POST['minusNumber'])){
+							
 						
-						for($i=0; $i <= count($id); $i++){
-							$update_user_query = 'UPDATE `customer` SET quota_domain='.$_POST['quotaValue_'.$id[$i]].'  WHERE `id`= '.$id[$i];
-							$update_user_result = mysql_query($update_user_query);
-						}
-						
-						echo "<script>location.href = 'domains.php?a=1' </script>";
-					}
+						 
 					
-					if($_GET['a']){
-						echo "<script> alert('Quotas updated succesfully'); </script>";
-					}
-					
-					?>
 					</div>	<!-- here ends the container -->		
 				</div>
 			</div>

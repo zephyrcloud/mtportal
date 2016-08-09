@@ -20,10 +20,18 @@
 						<a href="customers.php">Customers</a>
 					</li>
 					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "reports.php") { echo "current_page_item"; } ?>">
-						<a href="reports.php">Reports</a>
+						<a href="#">Reports</a>
+						<ul>
+							<li><a href="reports.php">Report</a></li>
+							<li><a href="archivereports.php">Archive reports</a></li>
+						</ul>
 					</li>
 					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "domains.php") { echo "current_page_item"; } ?>">
-						<a href="domains.php">Domains</a>
+						<a href="#">Domains</a>
+						<ul>
+							<li><a href="domains.php">Report</a></li>
+							<li><a href="administratequotas.php">Change quotas</a></li>
+						</ul>
 					</li>
 									
 				</ul>
