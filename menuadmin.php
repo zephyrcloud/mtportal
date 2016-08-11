@@ -30,10 +30,16 @@
 						<a href="#">Domains</a>
 						<ul>
 							<li><a href="domains.php">Report</a></li>
-							<li><a href="administratequotas.php">Change quotas</a></li>
+							<li><a href="domainquotas.php">Change quotas</a></li>
 						</ul>
 					</li>
-									
+					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "domains.php") { echo "current_page_item"; } ?>">
+						<a href="#">Telephone</a>
+						<ul>
+							<li><a href="telephone.php">Report</a></li>
+							<li><a href="telephonequotas.php">Change quotas</a></li>
+						</ul>
+					</li>				
 				</ul>
 			</div>					
 		</div>

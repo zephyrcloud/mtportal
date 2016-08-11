@@ -25,11 +25,10 @@
 							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 											$quota=$line['quota_telephone'];
 											$counter=$line['remaining_telephone'];
-							}
-							$permit =  $quota - $counter;
+							}							
 							// look for the table of create domains if the user has domains and count item
 							
-				if($permit > 0){
+				if($counter > 0){
 				
 				if (strpos($string, 'x[[supported:voice[[x') !== false) {
 					echo "<script> var r = confirm('This number is available,support: voice, if you want to register press OK, else press CANCEL to back to lookup number'); </script>";

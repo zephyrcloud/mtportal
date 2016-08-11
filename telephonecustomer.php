@@ -139,11 +139,11 @@ if(isset($_POST['port'])){
 		if (strpos($string, 'x[[ok') !== false) {echo "<script> alert('Success.'); </script>";
 			$insert_query = "INSERT INTO `created_telephone`(`customer_id`, `telephone`) VALUES (".$_SESSION['id'].",$number)";
 			$insert_result = mysql_query($insert_query);
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',15,1,7,".$_SESSION['id'].")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,telephonenumber) VALUES('".$ip_capture->getRealIP()."',15,1,7,".$_SESSION['id'].",$number)";
 			$insert_result = mysql_query($insert_query);}
 		if (strpos($string, 'x[[missingdata[[x') !== false) {echo "<script> alert('Missing data.'); </script>";}
 		if (strpos($string, 'x[[nosupport[[x') !== false || strpos($string, 'x[[invalid[[x') !== false) {echo "<script> alert('Request failed please contact support.'); </script>";
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',15,2,4,".$_SESSION['id'].")";
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',15,2,4,".$_SESSION['id'].",$number)";
 			$insert_result = mysql_query($insert_query);}
 	}
 }

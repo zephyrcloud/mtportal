@@ -28,7 +28,7 @@
 						<a href="#"> Telephone </a>
 						<ul>
 							<li><a href="telephonecustomer.php">Lookup</a></li>
-							<!--<li><a href="">Manage</a></li> --> 
+							<li><a href="telephonebilling.php">Billings per telephone</a></li>  
 						</ul>
 					</li>
 					

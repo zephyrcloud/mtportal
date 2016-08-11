@@ -53,6 +53,36 @@ class api_vetality{
 		curl_close($ch);
 		return $response;
 	}
+
+	function billingpernumber($begindate,$enddate){
+		$ch = curl_init();
+		$cmd = "http://api.vitelity.net/api.php?login=scorpico&pass=moore8&cmd=getcdr&startdate=$begindate&enddate=$enddate"; // url
+		curl_setopt($ch,CURLOPT_URL, "$cmd");
+		curl_setopt($ch,CURLOPT_HEADER, 0);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);
+		$response= curl_exec($ch);
+		curl_close($ch);
+		
+		// save the api response
+		$response=str_replace("x[[",'',$response) ;
+		$response=str_replace("[[x",'',$response) ;
+		$file = fopen('data.txt', "w");
+					fwrite($file, $response . PHP_EOL);
+					fclose($file);
+					$numlinea = [0,1,2]; 
+					$i=0;
+					$lineas = file('data.txt') ;
+
+					foreach ($lineas as $nLinea => $dato){
+						if ($nLinea != $numlinea[$i] )
+							$info[] = $dato ;
+							$i++;
+					}
+					
+					$documento = implode($info, ''); 
+					file_put_contents('data.txt', $documento);
+	}
+	
 }
 
 ?>
