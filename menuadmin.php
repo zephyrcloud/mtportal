@@ -2,6 +2,10 @@
 	<button style="width: 168px;" type="button" onclick="goTo('apps.php')">Apps</button>
 	<button style="width: 168px;" type="button" onclick="goTo('customers.php')">Customers</button>
 </div>-->
+<?php
+include("dictionary.php");
+$dict= new dictionary();
+?>
 
 <div class="menunormal" id="menumain">
 	
@@ -29,15 +33,16 @@
 					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "domains.php") { echo "current_page_item"; } ?>">
 						<a href="#">Domains</a>
 						<ul>
-							<li><a href="domains.php">Report</a></li>
+							<li><a href="domains.php"><?php echo $dict->words("151"); ?></a></li>
 							<li><a href="domainquotas.php">Change quotas</a></li>
 						</ul>
 					</li>
 					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "domains.php") { echo "current_page_item"; } ?>">
 						<a href="#">Telephone</a>
 						<ul>
-							<li><a href="telephone.php">Report</a></li>
+							<li><a href="telephone.php"><?php echo $dict->words("151"); ?></a></li>
 							<li><a href="telephonequotas.php">Change quotas</a></li>
+							<li><a href="generateBillings.php">Generate Bills</a></li>
 						</ul>
 					</li>				
 				</ul>

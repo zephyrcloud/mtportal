@@ -202,6 +202,10 @@ class dictionary{
 		$word[149] = "Contact Number";
 		$word[150] = "Rateplan";
 		
+		/*menuadmin.php*/
+		
+		$word[151] = "Registration History";
+		
 		return $word[$id];
 	}
 	

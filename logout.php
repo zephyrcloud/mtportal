@@ -18,6 +18,8 @@ ini_set('display_errors',1);
 				$logout_time_out = date("Y-m-d H:i:s"); 
 				$user = $id;
 				$email-> body_email($message,$logout_time_out,$user);
+				$select_customers_query = 'UPDATE `log` SET `send`= 1 WHERE `send`= 0 and `id_user` = '.$id;
+				$select_customers_result = mysql_query($select_customers_query) or die('... ');
 			}
 			session_start();
 			session_destroy();

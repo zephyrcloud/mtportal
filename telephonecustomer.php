@@ -7,7 +7,7 @@
 	$api = new api_vetality();
 	$ip_capture = new ip_capture();
 	$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_telephone-count(*)) as remaining FROM `created_telephone` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
-	$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+	$select_customers_result = mysql_query($select_customers_query) or die();
 	while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 		$update_user_query = 'UPDATE `customer` SET `remaining_telephone`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
 		$update_user_result = mysql_query($update_user_query);
@@ -61,7 +61,7 @@
 		
 <?php 
 
-$data = $api->numbersRegisterd();
+/*$data = $api->numbersRegisterd();
 
 $file = fopen('data.txt', "w");
 fwrite($file, $data . PHP_EOL);
@@ -76,18 +76,24 @@ foreach ($lineas as $nLinea => $dato)
 	$i++;
 }
 $documento = implode($info, ''); 
-file_put_contents('data.txt', $documento);  
+file_put_contents('data.txt', $documento);  */
 
 echo "<script> var numbers = [] </script>";
 
-$fp = fopen('data.txt', "r");
+/*$fp = fopen('data.txt', "r");
 while(!feof($fp)) {
 	$linea = fgets($fp);
 	$linea = explode(':',$linea);
 	echo "<script> numbers.push('".$linea[2]."'); </script>";	
 }
 
-fclose($fp);		
+fclose($fp);*/		
+
+$select_customers_query = 'SELECT `telephone` FROM `created_telephone`';
+$select_customers_result = mysql_query($select_customers_query) or die();
+while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+	echo "<script> numbers.push('".$line['telephone']."'); </script>";
+}
 
 
 //others metods.					
