@@ -6,6 +6,7 @@ if(isset($_POST['begin_day'])){
 	echo $billing ->inbound($_POST['begin_day'],$_POST['last_day']);
 }
 if(isset($_POST['begin_day_1'])){
+	echo $billing ->generate_inbounds($_POST['begin_day_1']);
 	echo $billing ->generate_excel($_POST['begin_day_1']);
 }
 ?>
@@ -82,6 +83,7 @@ if(isset($_POST['begin_day_1'])){
 							<input id="newUserBtn2" name="newUserBtn2" type="submit" value="Import registers ">
 							<input id="newUserBtn"  name="newUserBtn" type="submit" value="Import registers API vitelity ">
 							<input id="newUserBtn4" name="newUserBtn4" type="submit" value="Filter record with no clients">
+							<input id="allrecords" name="allrecords" type="submit" value="See all records" hidden>
 							
 						<!-- DIV Message 
 
@@ -121,23 +123,24 @@ if(isset($_POST['begin_day_1'])){
 						// read of database on table 
 						if(isset($_GET['client'])){
 							if($_GET['client'] == 0){
-								//$select_customers_query = 'SELECT bht.date as date ,bht.source as source ,bht.destination as destination ,bht.seconds as seconds,bht.callerid as callerid FROM `telephone_billing_customer` tbc , billings_history_test bht WHERE tbc.id_billing <> bht.id group by bht.source ';
+								$select_customers_query = 'SELECT * FROM `billings_history_test` WHERE `callerid` NOT IN (SELECT telephone FROM `created_telephone`) ';	
+								echo "<script> $('#newUserBtn4').hide(); $('#allrecords').show(); </script>";								
 							}
 						}else{
+							echo "<script> $('#newUserBtn4').show(); $('#allrecords').hide(); </script>";
 							$select_customers_query = 'SELECT * FROM `billings_history_test` ';
 						}
-						
-						
-						
 						$select_customers_result = mysql_query($select_customers_query);
-						$i=0;				 	
+							$i=0;				 	
 							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 								echo "<tr><td>".$line['date']."</td>
 										  <td>".$line['source']."</td>
 										  <td>".$line['destination']."</td>
 										  <td>".ceil($line['seconds']/60)."</td>
 										  <td>".$line['callerid']."</td></tr>"; 
-							}
+							
+						}
+						
 						?>
 							</table>
 						</div>
@@ -219,7 +222,7 @@ if(isset($_POST['begin_day_1'])){
 						<!-- Import registers -->
 							<div id="addUserPnl2" class="modalDialog" title="Import register">
 								<div id="post">
-									 <form method="post" action="ModalExamples.php" enctype="multipart/form-data">
+									 <form method="post" action="generateBillings.php" enctype="multipart/form-data">
 										Browse the archive:
 										<input name="fichero_usuario" type="file" accept=".csv" /><br><br>
 										<input type="submit" value="upload"><br>
@@ -289,6 +292,10 @@ if(isset($_POST['begin_day_1'])){
 			location.href = "generateBillings.php?client=0";
 		});
 		
+		$("#allrecords").click(function() {
+			//$("#addUserPnl").dialog( "open" );
+			location.href = "generateBillings.php";
+		});
 		// Dialog add user
 		$( "#addUserPnl" ).dialog({
 			autoOpen: false,

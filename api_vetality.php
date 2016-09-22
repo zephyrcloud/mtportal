@@ -86,7 +86,7 @@ class api_vetality{
 	
 
 	function roundnumber($number){
-		 $num = round($number,3);
+		 $num = round($number,2);
 		 return $num;
 	}
 }

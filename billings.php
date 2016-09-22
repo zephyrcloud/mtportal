@@ -94,23 +94,12 @@
 			$select_customers_query =  "DELETE FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
 			$select_customers_result = mysql_query($select_customers_query) or die();
 			
-			echo $this->outbound($monthly);
 			echo $this->generate_inbounds($monthly);
 						
 		}
 	
 		function inbound_csv($archive){
-			include("config/connection.php");
-			//Array with DID registered
-			/*$numbers= Array();			
-			//calling from the database the registered numbers.
-			$select_customers_query = 'SELECT `number` FROM `inboundnumber_test` ';
-			$select_customers_result = mysql_query($select_customers_query);
-			$i=0;					
-				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-					$numbers[$i]= $line['number'];
-					$i++;
-				}*/
+			include("config/connection.php");			
 			$j=0;
 			$destination= Array(); $seconds= Array(); $matriz= Array(Array(),Array());
 			$date= Array(); $source= Array(); $callerid= Array();$disposition= Array();$cost= Array();$peer= Array();
@@ -182,21 +171,14 @@
 								 VALUES (".$id[$j].",".mysql_insert_id().");";
 								 $insert_result = mysql_query($insert_query);
 								}
-							}
-						}						
+							}							
+							
+						}							
 
 					}
-					/*$select_customers_query =  "DELETE FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
-					$select_customers_result = mysql_query($select_customers_query) or die();
-								
-					$select_customers_query =  "DELETE FROM `inboundbillingreport_test` WHERE `date` LIKE '%".$monthly."%'";
-					$select_customers_result = mysql_query($select_customers_query) or die();
-							
-					$select_customers_query =  "DELETE FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
-					$select_customers_result = mysql_query($select_customers_query) or die();
-					
-					echo $this->outbound($monthly);
-					echo $this->generate_inbounds($monthly);	*/				
+				echo "<script>alert('Import Complete...');</script>";			
+			}else{
+				echo "<script>alert('CSV not valid...');</script>";
 			}
 		}
 	
@@ -217,7 +199,18 @@
 					$i++;
 				}
 				
-				$fp = fopen('inbound.txt', "r");
+				$select_customers_query = "SELECT date,source,destination,seconds FROM `billings_history_test` WHERE `date` LIKE '%".$monthly."%' AND `peer` LIKE '%66.241.106.107%'";
+				$select_customers_result = mysql_query($select_customers_query);
+				
+				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+						$date[$j] =  $line['date'];
+						$source[$j] =  $line['source'];
+						$destination[$j] =  $line['destination'];
+						$seconds[$j] =  $line['seconds'];
+						$j++;
+				}
+				
+				/*$fp = fopen('inbound.txt', "r");
 			while(!feof($fp)) {
 				$linea = fgets($fp);
 				$linea = explode(',',$linea);
@@ -230,7 +223,7 @@
 						$j++;
 					}
 
-				}
+				}*/
 
 			$sum=0;$sumVer=0;
 			$blackhole=0;$missed= Array();
@@ -343,6 +336,15 @@
 	
 		function generate_inbounds($monthly){
 			
+			$select_customers_query =  "DELETE FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+			$select_customers_result = mysql_query($select_customers_query) or die();
+						
+			$select_customers_query =  "DELETE FROM `inboundbillingreport_test` WHERE `date` LIKE '%".$monthly."%'";
+			$select_customers_result = mysql_query($select_customers_query) or die();
+					
+			$select_customers_query =  "DELETE FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+			$select_customers_result = mysql_query($select_customers_query) or die();
+			
 			$numbers= Array();			
 			//calling from the database the registered numbers.
 			$select_customers_query = 'SELECT `number` FROM `inboundnumber_test` ';
@@ -413,15 +415,30 @@
 			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 				$count = $line['count'];
 			}
+			$select_customers_query =  "SELECT count(*) as count FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+			$select_customers_result = mysql_query($select_customers_query) or die();
+			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+				$count = $line['count'];
+			}
+			
+			for($i=0; $i < count($numbers); $i++){
+				$select_customers_query ="SELECT date, source , seconds FROM `billings_history_test` WHERE `destination` LIKE '".$numbers[$i]."' and `date` LIKE '%".$monthly."%' AND seconds <> 0";
+				$select_customers_result = mysql_query($select_customers_query) or die('Something wrong 11');
+				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+					$insert_query = "INSERT INTO `inboundbillingreport_test`( `source`, `destination`, `seconds`, `date`)
+								VALUES ('".$numbers[$i]."','".$line['source']."','".ceil($line['seconds']/60)."','".$line['date']."')";
+								$insert_result = mysql_query($insert_query);
+				}
+			}
 			// sum of columns for inbound
 			 $i=0;$j=0;$sumVer=0;
 			 while($i < count($destination)){
 				 $sumVer= $sumVer + $matriz[$i][$j];
 				 if($matriz[$i][$j] != 0){
 				 	//echo nl2br("[".$numbers[$j]."] = " .$matriz[$i][$j]. " - ".$monthly. "\n");
-					$insert_query = "INSERT INTO `inboundbillingreport_test`( `source`, `destination`, `seconds`, `date`,status)
-								VALUES ('".$numbers[$j]."','".$destination[$j]."','".$matriz[$i][$j]."','".$date[$j]."','".$disposition[$i]."')";
-								$insert_result = mysql_query($insert_query);
+					/*$insert_query = "INSERT INTO `inboundbillingreport_test`( `source`, `destination`, `seconds`, `date`,status)
+								VALUES ('".$numbers[$j]."','".$telephone[$j]."','".$matriz[$i][$j]."','".$date[$i]."','".$disposition[$i]."')";
+								$insert_result = mysql_query($insert_query);*/
 				 }
 				 $i++;
 				 if($i == ((count($destination)))){
@@ -445,6 +462,10 @@
 			 } // end while for inbound
 			// end inbound
 			//echo nl2br("End Inbound\n");
+			
+			//delete data from the billings.
+						
+			echo $this->outbound($monthly);			
 			
 		}
 	
@@ -496,7 +517,7 @@
 			$j=0;
 			$destination= Array(); $seconds= Array(); $matriz= Array(Array(),Array());
 			$date= Array(); $source= Array(); $callerid= Array();$disposition= Array();$cost= Array();$peer= Array();
-			$fp = fopen('inbound.txt', "r");
+			/*$fp = fopen('inbound.txt', "r");
 			while(!feof($fp)) {
 				$linea = fgets($fp);
 				if(!empty($linea)){
@@ -526,7 +547,29 @@
 					  $objPHPExcel->getActiveSheet()->setCellValue('H'.($j+2), $peer[$j]);
 					  $j++;
 				}
-			}
+			}*/
+				$j=0;
+				$select_customers_query = "SELECT `id`, `date`, `source`, `destination`, `seconds`, `callerid`, `disposition`, `cost`, `peer` FROM `billings_history_test` WHERE `date` like '%".$monthly."%'";
+				$select_customers_result = mysql_query($select_customers_query) or die();
+				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+					$date[$j] = $line['date'];
+					$source[$j] = $line['source'];
+					$destination[$j] = $line['destination'];
+					$seconds[$j] = $line['seconds'];
+					$callerid[$j] = $line['callerid'];
+					$disposition[$j] = $line['disposition'];
+					$cost[$j] = $line['cost'];
+					$peer[$j] = $line['peer'];
+					$objPHPExcel->getActiveSheet()->setCellValue('A'.($j+2), $date[$j]);
+					$objPHPExcel->getActiveSheet()->setCellValue('B'.($j+2), $source[$j]);
+					$objPHPExcel->getActiveSheet()->setCellValue('C'.($j+2), $destination[$j]);
+					$objPHPExcel->getActiveSheet()->setCellValue('D'.($j+2), $seconds[$j]);
+					$objPHPExcel->getActiveSheet()->setCellValue('E'.($j+2), $callerid[$j]);
+					$objPHPExcel->getActiveSheet()->setCellValue('F'.($j+2), $disposition[$j]);
+					$objPHPExcel->getActiveSheet()->setCellValue('G'.($j+2), $cost[$j]);
+					$objPHPExcel->getActiveSheet()->setCellValue('H'.($j+2), $peer[$j]);
+					$j++;
+				}
 		
 			$i=0;
 			$select_customers_query = 'SELECT `id`, `telephone` FROM `created_telephone`';
@@ -659,8 +702,6 @@
 			$objPHPExcel->getActiveSheet()->setCellValue('H1', 'Peer');
 			$objPHPExcel->getActiveSheet()->setCellValue('I1', 'Missed');			
 
-			
-			$j=0;
 			$sourceOut= Array();$destinationOut= Array(); $secondsOut= Array() ;$matrizOut= Array(Array(),Array());
 			$dateOut= Array(); $calleridOut= Array();$dispositionOut= Array();$costOut= Array();$peerOut= Array();	
 			//echo nl2br("Outbound\n");
@@ -675,7 +716,7 @@
 					$i++;
 				}
 				
-				$fp = fopen('inbound.txt', "r");
+				/*$fp = fopen('inbound.txt', "r");
 			while(!feof($fp)) {
 				$linea = fgets($fp);
 				$linea = explode(',',$linea);
@@ -705,6 +746,30 @@
 					  $j++;
 					}
 
+				}*/
+				
+				$j=0;
+				$select_customers_query = "SELECT * FROM `billings_history_test` WHERE `date` LIKE '%".$monthly."%' AND `peer` LIKE '%66.241.106.107%'; ";
+				$select_customers_result = mysql_query($select_customers_query);
+				
+				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+						$date[$j] =  $line['date'];
+						$sourceOut[$j] =  $line['source'];
+						$destinationOut[$j] =  $line['destination'];
+						$secondsOut[$j] =  $line['seconds'];
+						$calleridOut[$j] =  $line['callerid'];					 
+						$dispositionOut[$j] = $line['disposition'];
+					  	$costOut[$j]= $line['cost'];
+						$peerOut[$j]=$line['peer'];
+						$objPHPExcel->getActiveSheet()->setCellValue('A'.($j+2), $date[$j]);
+						$objPHPExcel->getActiveSheet()->setCellValue('B'.($j+2), $sourceOut[$j]);
+						$objPHPExcel->getActiveSheet()->setCellValue('C'.($j+2), $destinationOut[$j]);
+						$objPHPExcel->getActiveSheet()->setCellValue('D'.($j+2), $secondsOut[$j]);
+						$objPHPExcel->getActiveSheet()->setCellValue('E'.($j+2), $calleridOut[$j]);
+						$objPHPExcel->getActiveSheet()->setCellValue('F'.($j+2), $dispositionOut[$j]);
+						$objPHPExcel->getActiveSheet()->setCellValue('G'.($j+2), $costOut[$j]);
+						$objPHPExcel->getActiveSheet()->setCellValue('H'.($j+2), $peerOut[$j]);
+						$j++;
 				}
 
 			$sum=0;$sumVer=0;

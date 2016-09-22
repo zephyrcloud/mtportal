@@ -72,7 +72,7 @@
 														
 													break;
 													case "out":
-														$select_customers_query ="SELECT `date`,`destination`,`seconds` FROM `billings_history_test` WHERE `source` = '".$number."' and `date` LIKE '%".$date."%' and peer LIKE '%66.241.106.107%'";
+														$select_customers_query ="SELECT `date`,`destination`,`seconds` FROM `billings_history_test` WHERE `source` = '".$number."' and `date` LIKE '%".$date."%' and peer LIKE '%66.241.106.107%' and seconds <> 0";
 														$select_customers_result = mysql_query($select_customers_query) or die('Something wrong 11');
 														while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 															$table.="<tr><td>".$line['date']."</td><td>".$line['destination']."</td><td>".ceil($line['seconds']/60)."</td></tr>";

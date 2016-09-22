@@ -94,7 +94,7 @@
 													}
 													
 													for($k=0; $k < count($inbound1);$k++){
-														$table.="<tr><td> <a href='billingpertelephone.php?number=".$numbers_customer[$i]."&month=".$inbound1[$k]."&case=in'>".$inbound1[$k]."</a></td><td>".$inbound2[$k]."</td><td> ".($price[$i] * $inbound2[$k])." </td><td></td><td><a href='billingpertelephone.php?number=".$numbers_customer[$i]."&month=".$outbound1[$k]."&case=out'> ".$outbound1[$k]."</a></td><td>".$outbound2[$k]."</td><td> ".($price[$i]*$outbound2[$k])."</td></tr>";
+														$table.="<tr><td> <a href='billingpertelephone.php?number=".$numbers_customer[$i]."&month=".$inbound1[$k]."&case=in'>".$inbound1[$k]."</a></td><td>".$inbound2[$k]."</td><td> ".$api->roundnumber($price[$i] * $inbound2[$k])." </td><td></td><td><a href='billingpertelephone.php?number=".$numbers_customer[$i]."&month=".$outbound1[$k]."&case=out'> ".$outbound1[$k]."</a></td><td>".$outbound2[$k]."</td><td> ".$api->roundnumber($price[$i]*$outbound2[$k])."</td></tr>";
 													}
 													 
 											$table.="</table> 
