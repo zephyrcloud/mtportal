@@ -40,7 +40,7 @@
 								<div id="post">
 									<?php
 										$i=0;
-										$select_customers_query = 'SELECT ct.`telephone` as tel , c.pricePerMinute as minute FROM `created_telephone` ct , customer c WHERE c.id = ct.`customer_id` AND ct.`customer_id` = '.$_SESSION['id'];								
+										$select_customers_query = 'SELECT ct.`number` as tel , c.pricePerMinute as minute FROM `voipclient` ct , customer c WHERE c.id = ct.`customer_id` AND ct.`customer_id` = '.$_SESSION['id'];								
 										$select_customers_result = mysql_query($select_customers_query) or die('Something wrong 3');
 										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 											$numbers_customer[$i]= $line['tel'];

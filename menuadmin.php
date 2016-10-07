@@ -21,6 +21,14 @@ $dict= new dictionary();
 						<a href="apps.php">Apps</a>
 					</li>
 					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "customers.php") { echo "current_page_item"; } ?>">
+						<a href="#">Users</a>
+						<ul>
+							<li><a href="adminUsers.php">User Management</a></li>
+							<li><a href="groupManager.php">Group Management</a></li>
+							<li><a href="groupsAdmin.php">See user per groups</a></li>
+						</ul>
+					</li>
+					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "customers.php") { echo "current_page_item"; } ?>">
 						<a href="customers.php">Customers</a>
 					</li>
 					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "reports.php") { echo "current_page_item"; } ?>">
@@ -43,6 +51,7 @@ $dict= new dictionary();
 							<li><a href="telephone.php"><?php echo $dict->words("151"); ?></a></li>
 							<li><a href="telephonequotas.php">Change quotas</a></li>
 							<li><a href="generateBillings.php">Generate Bills</a></li>
+							<li><a href="telephoneManager.php">Telephone manager</a></li>
 						</ul>
 					</li>				
 				</ul>

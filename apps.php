@@ -1,10 +1,8 @@
 <?php
-
 	// Connect to database
 	include("config/connection.php");
 	include("config/ip_capture.php");
 	$ip_capture = new ip_capture();
-
 	/*if(isset($_GET["val"])){
 		$id= base64_decode(html_entity_decode($_GET["val"]));
 		$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',1,1,4,".$id.")";
@@ -72,8 +70,6 @@
 		}	
 		
 	}
-
-
 ?>
 
 <html>

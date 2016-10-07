@@ -473,13 +473,14 @@
 			include("config/connection.php");
 			//include("api_vetality.php");
 			//include("config/ip_capture.php");			
-			$monthly = $begindate;			
+			$monthly = "2016-10";			
+			
+			require_once ('excelphp/Classes/PHPExcel.php');
+			require_once ('excelphp/Classes/PHPExcel/IOFactory.php');
 			header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 			header('Content-Type: application/vnd.ms-excel');
 			header('Content-Disposition: attachment;filename="SUPERVOID '.$monthly.'.xls"');			
 			header('Cache-Control: max-age=0');
-			require_once ('excelphp/Classes/PHPExcel.php');
-			require_once ('excelphp/Classes/PHPExcel/IOFactory.php');
 			$objPHPExcel = new PHPExcel();
 			//Array with DID registered
 			$numbers= Array();			
@@ -491,17 +492,7 @@
 					$numbers[$i]= $line['number'];
 					$i++;
 				}
-			// inbound
-
-			//open the CSV test 
 			
-			
-			//call to the API of vitality
-			/*$api = new api_vetality();
-			
-			// save month and year //
-			//$name="inbound";		
-			echo $api->billingpernumber($begindate,$enddate,"inbound");*/
 			$objPHPExcel->setActiveSheetIndex(0);
 			$objPHPExcel->getActiveSheet()->setCellValue('A1', 'Date');
 			$objPHPExcel->getActiveSheet()->setCellValue('B1', 'Source');
@@ -517,37 +508,10 @@
 			$j=0;
 			$destination= Array(); $seconds= Array(); $matriz= Array(Array(),Array());
 			$date= Array(); $source= Array(); $callerid= Array();$disposition= Array();$cost= Array();$peer= Array();
-			/*$fp = fopen('inbound.txt', "r");
-			while(!feof($fp)) {
-				$linea = fgets($fp);
-				if(!empty($linea)){
-				$linea = explode(',',$linea);
-				//on database save all the information. //
-					  $date[$j] =  $linea[0];
-					  $source[$j] =  $linea[1]; 
-					  $destination[$j] =  $linea[2];
-					  $seconds[$j] =  $linea[3];
-					  $callerid[$j] =  $linea[4];
-					  if($linea[5] != ""){
-						 $disposition[$j] =  $linea[5]; 
-					  }else{
-						   $callerid[$j] =  $linea[1];
-						   $disposition[$j] =  'VFAX - Received '; 
-					  }					  
-					  $cost[$j]= $linea[6];
-					  $peer[$j]= $linea[7];
-				
-					  $objPHPExcel->getActiveSheet()->setCellValue('A'.($j+2), $date[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('B'.($j+2), $source[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('C'.($j+2), $destination[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('D'.($j+2), $seconds[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('E'.($j+2), $callerid[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('F'.($j+2), $disposition[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('G'.($j+2), $cost[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('H'.($j+2), $peer[$j]);
-					  $j++;
-				}
-			}*/
+						
+			
+			
+			
 				$j=0;
 				$select_customers_query = "SELECT `id`, `date`, `source`, `destination`, `seconds`, `callerid`, `disposition`, `cost`, `peer` FROM `billings_history_test` WHERE `date` like '%".$monthly."%'";
 				$select_customers_result = mysql_query($select_customers_query) or die();
@@ -716,37 +680,7 @@
 					$i++;
 				}
 				
-				/*$fp = fopen('inbound.txt', "r");
-			while(!feof($fp)) {
-				$linea = fgets($fp);
-				$linea = explode(',',$linea);
-				//on database use a LIKE % 66.241.106.107 %
-					if (strpos($linea[7], '66.241.106.107') !== false) {
-						$date[$j] =  $linea[0];
-						$sourceOut[$j] =  $linea[1];
-						$destinationOut[$j] =  $linea[2];
-						$secondsOut[$j] =  $linea[3];
-						$calleridOut[$j] =  $linea[4];
-					  if($linea[5] != ""){
-						 $dispositionOut[$j] =  $linea[5]; 
-					  }else{
-						   $calleridOut[$j] =  $linea[1];
-						   $dispositionOut[$j] =  'VFAX - Received '; 
-					  }					  
-					  $costOut[$j]= $linea[6];
-					  $peerOut[$j]= $linea[7];
-					  $objPHPExcel->getActiveSheet()->setCellValue('A'.($j+2), $date[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('B'.($j+2), $sourceOut[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('C'.($j+2), $destinationOut[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('D'.($j+2), $secondsOut[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('E'.($j+2), $calleridOut[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('F'.($j+2), $dispositionOut[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('G'.($j+2), $costOut[$j]);
-					  $objPHPExcel->getActiveSheet()->setCellValue('H'.($j+2), $peerOut[$j]);
-					  $j++;
-					}
-
-				}*/
+				
 				
 				$j=0;
 				$select_customers_query = "SELECT * FROM `billings_history_test` WHERE `date` LIKE '%".$monthly."%' AND `peer` LIKE '%66.241.106.107%'; ";
@@ -905,12 +839,6 @@
 						$objPHPExcel->getActiveSheet()->setCellValue('B'.$k, $price[$i]);
 						$objPHPExcel->getActiveSheet()->setCellValue('G'.$k, $numbers_customer[$i]);
 						$objPHPExcel->getActiveSheet()->setCellValue('H'.$k, $price[$i]);
-						/*$select_customers_query = 'SELECT destination FROM `billings_history_test` WHERE `callerid` LIKE "%VFAX%" AND destination = '.$numbers_customer[$i];
-						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-							$inbound1[$n] =$line['date1'];
-							$inbound2[$n] =$line['min1'];
-							$n++;
-						} */
 						//echo nl2br('A'.$k." ".$numbers_customer[$i]. "  ");
 						$end++;
 						$k++;
@@ -919,7 +847,6 @@
 						$n=0;$m=0;
 						$inbound1=array(); $inbound2=array();
 						$select_customers_query = 'SELECT `minutes` as min1 ,`date` as date1 FROM `inboundbilling_test` WHERE date LIKE "%'.$monthly.'%" AND `number` ='.$numbers_customer[$i];
-						//echo nl2br('A'.$k." ".$select_customers_query. " \n ");
 						$select_customers_result = mysql_query($select_customers_query) or die();
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 							$inbound1[$n] =$line['date1'];
@@ -927,12 +854,11 @@
 							$n++;
 						}
 						$o=0;
-						$select_customers_query ='SELECT `source`, sum(`seconds`) as minutes,`status` FROM `inboundbillingreport_test` WHERE `source` = "'.$numbers_customer[$i].'" group by destination';						
+						$select_customers_query ='SELECT `source`, sum(`seconds`) as minutes FROM `inboundbillingreport_test` WHERE `source` = "'.$numbers_customer[$i].'" group by destination';						
 						$select_customers_result = mysql_query($select_customers_query) or die();
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 							$destination_req[$o] =$line['source'];
-							$summinutes_req[$o] =$line['minutes'];
-							$request[$o] =$line['status'];
+							$summinutes_req[$o] =$line['minutes'];							
 							$o++;
 						}
 						$outbound1=array(); $outbound2=array();
@@ -951,7 +877,7 @@
 								//$table.="<tr><td> <a href='billingpertelephone.php?number=".$numbers_customer[$i]."&month=".$inbound1[$k]."&case=in'>".$inbound1[$k]."</a></td><td>".$inbound2[$k]."</td><td> ".($price[$i] * $inbound2[$k])." </td><td></td><td><a href='billingpertelephone.php?number=".$numbers_customer[$i]."&month=".$outbound1[$k]."&case=out'> ".$outbound1[$k]."</a></td><td>".$outbound2[$k]."</td><td> ".($price[$i]*$outbound2[$k])."</td></tr>";
 								
 								//echo nl2br($inbound2[$r] ." == ".$summinutes_req[$r]. " && ".$numbers_customer[$i] . " == ".$destination_req[$r]. " && ".$request[$r]. "== 'VFAX - Received'" ."\n");
-								if($inbound2[$r]  == $summinutes_req[$r] && $numbers_customer[$i] == $destination_req[$r] && strpos($request[$r] , 'VFAX - Received') !== false){
+								if($inbound2[$r]  == $summinutes_req[$r] && $numbers_customer[$i] == $destination_req[$r] ){
 									//echo nl2br('C'.($k-1)." ".$inbound2[$r] ." price 0.1 \n");
 									$objPHPExcel->getActiveSheet()->setCellValue('B'.($k-1), "0.1");
 									$objPHPExcel->getActiveSheet()->setCellValue('C'.($k-1), $inbound2[$r]);
@@ -1033,12 +959,11 @@
 			$objPHPExcel->getActiveSheet()->setCellValue('N3',$sumInternational);
 			$objPHPExcel->getActiveSheet()->setCellValue('O3',"=M3*N3");
 			//echo nl2br("International = " .$sumInternational."\n");		
-				
-			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+			
+						
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');			
 			$objWriter->save('php://output');
 			exit();
-		}
-	
-		
+		}	
 	}
 ?>

@@ -206,6 +206,39 @@ class dictionary{
 		
 		$word[151] = "Registration History";
 		
+		/*adminUser*/
+		$word[152] = "User management";
+		$word[153] = "Search for names:";
+		$word[154] = "Search for user:";
+		$word[155] = "user"; // field name of table 
+		
+		/*telephoneManager.php*/
+		$word[156] = "Telephone management";
+		$word[157] = "Telephone";
+		$word[158] = "Owner";
+		$word[159] = "Type";
+		$word[160] = "Status";
+		
+		/*generateBillings.php*/
+		$word[161] = "History logs";
+		$word[162] = "Export registers";
+		$word[163] = "Import registers";
+		$word[164] = "Import registers API vitelity ";
+		$word[165] = "Filter record with no clients";
+		$word[166] = "See all records";
+		$word[167] = "date";
+		$word[168] = "Source";
+		$word[169] = "destination";
+		$word[170] = "Minutes";
+		$word[171] = "callerid";
+		$word[172] = "Action";
+		$word[173] = "Type";
+		$word[174] = "From";
+		$word[175] = "Since";
+		$word[176] = "Assign to ";
+		$word[177] = "Telephone as ";
+		$word[178] = "Target ";
+		
 		return $word[$id];
 	}
 	

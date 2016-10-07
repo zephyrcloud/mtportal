@@ -89,10 +89,10 @@ while(!feof($fp)) {
 
 fclose($fp);*/		
 
-$select_customers_query = 'SELECT `telephone` FROM `created_telephone`';
+$select_customers_query = 'SELECT `number` FROM `voipclient`';
 $select_customers_result = mysql_query($select_customers_query) or die();
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-	echo "<script> numbers.push('".$line['telephone']."'); </script>";
+	echo "<script> numbers.push('".$line['number']."'); </script>";
 }
 
 
@@ -105,7 +105,7 @@ if(isset($_GET['code'])){
 		}
 		case 400:{
 			echo "<script> alert('You cannot register telephone number, you do not have quotas available.'); </script>";
-			$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_telephone-count(*)) as remaining FROM `created_telephone` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
+			$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_telephone-count(*)) as remaining FROM `voipclient` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
 			$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 				$update_user_query = 'UPDATE `customer` SET `remaining_telephone`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
@@ -143,7 +143,7 @@ if(isset($_POST['port'])){
 		 header('Location: telephonecustomer.php?code=404');
 	}else{
 		if (strpos($string, 'x[[ok') !== false) {echo "<script> alert('Success.'); </script>";
-			$insert_query = "INSERT INTO `created_telephone`(`customer_id`, `telephone`) VALUES (".$_SESSION['id'].",$number)";
+			$insert_query = "INSERT INTO `voipclient`(`customer_id`, `number`) VALUES (".$_SESSION['id'].",$number)";
 			$insert_result = mysql_query($insert_query);
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,telephonenumber) VALUES('".$ip_capture->getRealIP()."',15,1,7,".$_SESSION['id'].",$number)";
 			$insert_result = mysql_query($insert_query);}

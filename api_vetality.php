@@ -66,7 +66,9 @@ class api_vetality{
 		// save the api response
 		$response=str_replace("x[[",'',$response) ;
 		$response=str_replace("[[x",'',$response) ;
-		//$response=str_replace("+1",'',$response) ;
+		$response=str_replace("+11",'+0',$response) ;
+		$response=str_replace("+1",'+0',$response) ;
+		$response=str_replace("+0",'',$response) ;
 		$file = fopen($name.'.txt', "w");
 					fwrite($file, $response . PHP_EOL);
 					fclose($file);

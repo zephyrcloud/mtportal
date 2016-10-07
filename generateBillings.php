@@ -1,6 +1,8 @@
 <?php
 include("config/connection.php");
 include("billings.php");
+include("dictionary.php");
+$dict= new dictionary();
 $billing = new billings();
 if(isset($_POST['begin_day'])){
 	echo $billing ->inbound($_POST['begin_day'],$_POST['last_day']);
@@ -64,13 +66,11 @@ if(isset($_POST['begin_day_1'])){
 		?>
 		
 		<div id="pagecontents">
-		<?php 
-			//echo nl2br($_POST['begin_day'] ." --- ".$_POST['last_day']);
-		?>
+		
 			<div class="wrapper">
 				<div id="post">
 					<div id="postitle">
-						<div class="floatleft"><h1>History logs</h1></div>
+						<div class="floatleft"><h1><?php echo $dict->words("161"); ?></h1></div>
 						<div class="floatright righttext tpad"></div>
 						<div class="clear">&nbsp;</div>
 					</div>
@@ -79,28 +79,24 @@ if(isset($_POST['begin_day_1'])){
 						
 						<div id="tables" name="tables">
 						
-							<input id="newUserBtn1" name="newUserBtn1" type="submit" value="Export registers ">
-							<input id="newUserBtn2" name="newUserBtn2" type="submit" value="Import registers ">
-							<input id="newUserBtn"  name="newUserBtn" type="submit" value="Import registers API vitelity ">
-							<input id="newUserBtn4" name="newUserBtn4" type="submit" value="Filter record with no clients">
-							<input id="allrecords" name="allrecords" type="submit" value="See all records" hidden>
-							
-						<!-- DIV Message 
-
-									<div id="messagePnl" class="modalDialog" title="Notice">
-										<div id="post">
-											
-											<input id="accetMessageBtn" name="accetMessageBtn" type="button" value="OK">
-										</div>
-									</div>-->
+							<input id="newUserBtn1" name="newUserBtn1" type="submit" value="<?php echo $dict->words("162"); ?>">
+							<input id="newUserBtn2" name="newUserBtn2" type="submit" value="<?php echo $dict->words("163"); ?>">
+							<input id="newUserBtn"  name="newUserBtn" type="submit" value="<?php echo $dict->words("164"); ?>">
+							<input id="newUserBtn4" name="newUserBtn4" type="submit" value="<?php echo $dict->words("165"); ?>">
+							<input id="allrecords" name="allrecords" type="submit" value="<?php echo $dict->words("166"); ?>" hidden>
+						
 						<div>
 							<table>
                                 <tr>
-                                    <th style="border: 1px solid;">	date </th>
-									<th style="border: 1px solid;">	source </th>
-									<th style="border: 1px solid;">	destination </th>
-									<th style="border: 1px solid;">	Minutes </th>
-									<th style="border: 1px solid;">	callerid </th>									
+                                    <th style="border: 1px solid;">	<?php echo $dict->words("167"); ?> </th>
+									<th style="border: 1px solid;">	<?php echo $dict->words("168"); ?> </th>
+									<th style="border: 1px solid;">	<?php echo $dict->words("169"); ?> </th>
+									<th style="border: 1px solid;">	<?php echo $dict->words("170"); ?> </th>
+									<th style="border: 1px solid;">	<?php echo $dict->words("171"); ?> </th>
+									<?php
+										if(isset($_GET['client'])){ ?>
+									<th style="border: 1px solid;">	<?php echo $dict->words("172"); ?> </th>
+										<?php }else { ?> <th style="border: 1px solid;"><?php echo $dict->words("173"); ?></th> <?php }?>
                                 </tr>
 												
 						<?php 
@@ -119,26 +115,41 @@ if(isset($_POST['begin_day_1'])){
 
 							print "</pre>";*/ 
 						}
-							
+						
+						if(isset($_POST['assign_client_1'])){
+									$insert_query="INSERT INTO `voipclient`(`customer_id`, `number`, `type`) VALUES (".$_POST['assign_client_1'].",".$_POST['test1'].",".$_POST['type_1'].");";
+									$insert_result = mysql_query($insert_query);
+									$insert_query="INSERT INTO `voipclient`(`customer_id`, `number`, `type`) VALUES (".$_POST['assign_client_2'].",".$_POST['test2'].",".$_POST['type_2'].");";
+									$insert_result = mysql_query($insert_query);
+									echo "<script> window.location.href = 'generateBillings.php?client=0'; </script>";												
+								}
 						// read of database on table 
 						if(isset($_GET['client'])){
-							if($_GET['client'] == 0){
-								$select_customers_query = 'SELECT * FROM `billings_history_test` WHERE `callerid` NOT IN (SELECT telephone FROM `created_telephone`) ';	
+							if($_GET['client'] == 0){								
+								$select_customers_query = "SELECT * , 'unknown' as type FROM `billings_history_test` WHERE source not in (select number from voipclient ) AND destination not in (select number from voipclient ) ORDER BY date DESC";
 								echo "<script> $('#newUserBtn4').hide(); $('#allrecords').show(); </script>";								
 							}
 						}else{
 							echo "<script> $('#newUserBtn4').show(); $('#allrecords').hide(); </script>";
-							$select_customers_query = 'SELECT * FROM `billings_history_test` ';
+							$select_customers_query = "SELECT * , 'Outbound' As type FROM `billings_history_test` WHERE `source` in (select number from voipclient ) AND `callerid` in (select number from voipclient ) 
+							UNION SELECT * , 'Extension' As type FROM `billings_history_test` WHERE `destination` in (select number from voipclient ) and source not in (select number from voipclient ) and callerid not in (select number from voipclient ) 
+							UNION SELECT *, 'Inbound' As type FROM `billings_history_test` WHERE `destination` not in (select number from voipclient ) and source not in (select number from voipclient ) and callerid not in (select number from voipclient ) UNION SELECT * , 'outbound' as type FROM `billings_history_test` WHERE `source` in (select number from voipclient ) AND `callerid` not in (select number from voipclient ) ORDER BY date DESC ";
 						}
 						$select_customers_result = mysql_query($select_customers_query);
 							$i=0;				 	
 							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 								echo "<tr><td>".$line['date']."</td>
-										  <td>".$line['source']."</td>
-										  <td>".$line['destination']."</td>
+										  <td id='source" . $line['id'] . "'>".$line['source']."</td>
+										  <td id='destination" . $line['id'] . "'>".$line['destination']."</td>
 										  <td>".ceil($line['seconds']/60)."</td>
-										  <td>".$line['callerid']."</td></tr>"; 
-							
+										  <td id='callerid" . $line['id'] . "'>".$line['callerid']."</td>";
+										  if(isset($_GET['client'])){
+											  //echo "<td> <input id='test' name='test' type='submit' value='Validate'></td>";
+											  echo "<td><a id='aValidate" . $line['id'] . "' href='#'>Validate</a></td>";											  
+										  }else{
+											  echo "<td>".$line['type']."</td>";
+										  }
+								echo "</tr>";
 						}
 						
 						?>
@@ -151,9 +162,9 @@ if(isset($_POST['begin_day_1'])){
 									<form method="POST" action="generateBillings.php">		 						
 										
 										<div>
-										<label for="begin_day">From</label>
+										<label for="begin_day"><?php echo $dict->words("174"); ?></label>
 										<input id="begin_day" name="begin_day" type="text" >
-										<label for="last_day">Since</label>
+										<label for="last_day"><?php echo $dict->words("175"); ?></label>
 										<input id="last_day" name="last_day" type="text" onchange="validarFechaMenorActual()" >
 										<br>
 										<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Process" hidden >
@@ -191,7 +202,7 @@ if(isset($_POST['begin_day_1'])){
 									<form method="POST" action="generateBillings.php">								
 										
 										<div>
-										<label for="begin_day_1">From</label>
+										<label for="begin_day_1"><?php echo $dict->words("174"); ?></label>
 										<input id="begin_day_1" name="begin_day_1" type="text" onchange="validarFechaMenorActual1()" >
 										<!-- <label for="last_day_1">Since</label>
 										<input id="last_day_1" name="last_day_1" type="text" onchange="validarFechaMenorActual1()" > -->
@@ -223,25 +234,82 @@ if(isset($_POST['begin_day_1'])){
 							<div id="addUserPnl2" class="modalDialog" title="Import register">
 								<div id="post">
 									 <form method="post" action="generateBillings.php" enctype="multipart/form-data">
-										Browse the archive:
 										<input name="fichero_usuario" type="file" accept=".csv" /><br><br>
-										<input type="submit" value="upload"><br>
+										<a href="Resources/template.csv" download>Download template for .CSV</a>
+										<p></p>
+										<input type="submit" value="Upload">										
 									</form>									
 								</div>
 							</div>
+							
+						<!-- Validate for assign clients -->
+							<div id="addUserPnl3" class="modalDialog" title="Validate client">
+								<div id="post">
+									 <form method="post" action="generateBillings.php" enctype="multipart/form-data">
+										<label for="test1"><?php echo $dict->words("168"); ?></label>
+										<input id="test1" name="test1" type="text" readonly>
+										<!-- combobox for users --->
+										<br> <?php echo $dict->words("176"); ?> 
+											<select id="assign_client_1" name="assign_client_1"  >											 
+												<?php
+												$select_customers_query = 'SELECT `id`, `name` FROM `customer`';
+												$select_customers_result = mysql_query($select_customers_query); 
+												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+													echo "<option  value=" . $line['id'] . ">" . $line['name'] . "</option>";
+												}
+												?>
+											</select>
+											<br><br> <?php echo $dict->words("177"); ?> 
+											<select id="type_1" name="type_1"  >											 
+												<?php
+												$select_customers_query = 'SELECT `id`, `name_type` FROM `type`';
+												$select_customers_result = mysql_query($select_customers_query); 
+
+												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+													echo "<option  value=" . $line['id'] . ">" . $line['name_type'] . "</option>";
+												}
+												?>
+											</select>
+										<br/>
+										<br/>
+										<label for="test2"><?php echo $dict->words("178"); ?> </label>
+										<input id="test2" name="test2" type="text"  readonly >
+										<br> <?php echo $dict->words("176"); ?> 
+											<select id="assign_client_2" name="assign_client_2"  >											 
+												<?php
+												$select_customers_query = 'SELECT `id`, `name` FROM `customer`';
+												$select_customers_result = mysql_query($select_customers_query); 
+
+												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+
+													echo "<option  value=" . $line['id'] . ">" . $line['name'] . "</option>";
+												}
+												?>
+											</select>
+											<br><br> <?php echo $dict->words("177"); ?> 
+											<select id="type_2" name="type_2"  >											 
+												<?php
+												$select_customers_query = 'SELECT `id`, `name_type` FROM `type`';
+												$select_customers_result = mysql_query($select_customers_query); 
+
+												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+
+													echo "<option  value=" . $line['id'] . ">" . $line['name_type'] . "</option>";
+												}
+												?>
+											</select>
+										<br/>
+										<br/>										
+										<input type="submit" value="Validate">										
+									</form>									
+								</div>
+							</div>
+							
 						</div>
 						
 						<br />
 						
-						<div id="emailsPerUserPnl" style="display: none;">
-							<div id="emailsPerUserUpdate">
-							</div>
-						</div>
 						
-						<div id="appsPerUserPnl" style="display: none;">
-							<div id="appsPerUserUpdate">
-							</div>
-						</div>
 					
 					</div>
 				
@@ -252,7 +320,6 @@ if(isset($_POST['begin_day_1'])){
 		</div>
 		<?php
 			include("footer.php");
-			
 		?>
 		
 	</body>
@@ -261,6 +328,32 @@ if(isset($_POST['begin_day_1'])){
 <script>
 	
 	$( document ).ready(function() {
+		
+		$("a[id^='aValidate']").click(function(event) {
+			$("#addUserPnl3").dialog( "open" );
+			$id = event.target.id.toString().split("aValidate")[1];
+			$("#test1").val($("#source".concat($id)).text());
+			$("#test2").val($("#destination".concat($id)).text());
+			//$("#test3").val($("#callerid".concat($id)).text());
+			
+			/*$("#idEditAppFld").val($id);
+			$("#nameEditAppFld").val($("#spanName".concat($id)).text());
+			$("#descriptionEditAppFld").val($("#spanDescription".concat($id)).text());*/
+		});
+		
+		$( "#addUserPnl3" ).dialog({
+			autoOpen: false,
+			modal: true,
+			position: { my: 'top', at: 'top+150' },
+			show: {
+				effect: "blind",
+				duration: 200
+			},
+			hide: {
+				effect: "blind",
+				duration: 200
+			}
+		});
 		
 		// Dialog message
 		$( "#messagePnl" ).dialog({
