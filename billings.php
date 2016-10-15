@@ -24,8 +24,18 @@
 				$linea = explode(',',$linea);
 				//on database save all the information. //
 					  $date[$j] =  $linea[0];
-					  $source[$j] =  $linea[1]; 
-					  $destination[$j] =  $linea[2];
+					  
+					  if($linea[1]{0} == "1"){
+						  $source[$j] =  substr($linea[1], 1);
+					  }else{
+						  $source[$j] =  $linea[1];
+					  }
+					  if($linea[2]{0} == "1"){
+						  $destination[$j] =  substr($linea[2], 1);
+					  }else{
+						  $destination[$j] =  $linea[2];
+					  }
+					  
 					  $seconds[$j] =  $linea[3];
 					  $callerid[$j] =  $linea[4];
 					  if($linea[5] != ""){
@@ -83,18 +93,38 @@
 						}		
 					}
 			
-								
-			//delete data from the billings.
-			$select_customers_query =  "DELETE FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
-			$select_customers_result = mysql_query($select_customers_query) or die();
-						
-			$select_customers_query =  "DELETE FROM `inboundbillingreport_test` WHERE `date` LIKE '%".$monthly."%'";
-			$select_customers_result = mysql_query($select_customers_query) or die();
-					
-			$select_customers_query =  "DELETE FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
-			$select_customers_result = mysql_query($select_customers_query) or die();
 			
-			echo $this->generate_inbounds($monthly);
+			$beg = explode("-",$begindate);
+			$end = explode("-",$enddate);
+			
+			if(($beg[0] == $end[0]) && ($beg[2] == $end[2])){
+				//delete data from the billings.
+				$select_customers_query =  "DELETE FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+				$select_customers_result = mysql_query($select_customers_query) or die();
+							
+				$select_customers_query =  "DELETE FROM `inboundbillingreport_test` WHERE `date` LIKE '%".$monthly."%'";
+				$select_customers_result = mysql_query($select_customers_query) or die();
+						
+				$select_customers_query =  "DELETE FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+				$select_customers_result = mysql_query($select_customers_query) or die();
+				echo $this->generate_inbounds($monthly);
+			}else{
+				//year (2) month (0)
+				for($i= $beg[2] ; $i < ($end[2])+1 ; $i++ ){
+					for($j=$beg[0] ; $j<($end[0])+1 ; $j++ ){
+						$monthly = $i."-".$j;
+						$select_customers_query =  "DELETE FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+						$select_customers_result = mysql_query($select_customers_query) or die();
+									
+						$select_customers_query =  "DELETE FROM `inboundbillingreport_test` WHERE `date` LIKE '%".$monthly."%'";
+						$select_customers_result = mysql_query($select_customers_query) or die();
+								
+						$select_customers_query =  "DELETE FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+						$select_customers_result = mysql_query($select_customers_query) or die();
+						echo $this->generate_inbounds($monthly);
+					}
+				}
+			}
 						
 		}
 	
@@ -237,7 +267,7 @@
 					if($numbersOut[$i]{0} == "1"){
 						if($destination[$j] == $numbersOut[$i]){
 							$matriz[$j][$i] = $secToMin;
-							$insert_result = mysql_query($insert_query);
+							//$insert_result = mysql_query($insert_query);
 							//echo nl2br($destination[$j]{0}." ".$destination[$j]{1}." ".$destination[$j]{2});
 						}else{
 							$matriz[$j][$i] = "0";
@@ -422,11 +452,11 @@
 			}
 			
 			for($i=0; $i < count($numbers); $i++){
-				$select_customers_query ="SELECT date, source , seconds FROM `billings_history_test` WHERE `destination` LIKE '".$numbers[$i]."' and `date` LIKE '%".$monthly."%' AND seconds <> 0";
+				$select_customers_query ="SELECT date, source , seconds, disposition FROM `billings_history_test` WHERE `destination` LIKE '".$numbers[$i]."' and `date` LIKE '%".$monthly."%' AND seconds <> 0";
 				$select_customers_result = mysql_query($select_customers_query) or die('Something wrong 11');
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-					$insert_query = "INSERT INTO `inboundbillingreport_test`( `source`, `destination`, `seconds`, `date`)
-								VALUES ('".$numbers[$i]."','".$line['source']."','".ceil($line['seconds']/60)."','".$line['date']."')";
+					$insert_query = "INSERT INTO `inboundbillingreport_test`( `source`, `destination`, `seconds`, `date`,`status`)
+								VALUES ('".$numbers[$i]."','".$line['source']."','".ceil($line['seconds']/60)."','".$line['date']."','".$line['disposition']."')";
 								$insert_result = mysql_query($insert_query);
 				}
 			}

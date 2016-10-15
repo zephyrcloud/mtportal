@@ -4,6 +4,7 @@ include("billings.php");
 include("dictionary.php");
 $dict= new dictionary();
 $billing = new billings();
+$message == "";
 if(isset($_POST['begin_day'])){
 	echo $billing ->inbound($_POST['begin_day'],$_POST['last_day']);
 }
@@ -11,6 +12,56 @@ if(isset($_POST['begin_day_1'])){
 	echo $billing ->generate_inbounds($_POST['begin_day_1']);
 	echo $billing ->generate_excel($_POST['begin_day_1']);
 }
+
+if(isset($_POST['saveNewUserBtn'])){
+	
+	$select_users_query = 'SELECT count(`extension`) as counExt FROM `user` WHERE `extension` = '.$_POST['extension'];
+	$select_users_result = mysql_query($select_users_query);
+	$i=0;			
+	while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+		$count = $line['counExt'];
+		$i++;
+	}
+	
+	if($count == 0 || $_POST['extension'] == "" ){
+		
+		$insert_app_query = "INSERT INTO `user`( `firstName`, `lastName`, `customer`, `email1`, `extension`, `outbound_did`) VALUES ('".$_POST['firstNameNewUserFld']."','".$_POST['lastNameNewUserFld']."',".$_POST['customer'].",'".$_POST['emailNewUserFld']."','".$_POST['extension']."','".$_POST['outbound']."')";
+		$insert_app_result = mysql_query($insert_app_query);
+		
+		$insert_app_query = "INSERT INTO `voipclient`(`number`, `customer_id`, `type`) VALUES ('".$_POST['outbound']."',".$_POST['customer'].",".$_POST['type_1'].")";;
+		$insert_app_result = mysql_query($insert_app_query);
+
+		$message = "Number added succesfuly";
+	}else{
+		$message = "This extension is busy , please try another";
+	}
+}
+
+if(isset($_POST['saveNewUserBtn1'])){
+	$select_users_query = 'SELECT count(`extension`) as counExt FROM `user` WHERE `extension` = '.$_POST['extension1'];
+	$select_users_result = mysql_query($select_users_query);
+	$i=0;			
+	while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
+		$count = $line['counExt'];
+		$i++;
+	}
+	
+	if($count == 0 || $_POST['extension1'] == "" ){
+	
+	$explode = explode(":",$_POST['client_update']);
+	$id = $explode[0];
+	$customer = $explode[1];
+	$update = "UPDATE `user` SET  `extension`='".$_POST['extension1']."',`outbound_did`='".$_POST['outbound1']."' WHERE `id`=$id";
+	$insert_app_result = mysql_query($update);
+	$insert_app_query = "INSERT INTO `voipclient`(`number`, `customer_id`, `type`) VALUES ('".$_POST['outbound1']."',".$customer.",".$_POST['type_update'].")";
+	$insert_app_result = mysql_query($insert_app_query);
+	$message = "Number added succesfuly";
+	
+	}else{
+		$message = "This extension is busy , please try another";
+	}
+}
+
 ?>
 <html>
 	<head>
@@ -21,9 +72,13 @@ if(isset($_POST['begin_day_1'])){
 			function goTo(destination) {
 				window.location.href = destination;
 			}
+			var today1 = new Date();
+			var dd = today1.getDate();
+			var mm = today1.getMonth()+1; //January is 0!
+			var yyyy = today1.getFullYear();
 			 $(function () {
-                $("#begin_day").datepicker({dateFormat: 'mm-dd-yy'});
-				$("#last_day").datepicker({dateFormat: 'mm-dd-yy'});
+                $("#begin_day").datepicker({dateFormat: 'mm-dd-yy', maxDate: mm+"-"+dd+"-"+yyyy});
+				$("#last_day").datepicker({dateFormat: 'mm-dd-yy',maxDate: mm+"-"+dd+"-"+yyyy});
 				$("#begin_day_1").datepicker({
 						changeMonth: true,
 						changeYear: true,
@@ -56,7 +111,7 @@ if(isset($_POST['begin_day_1'])){
 		<!-- JQuery UI -->
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-		
+		<script src="config/sorttable.js"></script>
 	</head>
 	<body>
 
@@ -74,6 +129,18 @@ if(isset($_POST['begin_day_1'])){
 						<div class="floatright righttext tpad"></div>
 						<div class="clear">&nbsp;</div>
 					</div>
+					<?php
+							if($message != ""){
+								?>
+									<div id="messagePnl" class="modalDialog" title="Notice">
+										<div id="post">
+											<?php echo $message; ?><br /><br />
+											<input id="accetMessageBtn" name="accetMessageBtn" type="button" value="OK">
+										</div>
+									</div>
+								<?php
+							}
+						?>
 	
 						<div id="postcontent">
 						
@@ -86,7 +153,7 @@ if(isset($_POST['begin_day_1'])){
 							<input id="allrecords" name="allrecords" type="submit" value="<?php echo $dict->words("166"); ?>" hidden>
 						
 						<div>
-							<table>
+							<table class="sortable">
                                 <tr>
                                     <th style="border: 1px solid;">	<?php echo $dict->words("167"); ?> </th>
 									<th style="border: 1px solid;">	<?php echo $dict->words("168"); ?> </th>
@@ -95,7 +162,6 @@ if(isset($_POST['begin_day_1'])){
 									<th style="border: 1px solid;">	<?php echo $dict->words("171"); ?> </th>
 									<?php
 										if(isset($_GET['client'])){ ?>
-									<th style="border: 1px solid;">	<?php echo $dict->words("172"); ?> </th>
 										<?php }else { ?> <th style="border: 1px solid;"><?php echo $dict->words("173"); ?></th> <?php }?>
                                 </tr>
 												
@@ -110,19 +176,9 @@ if(isset($_POST['begin_day_1'])){
 								echo $billing->inbound_csv($fichero_subido);								
 							} 
 							
-							/*echo 'Más información de depuración:';
-							print_r($_FILES);
-
-							print "</pre>";*/ 
-						}
+							}
 						
-						if(isset($_POST['assign_client_1'])){
-									$insert_query="INSERT INTO `voipclient`(`customer_id`, `number`, `type`) VALUES (".$_POST['assign_client_1'].",".$_POST['test1'].",".$_POST['type_1'].");";
-									$insert_result = mysql_query($insert_query);
-									$insert_query="INSERT INTO `voipclient`(`customer_id`, `number`, `type`) VALUES (".$_POST['assign_client_2'].",".$_POST['test2'].",".$_POST['type_2'].");";
-									$insert_result = mysql_query($insert_query);
-									echo "<script> window.location.href = 'generateBillings.php?client=0'; </script>";												
-								}
+						
 						// read of database on table 
 						if(isset($_GET['client'])){
 							if($_GET['client'] == 0){								
@@ -139,13 +195,13 @@ if(isset($_POST['begin_day_1'])){
 							$i=0;				 	
 							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 								echo "<tr><td>".$line['date']."</td>
-										  <td id='source" . $line['id'] . "'>".$line['source']."</td>
-										  <td id='destination" . $line['id'] . "'>".$line['destination']."</td>
+										  <td id='source" . $line['id'] . "'><a id='aValidateSource" . $line['id'] . "' href='#'>".$line['source']."</a></td>
+										  <td id='destination" . $line['id'] . "'><a id='aValidateDestination" . $line['id'] . "' href='#'>".$line['destination']."</td>
 										  <td>".ceil($line['seconds']/60)."</td>
 										  <td id='callerid" . $line['id'] . "'>".$line['callerid']."</td>";
 										  if(isset($_GET['client'])){
 											  //echo "<td> <input id='test' name='test' type='submit' value='Validate'></td>";
-											  echo "<td><a id='aValidate" . $line['id'] . "' href='#'>Validate</a></td>";											  
+											 // echo "<td><a id='aValidate" . $line['id'] . "' href='#'>Validate</a></td>";											  
 										  }else{
 											  echo "<td>".$line['type']."</td>";
 										  }
@@ -163,13 +219,29 @@ if(isset($_POST['begin_day_1'])){
 										
 										<div>
 										<label for="begin_day"><?php echo $dict->words("174"); ?></label>
-										<input id="begin_day" name="begin_day" type="text" >
+										<input id="begin_day" name="begin_day" type="text" onchange="validarFechaMenorActual()" >
 										<label for="last_day"><?php echo $dict->words("175"); ?></label>
 										<input id="last_day" name="last_day" type="text" onchange="validarFechaMenorActual()" >
 										<br>
-										<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Process" hidden >
+										<input id="makeDate" name="makeDate" type="submit" value="Process" hidden >
 										<input id="cancelNewUserBtn" name="cancelNewUserBtn" type="button" value="Cancel">
+										<?php
+											$select_customers_query = "SELECT max(`date`) as lastDate FROM `billings_history_test` ";
+											$select_customers_result = mysql_query($select_customers_query);
+											while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+												$last = $line['lastDate'];								
+											}
+											if($last != ""){
+												$split = explode("-", $last);
+												$space = explode(" ",$split[2]);
+												$lastTime= $split[1] ."-".$space[0]."-".$split[0];
+												echo "<script>$('#begin_day').val('".$lastTime."');</script>";
+											}
+											echo "<script>$('#last_day').val('".date("m-d-Y")."');</script>";											
+											
+										?>
 										</div>
+										
 										<script>
 											function validarFechaMenorActual(){
 											  var x=new Date();
@@ -180,17 +252,30 @@ if(isset($_POST['begin_day_1'])){
 											  var lastday = document.getElementById("last_day").value;
 											  lastday=lastday.split("-");
 											  today.setFullYear(lastday[0],lastday[1]-1,lastday[2]);
-											 
+											
 											  if (x > today){
 												  // alert("Wrong ! ");
-												  $("#saveNewUserBtn").hide();
+												  $("#makeDate").hide();
 											  }else{
 												  //alert("yeah ! ");
-												  $("#saveNewUserBtn").show();
+												  $("#makeDate").show();
 											  }
+												/*var today1 = new Date();
+												var dd = today1.getDate();
+												var mm = today1.getMonth()+1; //January is 0!
+												var yyyy = today1.getFullYear();*/
 												
 											}
 										</script>
+										<?php
+											echo "<script>
+													var be = $('#begin_day').val();
+													var end =$('#last_day').val();
+													if( be != '' && end != '' ){
+														validarFechaMenorActual();
+													}
+												 </script>";
+										?>
 									</form> 
 								</div>
 							</div>
@@ -245,63 +330,86 @@ if(isset($_POST['begin_day_1'])){
 						<!-- Validate for assign clients -->
 							<div id="addUserPnl3" class="modalDialog" title="Validate client">
 								<div id="post">
-									 <form method="post" action="generateBillings.php" enctype="multipart/form-data">
-										<label for="test1"><?php echo $dict->words("168"); ?></label>
-										<input id="test1" name="test1" type="text" readonly>
-										<!-- combobox for users --->
-										<br> <?php echo $dict->words("176"); ?> 
-											<select id="assign_client_1" name="assign_client_1"  >											 
-												<?php
-												$select_customers_query = 'SELECT `id`, `name` FROM `customer`';
-												$select_customers_result = mysql_query($select_customers_query); 
-												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-													echo "<option  value=" . $line['id'] . ">" . $line['name'] . "</option>";
-												}
-												?>
-											</select>
-											<br><br> <?php echo $dict->words("177"); ?> 
-											<select id="type_1" name="type_1"  >											 
-												<?php
-												$select_customers_query = 'SELECT `id`, `name_type` FROM `type`';
-												$select_customers_result = mysql_query($select_customers_query); 
+									 
+										<input type="radio" id="option0" name="option" value="0" onclick="divAppear()"> Create new user <br>
+										<input type="radio" id="option1" name="option" value="1" onclick="divAppear()"> Assign a exist user<br>
+										<br><br>
+										<div id="create" hidden >
+											<form method="POST" action="">								
+												<?php echo $dict->words("13"); ?>: <input id="firstNameNewUserFld" name="firstNameNewUserFld" type="text" required="required"><br />
+												<?php echo $dict->words("14"); ?>: <input id="lastNameNewUserFld" name="lastNameNewUserFld" type="text" required="required"><br /><br />
+												<?php echo $dict->words("15"); ?>: <input id="emailNewUserFld" name="emailNewUserFld" type="email" required="required"><br /><br />
+												<?php echo $dict->words("16"); ?>: <input onkeypress="return justNumbers(event);" id="outbound" name="outbound" type="text" readonly ><br /><br />
+												<?php echo $dict->words("17"); ?>: <input onkeypress="return justNumbers(event);" id="extension" name="extension" type="text" maxlength="4"  ><br /><br />
+												<div hidden id="validate_action">
+												<?php echo $dict->words("126");?>
+												</div>
+												<?php echo "Customer"; ?> 
+														<select id="customer" name="customer"  >											 
+															<?php
+															$select_customers_query = 'SELECT `id`, `name` FROM `customer` ';
+															$select_customers_result = mysql_query($select_customers_query); 
 
-												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-													echo "<option  value=" . $line['id'] . ">" . $line['name_type'] . "</option>";
-												}
-												?>
-											</select>
-										<br/>
-										<br/>
-										<label for="test2"><?php echo $dict->words("178"); ?> </label>
-										<input id="test2" name="test2" type="text"  readonly >
-										<br> <?php echo $dict->words("176"); ?> 
-											<select id="assign_client_2" name="assign_client_2"  >											 
-												<?php
-												$select_customers_query = 'SELECT `id`, `name` FROM `customer`';
-												$select_customers_result = mysql_query($select_customers_query); 
+															while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+																echo "<option  value=" . $line['id'] . ">" . $line['name'] . "</option>";
+															}
+															?>
+														</select>
+														<br><br>
+														 <?php echo $dict->words("177"); ?> 
+														<select id="type_1" name="type_1"  >											 
+															<?php
+															$select_customers_query = 'SELECT `id`, `name_type` FROM `type`';
+															$select_customers_result = mysql_query($select_customers_query); 
 
-												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+															while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+																echo "<option  value=" . $line['id'] . ">" . $line['name_type'] . "</option>";
+															}
+															?>
+														</select>
+														<br><br>
+												<div>
+												<br>
+												<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Add">
+												<input id="cancelNewUserBtn" name="cancelNewUserBtn" type="button" value="Cancel">
+												</div>
+											   
+											</form> 
+										</div>
+										<div id="assign" hidden>
+											<form method="POST" action="">	
+														<?php echo "Customer"; ?> 
+														<select id="client_update" name="client_update"  >											 
+															<?php
+															$select_customers_query = 'SELECT `id`, CONCAT(`firstName`," ",`lastName`) as name, `customer` FROM `user` WHERE `outbound_did` = "" AND `extension` = "" ';
+															$select_customers_result = mysql_query($select_customers_query); 
 
-													echo "<option  value=" . $line['id'] . ">" . $line['name'] . "</option>";
-												}
-												?>
-											</select>
-											<br><br> <?php echo $dict->words("177"); ?> 
-											<select id="type_2" name="type_2"  >											 
-												<?php
-												$select_customers_query = 'SELECT `id`, `name_type` FROM `type`';
-												$select_customers_result = mysql_query($select_customers_query); 
+															while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+																echo "<option  value=" . $line['id'] . ":" . $line['customer'] . ">" . $line['name'] . "</option>";
+															}
+															?>
+														</select>
+														<br><br>
+														
+														 <?php echo $dict->words("177"); ?> 
+														<select id="type_update" name="type_update"  >											 
+															<?php
+															$select_customers_query = 'SELECT `id`, `name_type` FROM `type`';
+															$select_customers_result = mysql_query($select_customers_query); 
 
-												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-
-													echo "<option  value=" . $line['id'] . ">" . $line['name_type'] . "</option>";
-												}
-												?>
-											</select>
-										<br/>
-										<br/>										
-										<input type="submit" value="Validate">										
-									</form>									
+															while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+																echo "<option  value=" . $line['id'] . ">" . $line['name_type'] . "</option>";
+															}
+															?>
+														</select>
+														<br><br>
+														<?php echo $dict->words("17"); ?>: <input onkeypress="return justNumbers(event);" id="extension1" name="extension1" type="text" maxlength="4"  ><br /><br />
+														<?php echo $dict->words("16"); ?>: <input onkeypress="return justNumbers(event);" id="outbound1" name="outbound1" type="text" readonly >		<br /><br />								
+												<input id="saveNewUserBtn1" name="saveNewUserBtn1" type="submit" value="Add">
+												<input id="cancelNewUserBtn1" name="cancelNewUserBtn1" type="button" value="Cancel">
+											</form>
+										</div>
+														
 								</div>
 							</div>
 							
@@ -334,11 +442,20 @@ if(isset($_POST['begin_day_1'])){
 			$id = event.target.id.toString().split("aValidate")[1];
 			$("#test1").val($("#source".concat($id)).text());
 			$("#test2").val($("#destination".concat($id)).text());
-			//$("#test3").val($("#callerid".concat($id)).text());
-			
-			/*$("#idEditAppFld").val($id);
-			$("#nameEditAppFld").val($("#spanName".concat($id)).text());
-			$("#descriptionEditAppFld").val($("#spanDescription".concat($id)).text());*/
+		});
+		
+		$("a[id^='aValidateSource']").click(function(event) {
+			$("#addUserPnl3").dialog( "open" );
+			$id = event.target.id.toString().split("aValidateSource")[1];
+			$("#outbound").val($("#source".concat($id)).text());
+			$("#outbound1").val($("#source".concat($id)).text());			
+		});
+		
+		$("a[id^='aValidateDestination']").click(function(event) {
+			$("#addUserPnl3").dialog( "open" );
+			$id = event.target.id.toString().split("aValidateDestination")[1];
+			$("#outbound").val($("#destination".concat($id)).text());
+			$("#outbound1").val($("#destination".concat($id)).text());	
 		});
 		
 		$( "#addUserPnl3" ).dialog({
@@ -451,6 +568,50 @@ if(isset($_POST['begin_day_1'])){
 		});
 			
 	});
+function divAppear(){
+	
+	var check = document.getElementById("option0").checked;
+    var check_1 = document.getElementById("option1").checked;	
+	if(check==true ){
+		$("#create").show();
+		$("#assign").hide();
+	}else{
+		$("#create").hide();
+		$("#assign").show();
+	}
+
+	
+}
+/*
+function validate_extension(){
+	 var exten=document.getElementById("extension").value;
+		var found= false;	 
+		 for(i=0;i< data.length; i++){
+			if(data[i] == exten){
+				//alert('This extension is not available, please use other.');
+				//alert(data[i]);
+				found= true;
+			} 
+		 }
+		  if(found){
+				$('#saveNewUserBtn').hide();
+				$('#validate_action').show();
+				document.getElementById("extension").style.backgroundColor = "#FF0000";
+		 }else{
+				$('#saveNewUserBtn').show();
+				$('#validate_action').hide();
+				document.getElementById("extension").style.backgroundColor = "#FFFFFF";
+			}
+
+	}
+*/
+function justNumbers(e){
+        var keynum = window.event ? window.event.keyCode : e.which;
+        if ((keynum == 8) || (keynum == 46))
+        return true;
+         
+        return /\d/.test(String.fromCharCode(keynum));
+        }
 
 </script>
 

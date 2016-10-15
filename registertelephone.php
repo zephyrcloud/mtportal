@@ -10,45 +10,57 @@
 
 <?php 
 		if(isset($_POST['telFld']) ){
-			//echo "<script> alert('". $api->available($_POST['telFld'])."'); </script>";			
-			$string= $api->available($_POST['telFld']); 
-			//echo "hi ... I am ". $string;
-			if (strpos($string, 'x[[invalidauth[[x') !== false) {
-				 header('Location: telephonecustomer.php?code=404');
-				//echo $string;
-			}else{
-				$id = base64_decode(html_entity_decode($_GET['u']));
-				$quota=0;
-				$counter=0;
-							$select_customers_query = 'SELECT `quota_telephone`,`remaining_telephone` FROM `customer` WHERE `id` = '.$id;
-							$select_customers_result = mysql_query($select_customers_query) or die('Something wrong ');
-							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-											$quota=$line['quota_telephone'];
-											$counter=$line['remaining_telephone'];
-							}							
-							// look for the table of create domains if the user has domains and count item
-							
-				if($counter > 0){
-				
-				if (strpos($string, 'x[[supported:voice[[x') !== false) {
-					echo "<script> var r = confirm('This number is available,support: voice, if you want to register press OK, else press CANCEL to back to lookup number'); </script>";
-				}
-				if (strpos($string, 'x[[supported:both[[x') !== false) {
-					echo "<script> var r = confirm('This number is available,support: voice & vFax, if you want to register press OK, else press CANCEL to back to lookup number'); </script>";
-				}
-				if (strpos($string, 'x[[nosupport[[x') !== false) {
-					 header('Location: telephonecustomer.php?code=403');
-				}
-				echo "<script> if (r == true) {";
-				?>
-				
-				<?php				
-				echo "}else{window.location='telephonecustomer.php';} </script>";
-				
+			
+			$select_customers_query = 'SELECT count(*) as counterNumber FROM `voipclient` WHERE `number` ='.$_POST['telFld'];
+			$select_customers_result = mysql_query($select_customers_query);
+			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+				$count=$line['counterNumber'];				
+			}
+			if($count != "0"){
+				//echo "<script> window.location.href = ''; </script>";
+				header('Location: telephonecustomer.php?error=0');
+			}else{ 
+				//echo "<script> alert('". $api->available($_POST['telFld'])."'); </script>";			
+				$string= $api->available($_POST['telFld']); 
+				//echo "hi ... I am ". $string;
+				if (strpos($string, 'x[[invalidauth[[x') !== false) {
+					 header('Location: telephonecustomer.php?code=404');
+					//echo $string;
 				}else{
-					header('Location: telephonecustomer.php?code=400');
+					$id = base64_decode(html_entity_decode($_GET['u']));
+					$quota=0;
+					$counter=0;
+								$select_customers_query = 'SELECT `quota_telephone`,`remaining_telephone` FROM `customer` WHERE `id` = '.$id;
+								$select_customers_result = mysql_query($select_customers_query) or die('Something wrong ');
+								while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+												$quota=$line['quota_telephone'];
+												$counter=$line['remaining_telephone'];
+								}							
+								// look for the table of create domains if the user has domains and count item
+								
+					if($counter > 0){
+					
+					if (strpos($string, 'x[[supported:voice[[x') !== false) {
+						echo "<script> var r = confirm('This number is available,support: voice, if you want to register press OK, else press CANCEL to back to lookup number'); </script>";
+					}
+					if (strpos($string, 'x[[supported:both[[x') !== false) {
+						echo "<script> var r = confirm('This number is available,support: voice & vFax, if you want to register press OK, else press CANCEL to back to lookup number'); </script>";
+					}
+					if (strpos($string, 'x[[nosupport[[x') !== false) {
+						 header('Location: telephonecustomer.php?code=403');
+					}
+					echo "<script> if (r == true) {";
+					?>
+					
+					<?php				
+					echo "}else{window.location='telephonecustomer.php';} </script>";
+					
+					}else{
+						header('Location: telephonecustomer.php?code=400');
+					}
 				}
 			}
+			
 		}
 ?>
 

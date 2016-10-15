@@ -16,6 +16,7 @@
 		<!-- JQuery UI -->
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+		<script src="config/sorttable.js"></script>
 		
 	</head>
 	<body>
@@ -35,7 +36,7 @@
 							</div>   
 					<div id="content">
 							<div id="principal">
-									<table>
+									<table class="sortable">
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">

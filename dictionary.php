@@ -209,8 +209,8 @@ class dictionary{
 		/*adminUser*/
 		$word[152] = "User management";
 		$word[153] = "Search for names:";
-		$word[154] = "Search for user:";
-		$word[155] = "user"; // field name of table 
+		$word[154] = "Search for customer:";
+		$word[155] = "Customer"; // field name of table 
 		
 		/*telephoneManager.php*/
 		$word[156] = "Telephone management";

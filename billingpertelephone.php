@@ -58,30 +58,31 @@
 													  <tr>
 													   <th>Date</th>
 													   <th>Destination</th>
+													    <th>Disposition</th>
 													   <th>Minutes</th>
 													 </tr>";
 												$sum=0;
 												switch($case){
 													case "in":
-														$select_customers_query ="SELECT `date`,`destination`,`seconds` FROM `inboundbillingreport_test` WHERE `source` = '".$number."' and `date` LIKE '%".$date."%'";
+														$select_customers_query ="SELECT `date`,`destination`,`seconds`, status FROM `inboundbillingreport_test` WHERE `source` = '".$number."' and `date` LIKE '%".$date."%'";
 														$select_customers_result = mysql_query($select_customers_query) or die('Something wrong 11');
 														while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-															$table.="<tr><td>".$line['date']."</td><td>".$line['destination']."</td><td>".ceil($line['seconds'])."</td></tr>";
+															$table.="<tr><td>".$line['date']."</td><td>".$line['destination']."</td><td>".$line['status']."</td><td>".ceil($line['seconds'])."</td></tr>";
 															$sum = $sum + ceil($line['seconds']);
 														} 
 														
 													break;
 													case "out":
-														$select_customers_query ="SELECT `date`,`destination`,`seconds` FROM `billings_history_test` WHERE `source` = '".$number."' and `date` LIKE '%".$date."%' and peer LIKE '%66.241.106.107%' and seconds <> 0";
+														$select_customers_query ="SELECT `date`,`destination`,`seconds`,disposition FROM `billings_history_test` WHERE `source` = '".$number."' and `date` LIKE '%".$date."%' and peer LIKE '%66.241.106.107%' and seconds <> 0";
 														$select_customers_result = mysql_query($select_customers_query) or die('Something wrong 11');
 														while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-															$table.="<tr><td>".$line['date']."</td><td>".$line['destination']."</td><td>".ceil($line['seconds']/60)."</td></tr>";
+															$table.="<tr><td>".$line['date']."</td><td>".$line['destination']."</td><td>".$line['disposition']."</td><td>".ceil($line['seconds']/60)."</td></tr>";
 															$sum = $sum + ceil($line['seconds']/60);
 														}
 													break;
 												}
 												
-												$table.="<tr><th colspan='2'> Total </th><td>".$sum."</td></tr>";
+												$table.="<tr><th colspan='3'> Total </th><td>".$sum."</td></tr>";
 												$table.="</table> </div>";
 									
 									

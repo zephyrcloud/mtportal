@@ -242,7 +242,7 @@
 		<!-- JQuery UI -->
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-		
+		<script src="config/sorttable.js"></script>
 	</head>
 	<body>
 
@@ -378,7 +378,7 @@
 						<br/><br/><?php echo $dict->words("153");?> <input type="text" id="myInput" onkeyup="myFunction()">
 						<br/><br/><?php echo $dict->words("154");?> <input type="text" id="clients" onkeyup="myFunction1()">
 						
-						<table id="myTable">
+						<table id="myTable" class="sortable">
 							<col width="150px">
 							<col width="150px">
 							<col width="150px">

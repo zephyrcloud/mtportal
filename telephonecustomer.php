@@ -12,6 +12,10 @@
 		$update_user_query = 'UPDATE `customer` SET `remaining_telephone`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
 		$update_user_result = mysql_query($update_user_query);
 	}
+	$message="";
+	if(isset($_GET['error'])){
+		$message = "This number is busy , please try another";
+	}
 ?>
 
 <html>
@@ -25,9 +29,8 @@
 			}
 
 		</script>
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
+		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 		<!-- JQuery UI -->
 		<!--<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
@@ -46,6 +49,19 @@
 				<div id="post">
 					<div id="lookupDomain">
 					<br>
+					<?php
+							if($message != ""){
+								?>
+									<div id="messagePnl" class="modalDialog" title="Notice">
+										<div id="post">
+											<?php echo $message; ?><br /><br />
+											<input id="accetMessageBtn" name="accetMessageBtn" type="button" value="OK">
+										</div>
+									</div>
+								<?php
+							}
+						?>
+	
 					<?php echo $dict->words("129");
 						$id = htmlentities (base64_encode($_SESSION['id']));
 						$link ="registertelephone.php?u=".$id;
@@ -60,40 +76,6 @@
 		</div>
 		
 <?php 
-
-/*$data = $api->numbersRegisterd();
-
-$file = fopen('data.txt', "w");
-fwrite($file, $data . PHP_EOL);
-fclose($file);
-$numlinea = [0,1,2]; 
-$i=0;
-$lineas = file('data.txt') ;
-foreach ($lineas as $nLinea => $dato)
-{
-	if ($nLinea != $numlinea[$i] )
-	$info[] = $dato ;
-	$i++;
-}
-$documento = implode($info, ''); 
-file_put_contents('data.txt', $documento);  */
-
-echo "<script> var numbers = [] </script>";
-
-/*$fp = fopen('data.txt', "r");
-while(!feof($fp)) {
-	$linea = fgets($fp);
-	$linea = explode(':',$linea);
-	echo "<script> numbers.push('".$linea[2]."'); </script>";	
-}
-
-fclose($fp);*/		
-
-$select_customers_query = 'SELECT `number` FROM `voipclient`';
-$select_customers_result = mysql_query($select_customers_query) or die();
-while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-	echo "<script> numbers.push('".$line['number']."'); </script>";
-}
 
 
 //others metods.					
@@ -161,11 +143,36 @@ if(isset($_POST['port'])){
 </html>
 
 <script>
+	$( document ).ready(function() {
+		
+			
+		// Dialog message
+		$( "#messagePnl" ).dialog({
+			autoOpen: true,
+			modal: true,
+			position: { my: 'top', at: 'top+150' },
+			show: {
+				effect: "blind",
+				duration: 200
+			},
+			hide: {
+				effect: "blind",
+				duration: 200
+			}
+		});
+		
+		// Funcion accept message
+		$("#accetMessageBtn").click(function() {
+			$( "#messagePnl" ).dialog( "close" );
+		});		
+		
+			
+	});
 
 function validate(){
 	var message = false;
 	var number = document.getElementById("telFld").value;
-	for(i=0 ; i < numbers.length; i++){
+	/*for(i=0 ; i < numbers.length; i++){
 		if(number == numbers[i] ){
 			message = true;			
 		}
@@ -173,14 +180,12 @@ function validate(){
 	 if(message){
 		 alert("This number is busy , pleasy try other");
 		 return false;
-	 }
+	 }*/
 	 
 	 if(number.length < 10){
-		  alert("Number not permitted");
+		 alert("Number not permitted");
 		 return false;
 	 }
 	
 }
-
-
 </script>

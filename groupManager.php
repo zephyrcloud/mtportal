@@ -93,7 +93,7 @@ include("config/connection.php");
 					<div id="postcontent">
 						
 						<div id="tables" name="tables">
-						<input id="newUserBtn" name="newUserBtn" type="submit" value="<?php echo $dict->words("23"); ?>">
+						<input id="newUserBtn" name="newUserBtn" type="submit" value="Add Category">
 						
 						<!-- DIV Message -->
 						<?php

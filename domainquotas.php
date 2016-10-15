@@ -1,5 +1,6 @@
 <?php
 	include("config/connection.php");
+	$message = "";
 ?>
 
 <html>
@@ -16,7 +17,34 @@
 		<!-- JQuery UI -->
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-		
+		<?php
+					if(isset($_POST['buttonUpdate'])){						
+						$select_customers_query = 'SELECT min(id) as min , max(id) as max ,count(*) as counter   FROM `customer`';
+						$select_customers_result = mysql_query($select_customers_query);
+						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+							$min = $line['min'];
+							$max = $line['max'];
+							$counter =	$line['counter'];
+						}
+						$count=0;
+						for($i=$min; $i < ($max+1); $i++){
+							if($_POST['quotaValue_'.$i] != ""){	
+								$update_user_query = 'UPDATE `customer` SET quota_domain='.$_POST['quotaValue_'.$i].' WHERE `id`= '.$i;
+								$update_user_result = mysql_query($update_user_query);
+								$count++;
+							}
+						}
+						
+						if($count == $counter){
+							$message = "Action complete succesfully";
+						}else{
+							$message = "Something Wrong";
+						}
+					}
+					
+					
+					
+		?>
 	</head>
 	<body>
 		
@@ -33,7 +61,20 @@
 								<div class="floatright righttext tpad"></div>
 								<div class="clear">&nbsp;</div>
 							</div>  
-					<div id="content">
+					<div id="postcontent">
+					<?php
+							if($message != ""){
+								?>
+									<div id="messagePnl" class="modalDialog" title="Notice">
+										<div id="post">
+											<?php echo $message; ?><br /><br />
+											<input id="accetMessageBtn" name="accetMessageBtn" type="button" value="OK">
+										</div>
+									</div>
+								<?php
+								
+							}
+						?>
 						<div id="quotasPerUser">
 									<table id="table">
 										<col width="300px">
@@ -48,7 +89,7 @@
 										</tr>
 										<form method="POST" action="domainquotas.php">
 										
-										<input id="buttonUpdate" type="submit" value="Update" >
+										<input id="buttonUpdate" name="buttonUpdate" type="submit" value="Update" >
 										<?php
 									
 											$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
@@ -84,28 +125,8 @@
 								</div>
 							
 				
-						<script type="text/javascript">
-							jQuery(document).ready(function ($) {
-								$('#tabs').tab();
-							});
-							
-						</script> 
-					<?php
-					if(isset($_POST['minusNumber'])){
 						
-						for($i=0; $i <= count($id); $i++){
-							$update_user_query = 'UPDATE `customer` SET quota_domain='.$_POST['quotaValue_'.$id[$i]].' WHERE `id`= '.$id[$i];
-							$update_user_result = mysql_query($update_user_query);
-						}
-						
-						echo "<script>location.href = 'domainquotas.php?a=1' </script>";
-					}
 					
-					if($_GET['a']){
-						echo "<script> alert('Quotas updated succesfully'); </script>";
-					}
-					
-					?>
 					</div>	<!-- here ends the container -->		
 				</div>
 			</div>
@@ -141,3 +162,28 @@
 		</script>
 	</body>
 </html>
+
+<script>
+$( document ).ready(function() {
+		
+		// Dialog message
+		$( "#messagePnl" ).dialog({
+			autoOpen: true,
+			modal: true,
+			position: { my: 'top', at: 'top+150' },
+			show: {
+				effect: "blind",
+				duration: 200
+			},
+			hide: {
+				effect: "blind",
+				duration: 200
+			}
+		});
+		
+		// Funcion accept message
+		$("#accetMessageBtn").click(function() {
+			$( "#messagePnl" ).dialog( "close" );
+		});
+	});
+</script>

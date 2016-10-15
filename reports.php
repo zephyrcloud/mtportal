@@ -20,6 +20,7 @@ $dict= new dictionary();
         <!-- JQuery UI -->
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+		<script src="config/sorttable.js"></script>
 
     </head>
     <body>
@@ -173,7 +174,7 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 ?>
                                         </form>
                                     </div>
-                                <table>
+                                <table class="sortable">
                                                 <col width="170px">
                                                 <col width="150px">
                                                 <col width="150px">

@@ -12,7 +12,7 @@
 	if (isset($_POST["saveNewCustomerBtn"])) {
 		
 		// Inserta en la base de datos el nuevo customer
-		$insert_customer_query = 'INSERT INTO customer (name, username, password) VALUES("' . $_POST["nameNewCustomerFld"] . '","' . $_POST["usernameNewCustomerFld"] . '","' . $_POST["passwordNewCustomerFld"] . '")';
+		$insert_customer_query = 'INSERT INTO customer (name, username, password,`pricePerMinute`) VALUES("' . $_POST["nameNewCustomerFld"] . '","' . $_POST["usernameNewCustomerFld"] . '","' . $_POST["passwordNewCustomerFld"] . '","' . $_POST["priceNewCustomerFld"] . '")';
 		$insert_customer_result = mysql_query($insert_customer_query);
 		
 		if($insert_customer_result){
@@ -32,7 +32,7 @@
 	if (isset($_POST["saveEditCustomerBtn"])) {
 		
 		// Edita en la base de datos el customer 
-		$update_customer_query = 'UPDATE customer SET name = "' . $_POST["nameEditCustomerFld"] . '", username = "' . $_POST["usernameEditCustomerFld"] . '", password = "' . $_POST["passwordEditCustomerFld"] . '" WHERE id = "' . $_POST["idEditCustomerFld"] . '"';
+		$update_customer_query = 'UPDATE customer SET name = "' . $_POST["nameEditCustomerFld"] . '", username = "' . $_POST["usernameEditCustomerFld"] . '", password = "' . $_POST["passwordEditCustomerFld"] . '", `pricePerMinute` = "' . $_POST["priceEditCustomerFld"] . '" WHERE id = "' . $_POST["idEditCustomerFld"] . '"';
 		$update_customer_result = mysql_query($update_customer_query);
 		
 		if($update_customer_result){
@@ -132,6 +132,7 @@
 									Name: <input id="nameNewCustomerFld" name="nameNewCustomerFld" type="text" required="required"><br />
 									Username: <input id="usernameNewCustomerFld" name="usernameNewCustomerFld" type="text" required="required"><br /><br />
 									Password: <input id="passwordNewCustomerFld" name="passwordNewCustomerFld" type="text" required="required"><br /><br />
+									Price per minute: <input id="priceNewCustomerFld" name="priceNewCustomerFld" type="text" required="required"><br /><br />
 									<input id="saveNewCustomerBtn" name="saveNewCustomerBtn" type="submit" value="Add">
 									<input id="cancelNewCustomerBtn" name="cancelNewCustomerBtn" type="button" value="Cancel">
 								</form>
@@ -146,6 +147,7 @@
 									Name: <input id="nameEditCustomerFld" name="nameEditCustomerFld" type="text" required="required"><br /><br />
 									Username: <input id="usernameEditCustomerFld" name="usernameEditCustomerFld" type="text" required="required"><br /><br />
 									Password: <input id="passwordEditCustomerFld" name="passwordEditCustomerFld" type="text" required="required"><br /><br />
+									Price per minute: <input id="priceEditCustomerFld" name="priceEditCustomerFld" type="text" required="required"><br /><br />
 									<input id="saveEditCustomerBtn" name="saveEditCustomerBtn" type="submit" value="Edit">
 									<input id="cancelEditCustomerBtn" name="cancelEditCustomerBtn" type="button" value="Cancel">
 								</form>
@@ -165,23 +167,26 @@
 						</div>
 						
 						<table>
+						<!--
 							<col width="170px">
                             <col width="150px">
                             <col width="150px">
                             <col width="150px">
-                            <col width="170px">
+							<col width="150px">
+                            <col width="170px">-->
 							<tr>
 								<th style="border: 1px solid;">Name</th>
 								<th style="border: 1px solid;">Username</th>
 								<th style="border: 1px solid;">Password</th>
-								<th colspan="2" style="border: 1px solid;">Actions</th>
+								<th style="border: 3px solid;">Price per minute</th>
+								<th colspan="2" style="border: 3px solid;">Actions</th>
 							</tr>
 							
 							<?php 
 								
 								// Realizar una consulta MySQL
 								$select_customers_query = 'SELECT * FROM customer';
-								$select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
+								$select_customers_result = mysql_query($select_customers_query);
 								
 								while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 									
@@ -190,6 +195,7 @@
 									echo "<td style='border: 1px solid;'><span id='spanName" . $line['id'] . "'>" . $line['name'] . "</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanUserName" . $line['id'] . "'>" . $line['username'] . "</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanPassword" . $line['id'] . "'>" . $line['password'] . "</span></td>";
+									echo "<td style='border: 1px solid;'><span id='spanPrice" . $line['id'] . "'>" . $line['pricePerMinute'] . "</span></td>";
 									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'] . "' href='#'>Edit</a></td>";
 									echo "<td style='border: 1px solid;'><a id='aDelete" . $line['id'] . "' href='#'>Delete</a></td>";
 									echo "</tr>";
@@ -275,6 +281,8 @@
 			$("#nameEditCustomerFld").val($("#spanName".concat($id)).text());
 			$("#usernameEditCustomerFld").val($("#spanUserName".concat($id)).text());
 			$("#passwordEditCustomerFld").val($("#spanPassword".concat($id)).text());
+			$("#priceEditCustomerFld").val($("#spanPrice".concat($id)).text());
+			
 		});
 		
 		// Dialog edit customer

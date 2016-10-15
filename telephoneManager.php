@@ -17,6 +17,7 @@ $dict= new dictionary();
 		<!-- JQuery UI -->
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+		<script src="config/sorttable.js"></script>
 		
 	</head>
 	<body>
@@ -49,7 +50,7 @@ $dict= new dictionary();
 					}
 						
 					?>
-					<table>
+					<table class="sortable">
                                 <tr>
                                     <th style="border: 1px solid;">	<?php echo $dict->words("157");?> </th>
 									<th style="border: 1px solid;">	<?php echo $dict->words("158");?> </th>

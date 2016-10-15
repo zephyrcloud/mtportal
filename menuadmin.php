@@ -52,6 +52,7 @@ $dict= new dictionary();
 							<li><a href="telephonequotas.php">Change quotas</a></li>
 							<li><a href="generateBillings.php">Generate Bills</a></li>
 							<li><a href="telephoneManager.php">Telephone manager</a></li>
+							<li><a href="BillingsSummaryAdmin.php">Billings Summary</a></li>								
 						</ul>
 					</li>				
 				</ul>
