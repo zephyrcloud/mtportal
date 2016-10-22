@@ -1,5 +1,4 @@
 ﻿<?php
-
 	// Connect to database
 	include("config/connection.php");
 	include("config/ip_capture.php");
@@ -594,7 +593,6 @@
 		});
 		
 	});
-
 	function validate_extension(){
 	 var exten=document.getElementById("extension").value;
 		var found= false;
@@ -636,9 +634,7 @@
 				$('#validate_action_edit').hide();
 				document.getElementById("extensionEditFld").style.backgroundColor = "#FFFFFF";
 			}
-
 	}
-
 </script>
 
 <script>

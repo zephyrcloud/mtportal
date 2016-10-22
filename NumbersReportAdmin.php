@@ -22,7 +22,14 @@
 		
 		<?php
 			include("header.php");
-			include("menuadmin.php");
+			 if(isset($_GET['u'])){
+			  $url = "telephonebilling.php";
+			  include("menucustomer.php");			 
+			 }else{
+			  $url ="BillingsSummaryAdmin.php";
+			  include("menuadmin.php");
+			}
+			
 		?>
 		
 		<div id="pagecontents">
@@ -34,7 +41,11 @@
 								<div class="clear">&nbsp;</div>
 							</div>  
 					<div id="postcontent">
-					 <form action="BillingsSummaryAdmin.php">					  
+					<?php
+					 
+					  
+					?>
+					 <form action="<?php echo $url; ?>">					  
 					   <input type="submit" value="Back">
 					 </form> 
 						<div id="quotasPerUser">
@@ -51,10 +62,10 @@
 							$table = "";
 							switch($_GET['case']){
 								case "Inbound":
-								$select_customers_query = 'SELECT `number`,`minutes`, `date` FROM `inboundbilling_test` WHERE `date` like "%'.$_GET['date'].'%" AND `minutes` <> 0 AND `number` in (SELECT `number` FROM `voipclient` WHERE type = 1 AND `customer_id` = '.$_GET['customer'].') ';
+								$select_customers_query = 'SELECT `number`,`minutes`, `date` FROM `inboundbilling_test` WHERE `date` like "%'.$_GET['date'].'%" AND `minutes` <> 0 AND `number` in (SELECT `number` FROM `voipclient` WHERE type <> 2 AND `customer_id` = '.$_GET['customer'].') ';
 								break;
 								case "Outbound":
-								$select_customers_query = 'SELECT `number`,`minutes`, `date` FROM `outboundbilling_test` WHERE `date` like "%'.$_GET['date'].'%" AND `minutes` <> 0 AND `number` in (SELECT `number` FROM `voipclient` WHERE type = 1 AND `customer_id` = '.$_GET['customer'].') ';
+								$select_customers_query = 'SELECT `number`,`minutes`, `date` FROM `outboundbilling_test` WHERE `date` like "%'.$_GET['date'].'%" AND `minutes` <> 0 AND `number` in (SELECT `number` FROM `voipclient` WHERE type <> 2  AND `customer_id` = '.$_GET['customer'].') ';
 								break;
 							}
 							$table="";
@@ -67,15 +78,37 @@
 													<th>Date</th>
 													<th>Minutes</th>
 												</tr>";
+							$sum=0; $sumVoice=0;
 							$select_customers_result = mysql_query($select_customers_query);
 							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 								$table .= "<tr><td><a id='Telephone" . $line['number'] . ":".$_GET['case'].":".$_GET['customer'].":".$line['date']."' href='#'>" . $line['number'] . "</span></td>
 											   <td><span id='spanDate" . $line['date'] . "'>" . $line['date'] . "</td>
 											   <td>" . $line['minutes'] . " </td>
-										   </tr>";
-								//echo nl2br($line['date'] ." --- ". $line['number'] ." --- ". $line['minutes'] ." \n " );
-								
+										   </tr>";								
 							}
+							
+							$total = 0;
+							$select_customers_query = 'SELECT SUM(`minutes`) as minutes , (SELECT `pricePerMinute`  FROM `customer` WHERE `id` = '.$_GET['customer'].') as Prices FROM `inboundbilling_test` WHERE `date` like "%'.$_GET['date'].'%" AND `minutes` <> 0 AND `number` in (SELECT `number` FROM `voipclient` WHERE type = 1  AND `customer_id` = '.$_GET['customer'].') ';
+							//echo nl2br($select_customers_query);
+							$select_customers_result = mysql_query($select_customers_query);
+							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+								$minutes = $line['minutes'];
+								$price = $line['Prices'];
+							}
+							$total = $total + ($minutes * $price);
+							
+							$select_customers_query = 'SELECT SUM(`minutes`) as minutes , (SELECT `priceVfax`  FROM `customer` WHERE `id` = '.$_GET['customer'].') as Prices FROM `inboundbilling_test` WHERE `date` like "%'.$_GET['date'].'%" AND `minutes` <> 0 AND `number` in (SELECT `number` FROM `voipclient` WHERE type = 3  AND `customer_id` = '.$_GET['customer'].') ';
+							//echo nl2br($select_customers_query);
+							$select_customers_result = mysql_query($select_customers_query);
+							while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+								$minutes = $line['minutes'];
+								$price = $line['Prices'];
+							}
+							$total = $total + ($minutes * $price);
+														
+							$table .= "<tr> <th colspan='2'>Total</th>
+											<td>".round($total,2)."</td>
+										</tr>"; 
 							$table .= "</table>";
 							echo $table;
 							

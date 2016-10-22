@@ -1,7 +1,7 @@
 <?php
 
 include("config/PHPMailer-master/PHPMailerAutoload.php");
-include("config/connection.php");
+//include("config/connection.php");
 include("config/ip_capture.php");
 include("dictionary.php");
 
@@ -17,13 +17,13 @@ function send_email($subject,$body_message) {
 		$mail->isSMTP();                                      // Set mailer to use SMTP
 		$mail->Host = 'smtp.office365.com';  // Specify main and backup SMTP servers
 		$mail->SMTPAuth = true;                               // Enable SMTP authentication
-		$mail->Username = 'email@email.com';                 // SMTP username
-		$mail->Password = '';                           // SMTP password
+		$mail->Username = 'jbriceno@zephyrcloud.com';                 // SMTP username
+		$mail->Password = 'Zcc//ZCC//12345';                           // SMTP password
 		$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
 		$mail->Port = 587;                                    // TCP port to connect to
 
-		$mail->setFrom('email@email.com', 'Mailer');
-		$mail->addAddress('email@email.com');               // Name is optional
+		$mail->setFrom('jbriceno@zephyrcloud.com', 'Mailer');
+		$mail->addAddress('jbriceno@zephyrcloud.com');               // Name is optional
 		
 		$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
 		$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
@@ -84,38 +84,82 @@ function body_email($message,$logout_time_out,$user){
                                                 </tr>';
                                                 
 	$now = date("Y-m-d");
-    $select_customers_query = 'SELECT l.`timeStamp` as time ,l.`ipAddress` as ip ,at.action_name as ac_name ,tm.table_name as t_name ,r.result_name as r_name 
+	$month = date("Y-m");
+	$select_customers_query = 'SELECT count(`send`) as counter FROM `log` WHERE timeStamp < "'.$now.'" and `send` = 0  and `id_user` = '.$user;	
+	$select_customers_result = mysql_query($select_customers_query) or die('... ');
+		while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+			$counter = $line['counter']; 
+		}
+		
+		if($counter == 0){
+			$select_customers_query = 'SELECT l.`timeStamp` as time ,l.`ipAddress` as ip ,at.action_name as ac_name ,tm.table_name as t_name ,r.result_name as r_name 
 								FROM `log` l, action_type at, table_modified tm, result r 
 								WHERE l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$user.' 
 								AND l.`timeStamp` LIKE "%'.$now.'%" order by l.`timeStamp` ';
-	
-    $select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
+			$select_customers_result = mysql_query($select_customers_query) or die('Message not generate, please review the class.. or DB connection ');
 
-    while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-		 $fecha = explode(" ", $line['time']);
-		  if($line['r_name'] == 'Success'){
-			 $body_message.= "<tr bgcolor='#DFF2BF'>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $fecha[1] . "</span></td>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
-			 $body_message.= "</tr>";
-		  }else{
-			 $body_message.= "<tr bgcolor='#FFBABA'>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $fecha[1] . "</span></td>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
-			 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
-			 $body_message.= "</tr>";
-		  }
-    }
+			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+				 $fecha = explode(" ", $line['time']);
+				  if($line['r_name'] == 'Success'){
+					 $body_message.= "<tr bgcolor='#DFF2BF'>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $fecha[1] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
+					 $body_message.= "</tr>";
+				  }else{
+					 $body_message.= "<tr bgcolor='#FFBABA'>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $fecha[1] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
+					 $body_message.= "</tr>";
+				  }
+			}
+			
+		}else{
+			$select_customers_query = 'SELECT l.`timeStamp` as time ,l.`ipAddress` as ip ,at.action_name as ac_name ,tm.table_name as t_name ,r.result_name as r_name 
+								FROM `log` l, action_type at, table_modified tm, result r 
+								WHERE l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$user.' 
+								and `send`=0 and l.`timeStamp` <= "%'.$now.'%"  order by l.`timeStamp` ';
+			
+			$select_customers_result = mysql_query($select_customers_query) or die('Message not generate, please review the class or DB connection ');
+
+			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+				 //$fecha = explode(" ", $line['time']);
+				  if($line['r_name'] == 'Success'){
+					 $body_message.= "<tr bgcolor='#DFF2BF'>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['time'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
+					 $body_message.= "</tr>";
+				  }else{
+					 $body_message.= "<tr bgcolor='#FFBABA'>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['time'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ip'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['ac_name'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['t_name'] . "</span></td>";
+					 $body_message.= "<td style='border: 1px solid; text-align: center;'><span id='spanName'>" . $line['r_name'] . "</span></td>";
+					 $body_message.= "</tr>";
+				  }
+			}
+		
+		}
+	
+		//echo nl2br($select_customers_query);
+	
+    
         $body_message.= '  </table>';
 		
 		// here ends the body of the event for email send
 		//echo $body_message;
+	
 		$this-> send_email($subject,$body_message);
+		
 }
 
 /*function body_email($message,$ip,$action_type,$result, $table_modified, $id_user, $logout_time_out){

@@ -70,6 +70,18 @@
 		
 	}
 	
+	if(isset($_POST['saveNewPriceBtn'])){
+		
+		$update_customer_query = 'UPDATE `customer` SET `priceVfax`='.$_POST['priceVfaxFld'];
+		$update_customer_result = mysql_query($update_customer_query);
+		if($update_customer_result){
+			$message = "Price update succeesfully";
+			
+		}else{
+			$message = $dict->words("3");
+		}
+	}
+	
 ?>
 
 <html>
@@ -110,7 +122,7 @@
 					<div id="postcontent">
 						
 						<input type="submit" id="newCustomerBtn" name="newCustomerBtn" value="Add customer">
-						
+						<input type="submit" id="newVfaxBtn" name="newVfaxBtn" value="VFAX price">
 						<!-- DIV Message -->
 						<?php
 							if($message != ""){
@@ -124,6 +136,25 @@
 								<?php
 							}
 						?>
+						
+						<!-- DIV price VFAX -->
+						<div id="addPriceVFAXPnl" class="modalDialog" title="VFAX price">
+							<div id="post">
+								<form method="POST" action="customers.php">
+								<?php
+								$select_customers_query = 'SELECT priceVfax FROM customer';
+								$select_customers_result = mysql_query($select_customers_query);
+								
+								while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+									$vfaxPrice= $line['priceVfax'];
+								}								
+								?>
+									Price: <input id="priceVfaxFld" name="priceVfaxFld" type="text" required="required" value="<?php echo $vfaxPrice; ?>"><br />									
+									<input id="saveNewPriceBtn" name="saveNewPriceBtn" type="submit" value="Update">
+									<input id="cancelNewPriceBtn" name="cancelNewPriceBtn" type="button" value="Cancel">
+								</form>
+							</div>
+						</div>
 						
 						<!-- DIV Add Customer -->
 						<div id="addCustomerPnl" class="modalDialog" title="New Customer">
@@ -271,6 +302,31 @@
 		// Funcion cancel add customer
 		$("#cancelNewCustomerBtn").click(function() {
 			$("#addCustomerPnl").dialog( "close" );
+		});
+		
+		// Funcion add customer
+		$("#newVfaxBtn").click(function() {
+			$("#addPriceVFAXPnl").dialog( "open" );			
+		});
+		
+		// Dialog add customer
+		$( "#addPriceVFAXPnl" ).dialog({
+			autoOpen: false,
+			modal: true,
+			position: { my: 'top', at: 'top+150' },
+			show: {
+				effect: "blind",
+				duration: 200
+			},
+			hide: {
+				effect: "blind",
+				duration: 200
+			}
+		});
+		
+		// Funcion cancel add customer
+		$("#cancelNewPriceBtn").click(function() {
+			$("#addPriceVFAXPnl").dialog( "close" );
 		});
 		
 		// Function edit customer

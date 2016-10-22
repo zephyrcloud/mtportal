@@ -176,14 +176,16 @@ if(isset($_POST['saveNewUserBtn1'])){
 								echo $billing->inbound_csv($fichero_subido);								
 							} 
 							
-							}
+						}
 						
 						
 						// read of database on table 
 						if(isset($_GET['client'])){
 							if($_GET['client'] == 0){								
-								$select_customers_query = "SELECT * , 'unknown' as type FROM `billings_history_test` WHERE source not in (select number from voipclient ) AND destination not in (select number from voipclient ) ORDER BY date DESC";
-								echo "<script> $('#newUserBtn4').hide(); $('#allrecords').show(); </script>";								
+								$select_customers_query = "SELECT * , 'Outbound' As type FROM `billings_history_test` WHERE `source` not in (select number from voipclient ) AND `destination` not in (select number from voipclient ) ORDER BY date DESC";
+								echo "<script> $('#newUserBtn4').hide(); $('#allrecords').show(); </script>";
+								//SELECT * , 'Outbound' As type FROM `billings_history_test` WHERE `source` not in (select number from voipclient ) AND `destination` not in (select number from voipclient )
+								
 							}
 						}else{
 							echo "<script> $('#newUserBtn4').show(); $('#allrecords').hide(); </script>";
