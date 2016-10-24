@@ -17,9 +17,9 @@ function send_email($subject,$body_message) {
 		$mail->isSMTP();                                      // Set mailer to use SMTP
 		$mail->Host = 'smtp.office365.com';  // Specify main and backup SMTP servers
 		$mail->SMTPAuth = true;                               // Enable SMTP authentication
-		$mail->Username = 'jbriceno@zephyrcloud.com';                 // SMTP username
-		$mail->Password = 'Zcc//ZCC//12345';                           // SMTP password
-		$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+		$mail->Username = 'Put me here ';                 // SMTP username
+		$mail->Password = 'Put me here';                           // SMTP password
+		$mail->SMTPSecure = 'tls';                            // Enable TLS encryption, ssl also accepted
 		$mail->Port = 587;                                    // TCP port to connect to
 
 		$mail->setFrom('jbriceno@zephyrcloud.com', 'Mailer');
@@ -50,20 +50,20 @@ function body_email($message,$logout_time_out,$user){
 		}
 		
 		// it finds the maximun time of the user when he/her did login
-		//SELECT max(`timeStamp`) as last_log FROM `log` WHERE `id_actionType` = 1 and `id_user` = ".$_POST["id_user"]."
-		$select_customers_query = 'SELECT max(`timeStamp`) as last_log FROM `log` WHERE `id_actionType` = 1 and `id_user` = '.$user;
+		//SELECT max(timeStamp) as last_log FROM log WHERE id_actionType = 1 and id_user = ".$_POST["id_user"]."
+		$select_customers_query = "SELECT max(timeStamp) as last_log FROM log WHERE id_actionType = 1 and id_user = ".$user;
 		$select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
 		while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 				$last_login= $line['last_log'];
 		}
 		
-		$select_customers_query = 'SELECT `name` FROM `customer` WHERE `id` ='.$user;
+		$select_customers_query = "SELECT name FROM customer WHERE id =".$user;
 		$select_customers_result = mysql_query($select_customers_query) or die('Consulta fallida: ' . mysql_error());
 		while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 				$user_name= $line['name'];
 		}
 		// it finds all that the user has made while he/she was in his/her account
-		//SELECT l.`ipAddress`,at.action_name ,tm.table_name ,r.result_name FROM `log` l, action_type at, table_modified tm, result r where l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$_POST["id_user"].' order by l.`timeStamp`			
+		//SELECT l.ipAddress,at.action_name ,tm.table_name ,r.result_name FROM log l, action_type at, table_modified tm, result r where l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.id_user = '.$_POST["id_user"].' order by l.timeStamp			
 		$subject = $message. " from user ".$user_name;	
 		$now = date("F j, Y");
 		
@@ -85,17 +85,17 @@ function body_email($message,$logout_time_out,$user){
                                                 
 	$now = date("Y-m-d");
 	$month = date("Y-m");
-	$select_customers_query = 'SELECT count(`send`) as counter FROM `log` WHERE timeStamp < "'.$now.'" and `send` = 0  and `id_user` = '.$user;	
+	$select_customers_query = "SELECT count(send) as counter FROM log WHERE timeStamp < '".$now."' and send = 0  and id_user = ".$user;	
 	$select_customers_result = mysql_query($select_customers_query) or die('... ');
 		while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 			$counter = $line['counter']; 
 		}
 		
 		if($counter == 0){
-			$select_customers_query = 'SELECT l.`timeStamp` as time ,l.`ipAddress` as ip ,at.action_name as ac_name ,tm.table_name as t_name ,r.result_name as r_name 
-								FROM `log` l, action_type at, table_modified tm, result r 
-								WHERE l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$user.' 
-								AND l.`timeStamp` LIKE "%'.$now.'%" order by l.`timeStamp` ';
+			$select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip ,at.action_name as ac_name ,tm.table_name as t_name ,r.result_name as r_name 
+								FROM log l, action_type at, table_modified tm, result r 
+								WHERE l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.id_user = '.$user.' 
+								AND l.timeStamp LIKE '%".$now."%' order by l.timeStamp ";
 			$select_customers_result = mysql_query($select_customers_query) or die('Message not generate, please review the class.. or DB connection ');
 
 			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -120,10 +120,10 @@ function body_email($message,$logout_time_out,$user){
 			}
 			
 		}else{
-			$select_customers_query = 'SELECT l.`timeStamp` as time ,l.`ipAddress` as ip ,at.action_name as ac_name ,tm.table_name as t_name ,r.result_name as r_name 
-								FROM `log` l, action_type at, table_modified tm, result r 
-								WHERE l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.`id_user` = '.$user.' 
-								and `send`=0 and l.`timeStamp` <= "%'.$now.'%"  order by l.`timeStamp` ';
+			$select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip ,at.action_name as ac_name ,tm.table_name as t_name ,r.result_name as r_name 
+								FROM log l, action_type at, table_modified tm, result r 
+								WHERE l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND l.id_user = '.$user.' 
+								and send=0 and l.timeStamp <= '%".$now."%'  order by l.timeStamp ";
 			
 			$select_customers_result = mysql_query($select_customers_query) or die('Message not generate, please review the class or DB connection ');
 
@@ -166,28 +166,28 @@ function body_email($message,$logout_time_out,$user){
 		$subject = $message;
 		$body_message= $message." from IP address: ". $ip. "</B>";
 		
-		$select_apps_query = 'SELECT `id`, `action_name` FROM `action_type` WHERE `id` = '.$action_type;
+		$select_apps_query = 'SELECT id, action_name FROM action_type WHERE id = '.$action_type;
 		$select_apps_result = mysql_query($select_apps_query) or die('1 ' . mysql_error());
 		
 		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
 			$body_message.= "<br> The action type was:  <B>".$line['action_name']. "</B>";
 		}	
 		
-		$select_apps_query = 'SELECT `id`, `result_name` FROM `result` WHERE `id` = '.$result;
+		$select_apps_query = 'SELECT id, result_name FROM result WHERE id = '.$result;
 		$select_apps_result = mysql_query($select_apps_query) or die('2 ' . mysql_error());
 		
 		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
 			$body_message.= "<br> The action type was:  <B> ".$line['result_name']. "</B>";
 		}
 		
-		$select_apps_query = 'SELECT `id`, `table_name` FROM `table_modified` WHERE `id` = '.$table_modified;
+		$select_apps_query = 'SELECT id, table_name FROM table_modified WHERE id = '.$table_modified;
 		$select_apps_result = mysql_query($select_apps_query) or die('3 ' . mysql_error());
 		
 		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
 			$body_message.= "<br> The table modified was:  <B> ".$line['table_name']. "</B>";
 		}
 		
-		$select_apps_query = 'SELECT  `username` FROM `customer` WHERE `id` = '.$id_user;
+		$select_apps_query = 'SELECT  username FROM customer WHERE id = '.$id_user;
 		$select_apps_result = mysql_query($select_apps_query) or die('4 '. $message . " - " . mysql_error());
 		
 		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
