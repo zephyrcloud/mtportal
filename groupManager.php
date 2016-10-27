@@ -9,14 +9,18 @@ include("config/connection.php");
 	
 	session_start();
 	
-		if (isset($_POST["saveNewUserBtn"])) {			 		
+	if (isset($_POST["saveNewUserBtn"])) {			 		
 		// Inserta en la base de datos el nuevo user
-		$insert_user_query = 'INSERT INTO `type_user`(`category`) VALUES ("' . $_POST["firstNameNewUserFld"] . '")';
+		$insert_user_query = "INSERT INTO type_user(category) VALUES ('" . $_POST["firstNameNewUserFld"] . "')";
 		$insert_user_result = mysql_query($insert_user_query);		
 		if($insert_user_result){
-			//$message =  $dict->words("2");			
+			$message =  $dict->words("2");
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',16,1,9,1)";
+			$insert_result = mysql_query($insert_query);
 		}else{
-			//$message =  $dict->words("3");			
+			$message =  $dict->words("3");
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',16,2,9,1)";
+			$insert_result = mysql_query($insert_query);			
 		}
 			
 			
@@ -26,28 +30,36 @@ include("config/connection.php");
 		if (isset($_POST["saveEditUserBtn"])) {
 			
 			// Edita en la base de datos el user 
-			$update_user_query = 'UPDATE `type_user` SET `category`="' . $_POST["firstNameEditUserFld"] . '" WHERE `id`="' . $_POST["idEditUserFld"] . '"';
+			$update_user_query = "UPDATE type_user SET category='" . $_POST["firstNameEditUserFld"] . "' WHERE id='" . $_POST["idEditUserFld"] . "'";
 			$update_user_result = mysql_query($update_user_query);
-			//echo nl2br($update_user_query ."\n");
+			//echo nl2br($update_user_query ."\n");1
 			if($update_user_result){
-				//$message =  $dict->words("4");			
+				$message =  $dict->words("4");
+				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',17,1,9,1)";
+				$insert_result = mysql_query($insert_query);	
 			}else{
-				//$message =  $dict->words("3");			
+				$message =  $dict->words("3");
+				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',17,2,9,1)";
+				$insert_result = mysql_query($insert_query);					
 			}
 			
 		}
 		
-		if (isset($_POST["saveDeleteUserBtn"])) {
+	if (isset($_POST["saveDeleteUserBtn"])) {
 		
 		// Elimina en la base de datos el user 
-		$delete_user_query = 'DELETE FROM type_user WHERE id = "' . $_POST["idDeleteUserFld"] . '"';
+		$delete_user_query = "DELETE FROM type_user WHERE id = '" . $_POST["idDeleteUserFld"] . "'";
 		$delete_user_result = mysql_query($delete_user_query);
 		
 		if($delete_user_result){
-			//$message =  $dict->words("5");
-			//$email-> body_email($message,$ip_capture->getRealIP(),4,9,2,$id_user);
+			$message =  $dict->words("5");
+			//$email-> body_email($message,$ip_capture->getRealIP(),4,9,2,$id_user);18
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',18,1,9,1)";
+			$insert_result = mysql_query($insert_query);
 		}else{
-			//$message =  $dict->words("3");
+			$message =  $dict->words("3");
+			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',18,2,9,1)";
+			$insert_result = mysql_query($insert_query);
 			//die('Invalid query: ' . mysql_error());
 			//$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
 		}
@@ -85,7 +97,7 @@ include("config/connection.php");
 			<div class="wrapper">
 				<div id="post">
 					<div id="postitle">
-						<div class="floatleft"><h1>Categories</h1></div>
+						<div class="floatleft"><h1>Groups</h1></div>
 						<div class="floatright righttext tpad"></div>
 						<div class="clear">&nbsp;</div>
 					</div>
@@ -93,9 +105,11 @@ include("config/connection.php");
 					<div id="postcontent">
 						
 						<div id="tables" name="tables">
-						<input id="newUserBtn" name="newUserBtn" type="submit" value="Add Category">
-						
-						<!-- DIV Message -->
+						<input id="newUserBtn" name="newUserBtn" type="submit" value="Add Group">
+						<input id="GroupAdminBtn" name="GroupAdminBtn" type="submit" value="Summary groups">
+						<!-- <form method="POST" action="groupsAdmin.php">
+							</form> 
+						 DIV Message -->
 						<?php
 							if($message != ""){
 								?>
@@ -114,7 +128,7 @@ include("config/connection.php");
 							<div id="post">
 						
 								<form method="POST" action="groupManager.php">								
-									Category name: <input id="firstNameNewUserFld" name="firstNameNewUserFld" type="text" required="required"><br />
+									Name: <input id="firstNameNewUserFld" name="firstNameNewUserFld" type="text" required="required"><br />
 									
 									<div>
 									<br>
@@ -131,7 +145,7 @@ include("config/connection.php");
 							<div id="post">
 								<form id="editUserFrm" name="editUserFrm" method="POST" action="groupManager.php">
 									<input id="idEditUserFld" name="idEditUserFld" type="hidden" required="required">
-									Category Name: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
+									Name: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
 									
 									<div>
 									<br>
@@ -148,7 +162,7 @@ include("config/connection.php");
 							<div id="post">
 								<form id="deleteUserFrm" name="deleteUserFrm" method="POST" action="groupManager.php">
 									<input id="idDeleteUserFld" name="idDeleteUserFld" type="hidden" required="required">
-									Delete the category <span id="firstNameDeleteUserLbl" name="firstNameDeleteUserLbl"></span>&nbsp;<span id="lastNameDeleteUserLbl" name="lastNameDeleteUserLbl"></span>?<br /><br />
+									Delete the Groups <span id="firstNameDeleteUserLbl" name="firstNameDeleteUserLbl"></span>&nbsp;<span id="lastNameDeleteUserLbl" name="lastNameDeleteUserLbl"></span>?<br /><br />
 									<input id="saveDeleteUserBtn" name="saveDeleteUserBtn" type="submit" value="Delete">
 									<input id="cancelDeleteUserBtn" name="cancelDeleteUserBtn" type="button" value="Cancel">									
 								</form>
@@ -162,7 +176,7 @@ include("config/connection.php");
 							<col width="150px">
 							
 							<tr>
-								<th style="border: 1px solid;"> Category </th>
+								<th style="border: 1px solid;"> Groups </th>
 								<th style="border: 1px solid;"> Action </th>
 								
 							</tr>
@@ -170,7 +184,7 @@ include("config/connection.php");
 							<?php 
 								
 								// Realizar una consulta MySQL
-								$select_users_query = 'SELECT `id`, `category` FROM `type_user` ';
+								$select_users_query = "SELECT id, category FROM type_user ";
 								$select_users_result = mysql_query($select_users_query);
 								
 								while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
@@ -267,6 +281,10 @@ include("config/connection.php");
 		// Funcion cancel delete user
 		$("#cancelDeleteUserBtn").click(function() {
 			$("#deleteUserPnl").dialog( "close" );
+		});
+		
+		$("#GroupAdminBtn").click(function() {
+			location.href = "groupsAdmin.php";
 		});
 		
 		$( "#addUserPnl" ).dialog({

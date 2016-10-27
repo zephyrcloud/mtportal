@@ -48,23 +48,22 @@
 					<div id="postcontent">
 					
 						<div id="menu">
-							
+							<input id="return" name="return" type="submit" value="Back">
 							<ul>
 								<p></p>
 								<?php 
-									$select_users_query = 'SELECT `id`, `name` FROM `customer`';
+									$select_users_query = "SELECT id, name FROM customer WHERE id in ( SELECT customer_id FROM customer_category  ) ";
 									$select_users_result = mysql_query($select_users_query);
 									
 									while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
-										
-										echo "<li class='has-sub'><i class='material-icons'>group_work<a title='' href='#'>".$line['name']."</a></i>";
+											echo "<li class='has-sub'><i class='material-icons'>group_work<a title='' href='#'>".$line['name']."</a></i>";
 											echo "<ul>";
-											$select_users_query1 = 'SELECT `id` as idUser, CONCAT(`firstName`," ",`lastName`) as name FROM `user` WHERE `customer` ='.$line['id'];
+											$select_users_query1 = "SELECT id as idUser, CONCAT(firstName,' ',lastName) as name FROM user WHERE id in ( SELECT user_id FROM user_category ) AND customer =".$line['id'];
 											$select_users_result1 = mysql_query($select_users_query1);
 											while ($line1 = mysql_fetch_array($select_users_result1, MYSQL_ASSOC)) {
 												echo "<li class='has-sub'><i class='material-icons'>account_circle<a title='' href='#'>".$line1['name']."</a></i>";
 												echo "<ul>";
-												$select_users_query2 = 'SELECT  tu.category as category  FROM `user_category` uc, `type_user` tu WHERE uc.tu_id = tu.id AND `user_id` ='.$line1['idUser'];
+												$select_users_query2 = "SELECT  tu.category as category  FROM user_category uc, type_user tu WHERE uc.tu_id = tu.id AND user_id =".$line1['idUser'];
 												$select_users_result2 = mysql_query($select_users_query2);
 												while ($line2 = mysql_fetch_array($select_users_result2, MYSQL_ASSOC)) {
 													echo "<li class='has-sub'><i class='material-icons'>work<a title='' href='#'>".$line2['category']."</a></i></li>";
@@ -73,7 +72,7 @@
 												echo "</li>";
 											}
 											echo "</ul>";
-										echo "</li>";
+										echo "</li>"; 
 									}
 								?>
 								
@@ -227,7 +226,11 @@
 
 <script>
 
-
+$( document ).ready(function() {
+	$("#return").click(function() {
+			location.href = "groupManager.php";
+		});
+});
 	
 function myFunction() {
   // Declare variables

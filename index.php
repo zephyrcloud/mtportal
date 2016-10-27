@@ -1,6 +1,4 @@
 <?php
-
-
 	// Connect to database
 	//include("config/connection.php");
 	include("config/ip_capture.php");
@@ -67,7 +65,6 @@
 									$body_message="Login Failed From IP address: ". $ip_capture->getRealIP() ;*/
 									//$email->enviar_correo($subject,$body_message);
 								}
-
 							?>
 									
 						</form>

@@ -36,23 +36,26 @@
 							</div>   
 					<div id="content">
 							<div id="principal">
-									<table class="sortable">
+								Search for Customer: <input type="text" id="clients" onkeyup="myFunction1()">	
+								Search for date: <input type="text" id="myInput" onkeyup="myFunction()" onchange="myFunction()" >
+								
+									<table class="sortable" id="myTable">
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
 										<tr>
-											<th style="border: 1px solid;">Customer name</th>
+											<th style="border: 1px solid;">Customer</th>
 											<th style="border: 1px solid;">Domain</th>
 											<th style="border: 1px solid;">Time registred</th>
 											<th style="border: 1px solid;">Action</th>
 											<th style="border: 1px solid;">Result</th>
 										</tr>
 										<?php
-										$select_customers_query = 'SELECT `timeStamp` as time , c.name as name , at.action_name as action , r.result_name as result, `domain_name` as domain 
-										FROM `log` l , customer c , action_type at , table_modified tm, result r 
-										WHERE `domain_name` NOT LIKE "NULL" AND l.id_user = c.id AND l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id ORDER BY `timeStamp`  DESC ';
+										$select_customers_query = "SELECT timeStamp as time , c.name as name , at.action_name as action , r.result_name as result, domain_name as domain 
+										FROM log l , customer c , action_type at , table_modified tm, result r 
+										WHERE domain_name NOT LIKE 'NULL' AND l.id_user = c.id AND l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id ORDER BY timeStamp  DESC ";
 										$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 											if($line['result'] == 'Success'){
@@ -96,7 +99,10 @@
 			include("footer.php");
 		?>
 		<script>
-	
+			var today1 = new Date();
+			var dd = today1.getDate();
+			var mm = today1.getMonth()+1; //January is 0!
+			var yyyy = today1.getFullYear();
 		$( "#detailUserPnl" ).dialog({
 			autoOpen: false,
 			modal: true,
@@ -117,6 +123,56 @@
 			$("#idDomain").val($id);			
 			
 		});
+		
+				
+			function myFunction() {
+			  // Declare variables
+			  var input, filter, table, tr, td, i;
+			  input = document.getElementById("myInput");
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("myTable");
+			  tr = table.getElementsByTagName("tr");
+
+			  // Loop through all table rows, and hide those who don't match the search query
+			  for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[2];
+				if (td) {
+				  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				  } else {
+					tr[i].style.display = "none";
+				  }
+				}
+			  }
+			}
+
+			function myFunction1() {
+			  // Declare variables
+			  var input, filter, table, tr, td, i;
+			  input = document.getElementById("clients");  
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("myTable");
+			  tr = table.getElementsByTagName("tr");
+
+			  // Loop through all table rows, and hide those who don't match the search query
+			  for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[0];
+				if (td) {
+				  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				  } else {
+					tr[i].style.display = "none";
+				  }
+				}
+			  }
+			}
+
+			 $(function () {
+                $("#myInput").datepicker({dateFormat: 'mm-dd-yy', maxDate: mm+"-"+dd+"-"+yyyy});
+			 });
+
 		</script>
+		
+		
 	</body>
 </html>

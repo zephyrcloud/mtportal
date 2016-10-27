@@ -2,6 +2,8 @@
 include("config/connection.php");
 include("dictionary.php");
 $dict= new dictionary();
+
+
 ?>
 <html>
 	<head>
@@ -36,15 +38,21 @@ $dict= new dictionary();
 						<div class="floatright righttext tpad"></div>
 						<div class="clear">&nbsp;</div>
 					</div>
-	
+					<input type="submit" id="newCustomerBtn" name="newCustomerBtn" value="Add Number">
 					<div id="postcontent">
 					<?php 
+					if(isset($_POST['saveNewTelephoneBtn'])){
+						$insert_query = "INSERT INTO voipclient(number, customer_id, type) VALUES ('".$_POST['nameNewCustomerFld']."',".$_POST['owner'].", ".$_POST['type']." )";
+						$insert_result = mysql_query($insert_query);
+						echo "<script> location.href= 'telephoneManager.php' </script>";
+					}
+					
 					if(isset($_POST['idEditCustomerFld'])){
-						$update_query = 'UPDATE `voipclient` 
-										 SET `customer_id`='.$_POST['owner'].',
-											 `type`='.$_POST['type'].',
-											 `statusCustmoer`='.$_POST['status'].' 
-										 WHERE `id`='.$_POST['idEditCustomerFld'];
+						$update_query = "UPDATE voipclient 
+										 SET customer_id=".$_POST['owner'].",
+											 type=".$_POST['type'].",
+											 statusCustmoer=".$_POST['status']." 
+										 WHERE id=".$_POST['idEditCustomerFld'];
 						$select_customers_result = mysql_query($update_query);
 						echo "<script> location.href = 'telephoneManager.php'; </script>";
 					}
@@ -59,8 +67,8 @@ $dict= new dictionary();
 									<th style="border: 1px solid;">	<?php echo $dict->words("18");?> </th>
 								</tr>
 						<?php
-						//SELECT ct.`telephone`, c.name FROM `created_telephone` ct, customer c WHERE c.id = ct.customer_id 
-						$select_customers_query = "SELECT sc.id as sid ,t.id as tid ,c.id as idc,vc.id as id, vc.id as id, vc.`number` as tel , t.name_type as type , sc.status_cus as status, c.name as name FROM `voipclient` vc , type t , status_customer sc, customer c WHERE t.id = vc.type AND sc.id = vc.statusCustmoer AND c.id = vc.customer_id ";
+						//SELECT ct.telephone, c.name FROM created_telephone ct, customer c WHERE c.id = ct.customer_id 
+						$select_customers_query = "SELECT sc.id as sid ,t.id as tid ,c.id as idc,vc.id as id, vc.id as id, vc.number as tel , t.name_type as type , sc.status_cus as status, c.name as name FROM voipclient vc , type t , status_customer sc, customer c WHERE t.id = vc.type AND sc.id = vc.statusCustmoer AND c.id = vc.customer_id ";
 						$select_customers_result = mysql_query($select_customers_query);
 									 	
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -84,7 +92,7 @@ $dict= new dictionary();
 									<?php echo $dict->words("158");?> 
 										<select id="owner" name="owner"  >											 
 												<?php
-												$select_customers_query = 'SELECT `id`, `name` FROM `customer`';
+												$select_customers_query = "SELECT id, name FROM customer";
 												$select_customers_result = mysql_query($select_customers_query); 
 												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 													echo "<option  value=" . $line['id'] . ">" . $line['name'] . "</option>";
@@ -96,7 +104,7 @@ $dict= new dictionary();
 									<?php echo $dict->words("159");?>
 										<select id="type" name="type"  >											 
 												<?php
-												$select_customers_query = 'SELECT `id`, `name_type` FROM `type`';
+												$select_customers_query = "SELECT id, name_type FROM type";
 												$select_customers_result = mysql_query($select_customers_query); 
 												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 													echo "<option  value=" . $line['id'] . ">" . $line['name_type'] . "</option>";
@@ -108,7 +116,7 @@ $dict= new dictionary();
 									<?php echo $dict->words("160");?>
 										<select id="status" name="status"  >											 
 												<?php
-												$select_customers_query = 'SELECT `id`, `status_cus` FROM `status_customer` ';
+												$select_customers_query = "SELECT id, status_cus FROM status_customer ";
 												$select_customers_result = mysql_query($select_customers_query); 
 												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 													echo "<option  value=" . $line['id'] . ">" . $line['status_cus'] . "</option>";
@@ -119,6 +127,43 @@ $dict= new dictionary();
 									<br/>
 									<input id="saveEditCustomerBtn" name="saveEditCustomerBtn" type="submit" value="Edit">
 									<input id="cancelEditCustomerBtn" name="cancelEditCustomerBtn" type="button" value="Cancel">
+								</form>
+							</div>
+						</div>
+				
+					<div id="addCustomerPnl" class="modalDialog" title="New Telephone">
+							<div id="post">
+								<form method="POST" action="telephoneManager.php"> 
+									Telephone number: <input id="nameNewCustomerFld" name="nameNewCustomerFld" type="text" required="required"><br />
+									
+									<?php echo $dict->words("158");?> 
+										<select id="owner" name="owner"  >											 
+												<?php
+												$select_customers_query = "SELECT id, name FROM customer";
+												$select_customers_result = mysql_query($select_customers_query); 
+												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+													echo "<option  value=" . $line['id'] . ">" . $line['name'] . "</option>";
+												}
+												?>
+										</select>
+										<br />
+										<br />
+									
+									<?php echo $dict->words("159");?>
+										<select id="type" name="type"  >											 
+												<?php
+												$select_customers_query = "SELECT id, name_type FROM type";
+												$select_customers_result = mysql_query($select_customers_query); 
+												while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+													echo "<option  value=" . $line['id'] . ">" . $line['name_type'] . "</option>";
+												}
+												?>
+										</select>
+										<br />
+										<br />
+									
+									<input id="saveNewTelephoneBtn" name="saveNewTelephoneBtn" type="submit" value="Add">
+									<input id="cancelNewTelephoneBtn" name="cancelNewTelephoneBtn" type="button" value="Cancel">
 								</form>
 							</div>
 						</div>
@@ -137,6 +182,30 @@ $dict= new dictionary();
 	
 	$( document ).ready(function() {
 		
+		// Funcion add customer
+		$("#newCustomerBtn").click(function() {
+			$("#addCustomerPnl").dialog( "open" );			
+		});
+		
+		// Dialog add customer
+		$( "#addCustomerPnl" ).dialog({
+			autoOpen: false,
+			modal: true,
+			position: { my: 'top', at: 'top+150' },
+			show: {
+				effect: "blind",
+				duration: 200
+			},
+			hide: {
+				effect: "blind",
+				duration: 200
+			}
+		});
+		
+		// Funcion cancel add customer
+		$("#cancelNewTelephoneBtn").click(function() {
+			$("#addCustomerPnl").dialog( "close" );
+		});
 		
 		$("a[id^='aEdit']").click(function(event) {
 			$("#editCustomerPnl").dialog( "open" );

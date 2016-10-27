@@ -1,5 +1,7 @@
 <?php
 	include("config/connection.php");
+	include("config/ip_capture.php");
+	$ip_capture = new ip_capture();
 ?>
 
 <html>
@@ -43,23 +45,27 @@
 										<tr>
 											<th style="border: 1px solid;">Customer</th>
 											<th style="border: 1px solid;">Username</th>
-											<th style="border: 1px solid;">Quotas telephone</th>
-											<th style="border: 1px solid;">Remaining telephone</th>
+											<th style="border: 1px solid;">Quota</th>
+											<th style="border: 1px solid;">Available</th>
 										</tr>
 										<form method="POST" action="telephonequotas.php">
 										
 										<input id="buttonUpdate" type="submit" value="Update" >
 										<?php
-									
-											
-											$select_customers_query = 'SELECT ct.`customer_id` as cid , (c.quota_telephone-count(*)) as remaining FROM `created_telephone` ct , customer c WHERE c.id= ct.customer_id GROUP BY ct.`customer_id` ';
+										
+											$select_customers_query = "SELECT id, quota_telephone FROM customer where id in (Select customer_id from voipclient) ";
 											$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 											while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-												$update_user_query = 'UPDATE `customer` SET `remaining_telephone`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
-												$update_user_result = mysql_query($update_user_query);
+												$select_customers_query1 = "SELECT count(*) as counter FROM voipclient WHERE customer_id = ".$line['id'];
+												$select_customers_result1 = mysql_query($select_customers_query1) or die('Choose a option to continue ');
+												while ($line1 = mysql_fetch_array($select_customers_result1, MYSQL_ASSOC)) {
+													$result= $line['quota_telephone'] - $line1['counter'];
+													$update_user_query = "UPDATE customer SET remaining_telephone=".$result." WHERE id =".$line['id'];
+													$update_user_result = mysql_query($update_user_query);
+												}
 											}
 											
-											$select_customers_query = 'SELECT * FROM customer ';
+											$select_customers_query = "SELECT * FROM customer ";
 											$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 											$id = Array();
 											$i=0;
@@ -94,7 +100,7 @@
 					if(isset($_POST['minusNumber'])){
 						
 						for($i=0; $i <= count($id); $i++){
-							$update_user_query = 'UPDATE `customer` SET  quota_telephone='.$_POST['quotaValueTel_'.$id[$i]].'  WHERE `id`= '.$id[$i];
+							$update_user_query = "UPDATE customer SET  quota_telephone=".$_POST['quotaValueTel_'.$id[$i]]."  WHERE id= ".$id[$i];
 							$update_user_result = mysql_query($update_user_query);
 						}
 						
@@ -103,6 +109,8 @@
 					
 					if($_GET['a']){
 						echo "<script> alert('Quotas updated succesfully'); </script>";
+						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',21,1,8,1)";
+						$insert_result = mysql_query($insert_query);
 					}
 					
 					?>

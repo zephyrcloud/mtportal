@@ -1,5 +1,7 @@
 <?php
 	include("config/connection.php");
+	include("config/ip_capture.php");
+	$ip_capture = new ip_capture();
 	$message = "";
 ?>
 
@@ -18,8 +20,8 @@
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 		<?php
-					if(isset($_POST['buttonUpdate'])){						
-						$select_customers_query = 'SELECT min(id) as min , max(id) as max ,count(*) as counter   FROM `customer`';
+					if(isset($_POST['buttonUpdate'])){	
+						$select_customers_query = "SELECT min(id) as min , max(id) as max ,count(*) as counter   FROM customer";
 						$select_customers_result = mysql_query($select_customers_query);
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 							$min = $line['min'];
@@ -29,15 +31,18 @@
 						$count=0;
 						for($i=$min; $i < ($max+1); $i++){
 							if($_POST['quotaValue_'.$i] != ""){	
-								$update_user_query = 'UPDATE `customer` SET quota_domain='.$_POST['quotaValue_'.$i].' WHERE `id`= '.$i;
+								$update_user_query = "UPDATE customer SET quota_domain=".$_POST['quotaValue_'.$i]." WHERE id= ".$i;
 								$update_user_result = mysql_query($update_user_query);
 								$count++;
 							}
 						}
-						
 						if($count == $counter){
 							$message = "Action complete succesfully";
+							$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',20,1,8,1)";
+							$insert_result = mysql_query($insert_query);
 						}else{
+							$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',20,2,8,1)";
+							$insert_result = mysql_query($insert_query);
 							$message = "Something Wrong";
 						}
 					}
@@ -84,23 +89,28 @@
 										<tr>
 											<th style="border: 1px solid;">Customer</th>
 											<th style="border: 1px solid;">Username</th>
-											<th style="border: 1px solid;">Quotas domain</th>
-											<th style="border: 1px solid;">Remaining domain</th>											
+											<th style="border: 1px solid;">Quotas</th>
+											<th style="border: 1px solid;">Available</th>											
 										</tr>
 										<form method="POST" action="domainquotas.php">
 										
 										<input id="buttonUpdate" name="buttonUpdate" type="submit" value="Update" >
 										<?php
 									
-											$select_customers_query = 'SELECT cd.`customer_id` as cid , (c.quota_domain-count(*)) as remaining FROM `created_domains` cd , customer c WHERE c.id= cd.customer_id GROUP BY cd.`customer_id` ';
+											$select_customers_query = "SELECT id, quota_domain FROM customer where id in (Select customer_id from created_domains) ";;
 											$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 											while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-												$update_user_query = 'UPDATE `customer` SET `remaining`='.$line['remaining'].' WHERE `id` ='.$line['cid'];
-												$update_user_result = mysql_query($update_user_query);
+												$select_customers_query1 = "SELECT count(*) as counter FROM created_domains WHERE customer_id = ".$line['id'];
+												$select_customers_result1 = mysql_query($select_customers_query1) or die('Choose a option to continue ');
+												while ($line1 = mysql_fetch_array($select_customers_result1, MYSQL_ASSOC)) {
+													$result= $line['quota_domain'] - $line1['counter'];
+													$update_user_query = "UPDATE customer SET remaining=".$result." WHERE id =".$line['id'];
+													$update_user_result = mysql_query($update_user_query);
+												}
 											}
 											
 											
-											$select_customers_query = 'SELECT * FROM customer ';
+											$select_customers_query = "SELECT * FROM customer ";
 											$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 											$id = Array();
 											$i=0;

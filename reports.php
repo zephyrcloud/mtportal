@@ -67,7 +67,7 @@ $dict= new dictionary();
                                         <select id="opciones_user" name="opciones_user"  onclick="buscar('user')"  >
                                          <option value="0"><?php echo $dict->words("71");?></option>
                 <?php
-                $select_customers_query = 'SELECT `id`, `name` FROM `customer`';
+                $select_customers_query = "SELECT id, name FROM customer";
                 $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
                 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -88,7 +88,7 @@ $dict= new dictionary();
                                         <select id="opciones_actionType" name="opciones_actionType"  onclick="buscar('actionType')"  >
                                          <option value="0"><?php echo $dict->words("71");?></option>
 <?php
-$select_customers_query = 'SELECT `id`, `action_name` FROM `action_type`';
+$select_customers_query = "SELECT id, action_name FROM action_type";
 $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -109,7 +109,7 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
                                         <select id="opciones_table_modified" name="opciones_actionType"  onclick="buscar('table_modified')"  >
                                          <option value="0"><?php echo $dict->words("71");?></option>
 <?php
-$select_customers_query = 'SELECT `id`, `table_name` FROM `table_modified`';
+$select_customers_query = "SELECT id, table_name FROM table_modified";
 $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -132,7 +132,7 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
                                         <select id="opciones_result" name="opciones_result"  onclick="buscar('result')"  >
                                          <option value="0"><?php echo $dict->words("71");?></option>
 <?php
-$select_customers_query = 'SELECT `id`, `result_name` FROM `result`';
+$select_customers_query = "SELECT id, result_name FROM result";
 $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -155,7 +155,7 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
                                         <input id="close" name="close" type="text" size="4" style="display:none;" value="1">						
                                         <input  id="end_report" type="submit" value="<?php echo $dict->words("79");?>" />
 <?php
-$select_customers_query = 'SELECT min(id) as minimo FROM `log` WHERE id_counter = 0';
+$select_customers_query = "SELECT min(id) as minimo FROM log WHERE id_counter = 0";
 
 $select_customers_result = mysql_query($select_customers_query)or die($dict->words("12").' ' . mysql_error());
 
@@ -163,7 +163,7 @@ while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
     $minimo = $line['minimo'];
     echo '<input id="minimo" name="minimo" type="text" size="4" style="display:none;" value="' . $minimo . '">';
 }
-$select_customers_query = 'SELECT max(id) as maximo FROM `log` WHERE id_counter = 0';
+$select_customers_query = 'SELECT max(id) as maximo FROM log WHERE id_counter = 0';
 $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
 while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -196,17 +196,17 @@ if (isset($_POST["close"])) {
 
     for ($i = $_POST["minimo"]; $i <= $_POST["maximo"]; $i++) {
 
-        $update_app_query = 'UPDATE `log` SET `id_counter` = 1 WHERE `id` = ' . $i;
+        $update_app_query = "UPDATE log SET id_counter = 1 WHERE id = " . $i;
         $update_app_result = mysql_query($update_app_query);
     }
 }
 
 if (isset($_POST["rep_history"])) {
-    $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
+    $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 														   FROM log l , customer c , action_type at, table_modified tm , result r 
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-														   AND l.timeStamp < NOW() AND id_counter <> 0  ORDER BY l.timeStamp DESC ';
-
+														   AND l.timeStamp < NOW() AND id_counter <> 0  ORDER BY l.timeStamp DESC ";
+	
     $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
     while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -236,48 +236,45 @@ if (isset($_POST["rep_history"])) {
 
 if (isset($_POST["user_id_field"])) {
     if ($_POST["user_id_field"] != "0") {
-        $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
+        $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 														   FROM log l , customer c , action_type at, table_modified tm , result r 
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-														   AND id_user =' . $_POST["user_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC ';
+														   AND id_user =" . $_POST["user_id_field"] . " AND id_counter <> 1 ORDER BY l.timeStamp DESC ";
     }
 } else {
     if (isset($_POST["actionType_id_field"])) {
         if ($_POST["actionType_id_field"] != "0") {
-            $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
+            $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 															   FROM log l , customer c , action_type at, table_modified tm , result r 
 															   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-															   AND id_actionType =' . $_POST["actionType_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC';
+															   AND id_actionType =" . $_POST["actionType_id_field"] . " AND id_counter <> 1 ORDER BY l.timeStamp DESC";
         }
     } else {
         if (isset($_POST["actionType_id_field"])) {
             if ($_POST["actionType_id_field"] != "0") {
-                $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
+                $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 														   FROM log l , customer c , action_type at, table_modified tm , result r 
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-														   AND id_actionType =' . $_POST["actionType_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC';
+														   AND id_actionType =" . $_POST["actionType_id_field"] . " AND id_counter <> 1 ORDER BY l.timeStamp DESC";
             }
         } else {
             if (isset($_POST["table_modified_id_field"])) {
                 if ($_POST["table_modified_id_field"] != "0") {
-                    $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
+                    $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 																	   FROM log l , customer c , action_type at, table_modified tm , result r 
 																	   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-																	   AND id_tableModified =' . $_POST["table_modified_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC';
+																	   AND id_tableModified =" . $_POST["table_modified_id_field"] . " AND id_counter <> 1 ORDER BY l.timeStamp DESC";
                 }
             } else {
                 if (isset($_POST["result_id_field"])) {
                     if ($_POST["result_id_field"] != "0") {
-                        $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
+                        $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 																		   FROM log l , customer c , action_type at, table_modified tm , result r 
 																		   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-																		   AND id_result =' . $_POST["result_id_field"] . ' AND id_counter <> 1 ORDER BY l.timeStamp DESC';
+																		   AND id_result =" . $_POST["result_id_field"] . " AND id_counter <> 1 ORDER BY l.timeStamp DESC";
                     }
                 } else {
-                    $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
-														   FROM log l , customer c , action_type at, table_modified tm , result r 
-														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1
-														   ORDER BY l.timeStamp DESC';
+                    $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 UNION SELECT l.`timeStamp`, l.`ipAddress`, ifnull(l.`id_user`,'admin') as name, at.action_name as action,tm.table_name as table_name, r.result_name as result FROM log l , action_type at , table_modified tm , result r WHERE l.admin = 1 AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result ORDER BY `time` desc ";
                 }
             }
         }
@@ -288,31 +285,31 @@ if (isset($_POST["id_order"])) {
 
     switch ($_POST["id_order"]) {
         case 1:
-            $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.id_user ';
+            $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.id_user ";
             break;
         case 2:
-            $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.id_actionType ';
+            $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.id_actionType ";
             break;
         case 3:
-            $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.id_tableModified ';
+            $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.id_tableModified ";
             break;
         case 4:
-            $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.id_result ';
+            $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.id_result ";
             break;
         case 5:
-            $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.timeStamp ASC ';
+            $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.timeStamp ASC ";
             break;
         case 6:
-            $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.timeStamp DESC ';
+            $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result FROM log l , customer c , action_type at, table_modified tm , result r WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result AND id_counter <> 1 ORDER BY l.timeStamp DESC ";
             break;
     }
 }
 
 if (isset($_POST["especific_day"])) {
-    $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
+    $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 														   FROM log l , customer c , action_type at, table_modified tm , result r 
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-														   AND l.timeStamp LIKE "%' . $_POST["especific_day"] . '%" AND id_counter <> 1 ORDER BY l.timeStamp ';
+														   AND l.timeStamp LIKE '%" . $_POST["especific_day"] . "%' AND id_counter <> 1 ORDER BY l.timeStamp ";
 }
 
 $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());

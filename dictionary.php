@@ -1,5 +1,4 @@
 <?php
-
 class dictionary{
 	
 	function words($id,$atribute1="",$atribute2="",$atribute3="",$atribute4=""){
@@ -179,7 +178,6 @@ class dictionary{
 						<li>Please note all numbers must be on the same account with the existing service provider to be on a single order.</li>
 					  </ul>";
 		$word[130] = "Lookup Telephone"; // Text field tittle
-
 		/*registertelephone.php */
 		$word[131] = "Numbers to Port";
 		$word[132] = "Current Carrier";
@@ -259,5 +257,4 @@ class dictionary{
 		return $combo;
 	}
 }
-
 ?>

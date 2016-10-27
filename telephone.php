@@ -35,23 +35,24 @@
 							</div>   
 					<div id="content">
 							<div id="principal">
-									<table>
+							Search for date: <input type="text" id="myInput" onkeyup="myFunction()" onchange="myFunction()" >
+									<table id="myTable">
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
 										<tr>
-											<th style="border: 1px solid;">Customer name</th>
-											<th style="border: 1px solid;">Telephone number</th>
+											<th style="border: 1px solid;">Name</th>
+											<th style="border: 1px solid;">Number</th>
 											<th style="border: 1px solid;">Time registred</th>
 											<th style="border: 1px solid;">Action</th>
 											<th style="border: 1px solid;">Result</th>
 										</tr>
 										<?php
-										$select_customers_query = 'SELECT `timeStamp` as time , c.name as name , at.action_name as action , r.result_name as result , l. telephonenumber as number 
-										FROM `log` l , customer c , action_type at , table_modified tm, result r 
-										WHERE l.id_user = c.id AND l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND `id_actionType`=15 ORDER BY `timeStamp` DESC ';
+										$select_customers_query = "SELECT timeStamp as time , c.name as name , at.action_name as action , r.result_name as result , l. telephonenumber as number 
+										FROM log l , customer c , action_type at , table_modified tm, result r 
+										WHERE l.id_user = c.id AND l.id_actionType = at.id AND l.id_tableModified = tm.id AND l.id_result = r.id AND id_actionType=15 ORDER BY timeStamp DESC ";
 										$select_customers_result = mysql_query($select_customers_query) or die('Choose a option to continue ');
 										while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 											if($line['result'] == 'Success'){
@@ -116,6 +117,39 @@
 			$("#idDomain").val($id);			
 			
 		});
+		
+				function myFunction() {
+			  // Declare variables
+			  var input, filter, table, tr, td, i;
+			  input = document.getElementById("myInput");
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("myTable");
+			  tr = table.getElementsByTagName("tr");
+
+			  // Loop through all table rows, and hide those who don't match the search query
+			  for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[2];
+				if (td) {
+				  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				  } else {
+					tr[i].style.display = "none";
+				  }
+				}
+			  }
+			}
+	
+		
+		var today1 = new Date();
+			var dd = today1.getDate();
+			var mm = today1.getMonth()+1; //January is 0!
+			var yyyy = today1.getFullYear();
+			 $(function () {
+                $("#myInput").datepicker({dateFormat: 'mm-dd-yy', maxDate: mm+"-"+dd+"-"+yyyy});
+				
+            });
+		
+	
 		</script>
 	</body>
 </html>
