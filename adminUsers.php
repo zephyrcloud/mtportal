@@ -40,7 +40,7 @@
 		if($update_user_result){
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,admin) VALUES('".$ip_capture->getRealIP()."',4,1,2,1)";
 			$insert_result = mysql_query($insert_query);
-			$message = $dict->words("10");
+			$message = $dict->words("4");
 		}else{
 			$message = $dict->words("3");
 			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user,admin) VALUES('".$ip_capture->getRealIP()."',4,2,2,1)";
@@ -243,6 +243,7 @@
 		<title><?php echo $dict->words("152");?></title>
 		<link href="style/style.css" rel="stylesheet" type="text/css">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" language="javascript" src="TableFilter/tablefilter.js"></script> 
 		<script>
 			function goTo(destination) {
 				window.location.href = destination;
@@ -385,31 +386,21 @@
 						</div>
 						
 						
-						<br/><br/><?php echo $dict->words("153");?> <input type="text" id="myInput" onkeyup="myFunction()">
-						<br/><br/><?php echo $dict->words("154");?> <input type="text" id="clients" onkeyup="myFunction1()">
-						
-						<table id="myTable" class="sortable">
-							<col width="150px">
-							<col width="150px">
-							<col width="150px">
-							<col width="80px">
-							<col width="20px">
-							<col width="20px">
-							<col width="20px">
-							<col width="20px">
+						<table id="table1" cellspacing="0" class="sortable" > 
+							
 							<tr>
-								<th style="border: 1px solid;"><?php echo $dict->words("13"); ?></th>
-								<th style="border: 1px solid;"><?php echo $dict->words("14"); ?></th>
+								<th style="border: 1px solid;"> First Name</th>
+								<th style="border: 1px solid;"> Last Name </th>								
 								<th style="border: 1px solid;"> <?php echo $dict->words("155");?> </th>
 								<th style="border: 1px solid;"><?php echo $dict->words("16"); ?></th>
 								<th style="border: 1px solid;"><?php echo $dict->words("17"); ?></th>
-								<th colspan="5" style="border: 1px solid;"><?php echo $dict->words("18"); ?></th>
+								<th style="border: 1px solid;"><?php echo $dict->words("18"); ?></th>
 							</tr>
 							
 							<?php 
 								
 								// Realizar una consulta MySQL
-								$select_users_query = "SELECT U.id, U.firstName, U.lastName , U.extension, U.outbound_did , C.name ,C.id as idc FROM user U, customer C WHERE C.id = U.customer ";
+								$select_users_query = "SELECT U.id, U.firstName , U.lastName , U.extension, U.outbound_did , C.name ,C.id as idc FROM user U, customer C WHERE C.id = U.customer ";
 								$select_users_result = mysql_query($select_users_query);
 								
 								while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
@@ -421,11 +412,11 @@
 									echo "<td style='border: 1px solid;'><span id='client" . $line['id'] . "'>" . $line['name'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanOutboundDid" . $line['id'] . "'>" . $line['outbound_did'] ."</span></td>";
 									echo "<td style='border: 1px solid;'><span id='spanExtension" . $line['id'] . "'>" . $line['extension'] ."</span></td>";
-									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'].':'.$line['idc']. "' href='#'>".$dict->words("19")."</a></td>";
-									echo "<td style='border: 1px solid;'><a id='aEmails" . $line['id'] . "' href='#'>".$dict->words("20")."</a></td>";
-									echo "<td style='border: 1px solid;'><a id='aApps" . $line['id'] . "' href='#'>".$dict->words("21")."</a></td>";
-									echo "<td style='border: 1px solid;'><a id='aDelete" . $line['id'] . "' href='#'>".$dict->words("22")."</a></td>";
-									echo "<td style='border: 1px solid;'><a id='aGroup" . $line['id']. "' href='#'>Assing to group</a></td>";
+									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'].':'.$line['idc']. "' href='#'>".$dict->words("19")."</a>
+									 | <a id='aEmails" . $line['id'] . "' href='#'>".$dict->words("20")."</a>
+									 | <a id='aApps" . $line['id'] . "' href='#'>".$dict->words("21")."</a>
+									 | <a id='aDelete" . $line['id'] . "' href='#'>".$dict->words("22")."</a>
+									 | <a id='aGroup" . $line['id']. "' href='#'>Assign to group</a></td>";
 									
 									echo "</tr>";
 								}
@@ -471,7 +462,18 @@
 		
 	</body>
 </html>
-
+<script language="javascript" type="text/javascript">  
+    var table3Filters = {  
+        col_2: "select",
+		col_5: "none",
+		col_6: "none",
+		col_7: "none",
+		col_8: "none",
+		col_9: "none",		
+        btn: true  
+    }  
+    var tf03 = setFilterGrid("table1",1,table3Filters);  
+</script>
 <script>
 	
 	$( document ).ready(function() {

@@ -18,6 +18,7 @@ $dict= new dictionary();
             });
         </script>
        <!-- JQuery UI -->
+	   <script type="text/javascript" language="javascript" src="TableFilter/tablefilter.js"></script>
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
@@ -41,7 +42,7 @@ $dict= new dictionary();
 								<div class="floatright righttext tpad"></div>
 								<div class="clear">&nbsp;</div>
 							</div>   
-							<table>
+							 <table id="table1" cellspacing="0" class="sortable" > 
                                                 <col width="170px">
                                                 <col width="150px">
                                                 <col width="150px">
@@ -58,10 +59,10 @@ $dict= new dictionary();
                                                 </tr>
                                                 
 <?php
-    $select_customers_query = 'SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
+    $select_customers_query = "SELECT l.timeStamp as time ,l.ipAddress as ip, c.name as name , at.action_name as action , tm.table_name as table_name, r.result_name as result
 														   FROM log l , customer c , action_type at, table_modified tm , result r 
 														   WHERE l.id_user = c.id AND at.id = l.id_actionType AND tm.id = l.id_tableModified AND r.id = l.id_result
-														   AND l.timeStamp < NOW() AND id_counter <> 0  ORDER BY l.timeStamp ';
+														   AND l.timeStamp < NOW() AND id_counter <> 0  ORDER BY l.timeStamp ";
 
     $select_customers_result = mysql_query($select_customers_query) or die($dict->words("12").' ' . mysql_error());
 
@@ -263,3 +264,14 @@ include("footer.php");
 
 </body>
 </html>
+<script language="javascript" type="text/javascript">  
+    var table3Filters = {
+		col_1: "select",
+        col_2: "select",
+		col_3: "select",
+		col_4: "select",
+		col_5: "select",
+        btn: false  
+    }  
+    var tf03 = setFilterGrid("table1",1,table3Filters);  
+</script>

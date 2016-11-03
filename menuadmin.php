@@ -20,7 +20,7 @@ $dict= new dictionary();
 						<a href="#">Administration</a>
 						<ul>
 							<li><a href="customers.php">Customer</a></li>
-							<li><a href="groupManager.php">Group Management</a></li>
+							<!-- <li><a href="groupManager.php">Group Management</a></li> -->
 							<li><a href="adminUsers.php">Users</a></li>
 							<li><a href="apps.php">Apps</a></li>
 							<li>
@@ -30,12 +30,12 @@ $dict= new dictionary();
 									<li><a href="archivereports.php">Archive user audit</a></li>
 								</ul>
 							</li>
-							<li>
+							<!-- <li>
 								<a href="#">Reports</a>
 								<ul>
 									<li><a href="#">Billing</a></li>
 								</ul>
-							</li>
+							</li> -->
 						</ul>
 					</li>
 					<li class="<?php if(explode("/", $_SERVER['PHP_SELF'])[2] == "customers.php") { echo "current_page_item"; } ?>">
@@ -65,7 +65,7 @@ $dict= new dictionary();
 									<li><a href="generateBillings.php">CDR management</a></li>
 								</ul>
 							</li>
-							<li><a href="#">Report</a>
+							<li><a href="#">Reports</a>
 								<ul>
 									<li><a href="telephone.php">Order history</a></li>
 									<li><a href="BillingsSummaryAdmin.php">Summary</a></li>

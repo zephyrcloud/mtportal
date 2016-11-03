@@ -1,78 +1,117 @@
 <?php
-include("config/connection.php");
-	include("config/ip_capture.php");
-	include("emails.php");
-	include("dictionary.php");
-	$dict= new dictionary();
-	$ip_capture = new ip_capture();
-	$email= new emails();
-	
-	session_start();
-	
-	if (isset($_POST["saveNewUserBtn"])) {			 		
-		// Inserta en la base de datos el nuevo user
-		$insert_user_query = "INSERT INTO type_user(category) VALUES ('" . $_POST["firstNameNewUserFld"] . "')";
-		$insert_user_result = mysql_query($insert_user_query);		
-		if($insert_user_result){
-			$message =  $dict->words("2");
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',16,1,9,1)";
-			$insert_result = mysql_query($insert_query);
-		}else{
-			$message =  $dict->words("3");
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',16,2,9,1)";
-			$insert_result = mysql_query($insert_query);			
-		}
-			
-			
-	}
-	
-		// Valida si proviene del boton de edit user
-		if (isset($_POST["saveEditUserBtn"])) {
-			
-			// Edita en la base de datos el user 
-			$update_user_query = "UPDATE type_user SET category='" . $_POST["firstNameEditUserFld"] . "' WHERE id='" . $_POST["idEditUserFld"] . "'";
-			$update_user_result = mysql_query($update_user_query);
-			//echo nl2br($update_user_query ."\n");1
-			if($update_user_result){
-				$message =  $dict->words("4");
-				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',17,1,9,1)";
-				$insert_result = mysql_query($insert_query);	
-			}else{
-				$message =  $dict->words("3");
-				$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',17,2,9,1)";
-				$insert_result = mysql_query($insert_query);					
-			}
-			
-		}
-		
-	if (isset($_POST["saveDeleteUserBtn"])) {
-		
-		// Elimina en la base de datos el user 
-		$delete_user_query = "DELETE FROM type_user WHERE id = '" . $_POST["idDeleteUserFld"] . "'";
-		$delete_user_result = mysql_query($delete_user_query);
-		
-		if($delete_user_result){
-			$message =  $dict->words("5");
-			//$email-> body_email($message,$ip_capture->getRealIP(),4,9,2,$id_user);18
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',18,1,9,1)";
-			$insert_result = mysql_query($insert_query);
-		}else{
-			$message =  $dict->words("3");
-			$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,admin) VALUES('".$ip_capture->getRealIP()."',18,2,9,1)";
-			$insert_result = mysql_query($insert_query);
-			//die('Invalid query: ' . mysql_error());
-			//$email-> body_email($message,$ip_capture->getRealIP(),4,10,2,$id_user);
-		}
-	}
-	
-  
-	
-?>
 
+	// Connect to database
+	include("config/connection.php");
+	include("config/ip_capture.php");
+	include("dictionary.php");
+	$ip_capture = new ip_capture();
+	$dict= new dictionary();
+	$message = "";
+
+	if(isset($_POST["saveAppsPerUserBtn"])){
+		    /*////echo '<pre>';
+			print_r($_POST);
+			//echo '</pre>'; */
+		$j=0;$prices = Array();
+		foreach($_POST['price'] as $val) { // Recorremos los valores que nos llegan
+			$prices[$j] = $val;
+			$j++;
+		}
+		$user = $_POST["idUserFld"];
+		$id_user = $_POST["idUserLog"];
+		
+		// Lista toas las apps 
+		$select_apps_query = "SELECT id FROM app";
+		$select_apps_result = mysql_query($select_apps_query) or die($dict->words("6").' '. mysql_error());
+		
+		$selected = 0;
+		$not_selected =0;
+		
+		// Por cada app
+		$i=0;
+		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
+			try {
+				// Busca en la BD si la app esta signada al usuario
+				$select_appuser_query = "SELECT id, endDate FROM appcustomer WHERE app = " . $line['id'] . " AND user = " . $user . " AND initDate = (SELECT MAX(initDate) FROM appcustomer WHERE app = " . $line['id'] . " AND user = " . $user . ")";
+				//echo nl2br($select_appuser_query."\n");	
+				//$select_appuser_result = mysql_query($select_appuser_query);				
+				$row = mysql_fetch_assoc($select_appuser_result);
+				$idAppUser = $row["id"];
+				$endDate = $row["endDate"];
+				
+				//////echo "idAppUser -> " . $idAppUser . ", endDate -> " . $endDate . ", check -> " . isset($_POST["aAssignApp" . $line["id"]]);
+				
+				if($idAppUser == "") {
+					
+					// Si está checked
+					if(isset($_POST["aAssignApp" . $line["id"]])) {
+						//echo nl2br( "I am the i " .$i ."\n");
+						// Asignacion de una aplicacion 
+						$insert_app_query = "INSERT INTO appcustomer (app, customer, initDate, endDate , price) VALUES (" . $line['id'] . ", " . $user . ", NOW(), NULL,".$prices[$i].")";
+						//$insert_app_result = mysql_query($insert_app_query) or die($dict->words("7").' ' . mysql_error());						
+						// Insertar el registro de que checkeo una asignacion de la lista apps
+						//echo nl2br($insert_app_query."\n");				
+						
+						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,1,5,".$_SESSION['user'].")";
+						//$insert_result = mysql_query($insert_query);
+						//echo nl2br($insert_result."\n");
+						$selected++;
+						$i++;
+					}
+						
+				} else if($idAppUser != "" && $endDate == "") {
+					
+					// Si no está checked
+					if(!isset($_POST["aAssignApp" . $line["id"]])) {
+						
+						// Quitar asignacion de una aplicacion 
+						$update_app_query = "UPDATE appcustomer SET endDate = NOW() WHERE id = " . $idAppUser;
+						//$update_app_result = mysql_query($update_app_query) or die($dict->words("8").' ' . mysql_error());
+						//echo nl2br($update_app_result."\n");
+						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,1,5,".$_SESSION['user'].")";
+						//$insert_result = mysql_query($insert_query);
+						//echo nl2br($insert_result."\n");
+						$not_selected++;
+					}
+						
+				} else if($idAppUser != "" && $endDate != "") {
+						
+					// Si está checked
+					if(isset($_POST["aAssignApp" . $line["id"]])) {
+						
+						// Asignacion de una aplicacion 
+						$insert_app_query = "INSERT INTO appcustomer (app, customer, initDate, endDate) VALUES (" . $line['id'] . ", " . $user . ", NOW(), NULL)";
+						//echo nl2br($insert_app_query."\n");
+						//$insert_app_result = mysql_query($insert_app_query) or die('Creación de la asignación fallida: ' . mysql_error());
+						
+					}
+					
+				}
+					
+			
+			} catch(Exception $e) {}
+			
+		}
+	
+	}
+	
+	if(isset($_POST["saveEditCustomerGroupBtn"])){
+		//echo nl2br($_POST['nameEditCustomerGroupFld']." ".$_POST['idEditCustomerGroupFld']."\n");
+		$update_customer_query = "UPDATE customer_group SET name_group='".$_POST['nameEditCustomerGroupFld']."' WHERE id=".$_POST['idEditCustomerGroupFld'];
+		$update_customer_result = mysql_query($update_customer_query);
+		
+	}
+	
+	if(isset($_POST["saveDeleteCustomerGroupBtn"])){
+		//echo nl2br("I am here ".$_POST['idDeleteCustomerGroupFld']." ".$_GET['nameDeleteCustomerGroupFld']."\n");
+		$update_customer_query = "UPDATE customer_group SET endTime= NOW() WHERE id=".$_POST['idDeleteCustomerGroupFld'];
+		$update_customer_result = mysql_query($update_customer_query);
+	}
+?>
 
 <html>
 	<head>
-		<title>Categories</title>
+		<title>Customers</title>
 		<link href="style/style.css" rel="stylesheet" type="text/css">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<script>
@@ -87,133 +126,123 @@ include("config/connection.php");
 		
 	</head>
 	<body>
-
-		<?php
+		
+		<?php 
 			include("header.php");
 			include("menuadmin.php");
 		?>
 		
 		<div id="pagecontents">
+			
 			<div class="wrapper">
+			
 				<div id="post">
+				
 					<div id="postitle">
-						<div class="floatleft"><h1>Groups</h1></div>
+					<?php
+					
+						$select_customers_query = "SELECT name FROM customer WHERE id =".$_GET["id"];
+						$select_customers_result = mysql_query($select_customers_query);
+									
+						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+							$name = $line['name'];
+						}
+					?>
+						<div class="floatleft"><h3><?php echo $name ?></h3></div>
 						<div class="floatright righttext tpad"></div>
 						<div class="clear">&nbsp;</div>
 					</div>
 					
 					<div id="postcontent">
-						
-						<div id="tables" name="tables">
-						<input id="newUserBtn" name="newUserBtn" type="submit" value="Add Group">
-						<input id="GroupAdminBtn" name="GroupAdminBtn" type="submit" value="Summary groups">
-						<!-- <form method="POST" action="groupsAdmin.php">
-							</form> 
-						 DIV Message -->
-						<?php
-							if($message != ""){
-								?>
-									<div id="messagePnl" class="modalDialog" title="Notice">
-										<div id="post">
-											<?php echo $message;?><br /><br />
-											<input id="accetMessageBtn" name="accetMessageBtn" type="button" value="OK">
-										</div>
-									</div>
-								<?php
-							}
-						?>
-						
-						<!-- DIV Add User -->
-						<div id="addUserPnl" class="modalDialog" title="New User">
-							<div id="post">
-						
-								<form method="POST" action="groupManager.php">								
-									Name: <input id="firstNameNewUserFld" name="firstNameNewUserFld" type="text" required="required"><br />
-									
-									<div>
-									<br>
-									<input id="saveNewUserBtn" name="saveNewUserBtn" type="submit" value="Add">
-									<input id="cancelNewUserBtn" name="cancelNewUserBtn" type="button" value="Cancel">
-									</div>
-								  
-								</form> 
-							</div>
-						</div>
-						
-						<!-- DIV Edit User -->
-						<div id="editUserPnl" name="editUserPnl" class="modalDialog" title="Edit User">
-							<div id="post">
-								<form id="editUserFrm" name="editUserFrm" method="POST" action="groupManager.php">
-									<input id="idEditUserFld" name="idEditUserFld" type="hidden" required="required">
-									Name: <input id="firstNameEditUserFld" name="firstNameEditUserFld" type="text" required="required"><br /><br />
-									
-									<div>
-									<br>
-									<input id="saveEditUserBtn" name="saveEditUserBtn" type="submit" value="Edit">
-									<input id="cancelEditUserBtn" name="cancelEditUserBtn" type="button" value="Cancel">
-									</div>  
-									  
-								</form>
-							</div>
-						</div>
-						
-						<!-- DIV Delete User -->
-						<div id="deleteUserPnl" name="deleteUserPnl" class="modalDialog" title="Delete User">
-							<div id="post">
-								<form id="deleteUserFrm" name="deleteUserFrm" method="POST" action="groupManager.php">
-									<input id="idDeleteUserFld" name="idDeleteUserFld" type="hidden" required="required">
-									Delete the Groups <span id="firstNameDeleteUserLbl" name="firstNameDeleteUserLbl"></span>&nbsp;<span id="lastNameDeleteUserLbl" name="lastNameDeleteUserLbl"></span>?<br /><br />
-									<input id="saveDeleteUserBtn" name="saveDeleteUserBtn" type="submit" value="Delete">
-									<input id="cancelDeleteUserBtn" name="cancelDeleteUserBtn" type="button" value="Cancel">									
-								</form>
-							</div>
-						</div>
-						
-						
-						
-						<table id="myTable">
-							<col width="150px">
-							<col width="150px">
+						<input id="addFields" name="addFields" type="submit" value="Add fields" onclick="addRow()">
+						<form id="emailsFrm" name="emailsFrm" method="POST" action="customers.php">
 							
-							<tr>
-								<th style="border: 1px solid;"> Groups </th>
-								<th style="border: 1px solid;"> Action </th>
-								
-							</tr>
+
+							<input id="idUserFld" name="idUserFld" type="hidden" value="<?php echo $_GET["id"]; ?>">
 							
 							<?php 
-								
-								// Realizar una consulta MySQL
-								$select_users_query = "SELECT id, category FROM type_user ";
-								$select_users_result = mysql_query($select_users_query);
-								
-								while ($line = mysql_fetch_array($select_users_result, MYSQL_ASSOC)) {
-									
-									echo "<tr id='" . $line['id'] . "'>";
-									
-									echo "<td style='border: 1px solid;'><span id='spanFirstName" . $line['id'] . "'>" . $line['category'] ."</span></td>";
-									echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id']. "' href='#'>".$dict->words("19")."</a>
-									| <a id='aDelete" . $line['id'] . "' href='#'>".$dict->words("22")."</a></td>";
-									
-									echo "</tr>";
-								}							
+								$select_apps_query = 'SELECT customer FROM user WHERE id = '.$_GET["id"];
+								$select_apps_result = mysql_query($select_apps_query) or die('1 ' . mysql_error());
+						
+								while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
+									echo "<input id='idlogin' name='idlogin'  type='hidden' value='".$line["customer"]."'>";
+								}	
 							?>
 							
-						</table>
-						</div>
+							<table style="width: 100%; border: 1px solid; border-collapse: collapse;" id="fields">
+								<tr>					
+									<th style="border: 1px solid;">Group name</th>					
+								</tr>
+								<tr>					
+									<td style='border: 1px solid;'><input type='text' name='groups[]'></td>									
+								</tr>
+								
+							</table>
+							
+							<br />
+							
+							<input id="saveGroupsBtn" name="saveGroupsBtn" type="submit" value="Save groups">
+							<input id="cancelGroupsBtn" name="cancelGroupsBtn" type="submit" value="Cancel">
+							<br>
+							
+							<?php 
+									$table="";
+									$table.= "<table>";
+									$table.= '<tr>					
+										<th style="border: 1px solid;">Group name</th>
+										<th style="border: 1px solid;" colspan="2">Action</th>						
+									</tr>';
+									
+									// Realizar una consulta MySQL
+									$select_groups_query = "SELECT id, name_group FROM customer_group WHERE customer_id = ".$_GET["id"]." AND endTime IS NULL  ";
+									$select_groups_result = mysql_query($select_groups_query) or die('Consulta fallida: ' . mysql_error());
+									
+									while ($line = mysql_fetch_array($select_groups_result, MYSQL_ASSOC)) {
+										
+										$table.= "<tr>";
+										$table.= "<td style='border: 1px solid;'><span id='groupName" . $line['id'] . "'>" . $line['name_group'] . "</span></td>";
+										$table.= "<td style='border: 1px solid;'><a id='aEditGroup" . $line['id'] . "' href='#'>Edit</a></td>";
+										$table.= "<td style='border: 1px solid;'><a id='aDeleteGroup" . $line['id'] . "' href='#'>Delete</a></td>";
+										$table.= "</tr>";
+									}
+									$table.= "</table>";
+									
+									echo $table;
+								?>	
 						
-						<br />
+						</form>
+						<!-- DIV Edit Customer -->
+											<div id="editCustomerGroupPnl" name="editCustomerGroupPnl" class="modalDialog" title="Edit Customer">
+												<div id="post">
+													<form id="editCustomerFrm" name="editCustomerFrm" method="POST" action="groupManager.php?id=<?php echo $_GET["id"]; ?>">
+														<input id="idEditCustomerGroupFld" name="idEditCustomerGroupFld" type="hidden" required="required">
+														Name: <input id="nameEditCustomerGroupFld" name="nameEditCustomerGroupFld" type="text" required="required"><br /><br />										
+														<input id="saveEditCustomerGroupBtn" name="saveEditCustomerGroupBtn" type="submit" value="Add">
+														<input id="cancelNewCustomerBtn" name="cancelNewCustomerBtn" type="button" value="Cancel">
+													</form>
+												</div>
+											</div>
+						
+						<div id="deleteGroupPnl" name="deleteGroupPnl" class="modalDialog" title="Delete Customer">
+								<div id="post">
+									<form id="deleteCustomerFrm" name="deleteCustomerFrm" method="POST" action="groupManager.php?id=<?php echo $_GET["id"]; ?>">
+										<input id="idDeleteCustomerGroupFld" name="idDeleteCustomerGroupFld" type="hidden" required="required">
+										Delete the group <span id="nameDeleteCustomerGroupFld" name="nameDeleteCustomerGroupFld"></span>?<br /><br />
+										<input id="saveDeleteCustomerGroupBtn" name="saveDeleteCustomerGroupBtn" type="submit" value="Delete">
+										<input id="cancelDeleteCustomerGroupBtn" name="cancelDeleteCustomerGroupBtn" type="button" value="Cancel">
+									</form>
+								</div>
+							</div>
 						
 						
-					
 					</div>
-				
+					
 				</div>
 			
 			</div>
 		
 		</div>
-		
+			
 		<?php
 			include("footer.php");
 		?>
@@ -221,53 +250,18 @@ include("config/connection.php");
 	</body>
 </html>
 
-<script>
-	
-	$( document ).ready(function() {
-		
-		// Function edit user
-		$("a[id^='aEdit']").click(function(event) {
-			$("#editUserPnl").dialog( "open" );
-			$id = event.target.id.toString().split("aEdit")[1];
-			var data1 = $id.split(":");			
-			$("#idEditUserFld").val(data1[0]);
-			$("#firstNameEditUserFld").val($("#spanFirstName".concat(data1[0])).text());
-			$("#lastNameEditUserFld").val($("#spanLastName".concat(data1[0])).text());
-			$("#extensionEditFld").val($("#spanExtension".concat(data1[0])).text());
-			$("#outboundEditFld").val($("#spanOutboundDid".concat(data1[0])).text());
-			$("#UserEdit").val(data1[1]);
-			
+<script>		
+$( document ).ready(function() {
+	$("a[id^='aEditGroup']").click(function(event) {
+			$("#editCustomerGroupPnl").dialog( "open" );
+			$id = event.target.id.toString().split("aEditGroup")[1];
+			$("#idEditCustomerGroupFld").val($id);
+			$("#nameEditCustomerGroupFld").val($("#groupName".concat($id)).text());
 		});
 		
-		// Dialog edit user
-		$( "#editUserPnl" ).dialog({
+		$( "#editCustomerGroupPnl" ).dialog({
 			autoOpen: false,
 			modal: true,
-			position: { my: 'top', at: 'top+150' },
-			show: {
-				effect: "blind",
-				duration: 200
-			},
-			hide: {
-				effect: "blind",
-				duration: 200
-			}
-		});	
-		
-		// Function delete user
-		$("a[id^='aDelete']").click(function(event) {
-			$("#deleteUserPnl").dialog( "open" );
-			$id = event.target.id.toString().split("aDelete")[1];
-			$("#idDeleteUserFld").val($id);
-			$("#firstNameDeleteUserLbl").text($("#spanFirstName".concat($id)).text());
-			$("#lastNameDeleteUserLbl").text($("#spanLastName".concat($id)).text());
-		});
-		
-		// Dialog delete user
-		$( "#deleteUserPnl" ).dialog({
-			autoOpen: false,
-			modal: true,
-			position: { my: 'top', at: 'top+150' },
 			show: {
 				effect: "blind",
 				duration: 200
@@ -278,19 +272,17 @@ include("config/connection.php");
 			}
 		});
 		
-		// Funcion cancel delete user
-		$("#cancelDeleteUserBtn").click(function() {
-			$("#deleteUserPnl").dialog( "close" );
+		$("a[id^='aDeleteGroup']").click(function(event) {
+			$("#deleteGroupPnl").dialog( "open" );
+			$id = event.target.id.toString().split("aDeleteGroup")[1];
+			$("#idDeleteCustomerGroupFld").val($id);
+			$("#nameDeleteCustomerGroupFld").text($("#groupName".concat($id)).text());
 		});
 		
-		$("#GroupAdminBtn").click(function() {
-			location.href = "groupsAdmin.php";
-		});
-		
-		$( "#addUserPnl" ).dialog({
+		// Dialog delete customer
+		$( "#deleteGroupPnl" ).dialog({
 			autoOpen: false,
 			modal: true,
-			position: { my: 'top', at: 'top+150' },
 			show: {
 				effect: "blind",
 				duration: 200
@@ -300,16 +292,14 @@ include("config/connection.php");
 				duration: 200
 			}
 		});
-	
-			$("#newUserBtn").click(function() {
-			$("#addUserPnl").dialog( "open" );
-			$( "#firstNameNewUserFld" ).val("");
-			
-		});
-	
 		
-	});
-
+		
+	});	
 	
-
-</script>
+	function addRow() {
+		var table  = document.getElementById("fields");
+		var row = table.insertRow(1);
+		var cell1 = row.insertCell(0);
+		cell1.innerHTML = "<input type='text' name='groups[]'>";
+	}
+</script>	

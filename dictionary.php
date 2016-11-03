@@ -208,19 +208,19 @@ class dictionary{
 		$word[152] = "User management";
 		$word[153] = "Search for names:";
 		$word[154] = "Search for customer:";
-		$word[155] = "Customer"; // field name of table 
+		$word[155] = "User"; // field name of table 
 		
 		/*telephoneManager.php*/
-		$word[156] = "Telephone management";
-		$word[157] = "Telephone";
+		$word[156] = "Number management";
+		$word[157] = "Number";
 		$word[158] = "Owner";
 		$word[159] = "Type";
 		$word[160] = "Status";
 		
 		/*generateBillings.php*/
 		$word[161] = "History logs";
-		$word[162] = "Export registers";
-		$word[163] = "Import registers";
+		$word[162] = "Export Records";
+		$word[163] = "Import Records";
 		$word[164] = "Import registers API vitelity ";
 		$word[165] = "Filter record with no clients";
 		$word[166] = "See all records";
@@ -237,6 +237,129 @@ class dictionary{
 		$word[177] = "Telephone as ";
 		$word[178] = "Target ";
 		
+		return $word[$id];
+	}
+	
+	function words_menu_admin($id){
+		$word = Array();
+		$word[1] = "Administration";
+		$word[2] = "Customer";
+		$word[3] = "Group Management";
+		$word[4] = "Users";
+		$word[5] = "Apps";
+		$word[6] = "Auditing";
+		$word[7] = "Recent user audit";
+		$word[8] = "Archive user audit";
+		$word[9] = "Reports";
+		$word[10] = "Billing";
+		$word[11] = "Domains";
+		$word[12] = "Quotas";
+		$word[13] = "Order history";
+		$word[14] = "DID management";
+		$word[15] = "CDR management";
+		$word[16] = "Summary";
+		$word[17] = "VoIP";
+		return $word[$id];
+	}
+	
+	function words_admin_profile($id){
+		$word = Array();
+		$word[1] = "Log In";
+		$word[2] = "Apps";
+		$word[3] = "Add app";
+		$word[4] = "New App";
+		$word[5] = "Name";
+		$word[6] = "Description";
+		$word[7] = "Add";
+		$word[8] = "Cancel";
+		$word[9] = "Actions";
+		$word[10] = "Edit";
+		$word[11] = "Edit App";
+		$word[12] = "Delete";
+		$word[13] = "Customers";
+		$word[14] = "Add customer";
+		$word[15] = "VFAX price";
+		$word[16] = "Username";
+		$word[17] = "Password";
+		$word[18] = "Assign to Groups";
+		$word[19] = "Edit Customer";
+		$word[20] = "New Customer";
+		$word[21] = "Groups";
+		$word[22] = "Add Groups";
+		$word[23] = "Summary groups";
+		$word[24] = "Edit group";
+		$word[25] = "Users";
+		$word[26] = "Add User";
+		$word[27] = "Search for names";
+		$word[28] = "Search for customer";
+		$word[29] = "First Name";
+		$word[30] = "Last Name";
+		$word[31] = "Outbound DID";
+		$word[32] = "Extension";
+		$word[33] = "Emails";
+		$word[34] = "New User";
+		$word[35] = "Default Email";
+		$word[36] = "Edit User";
+		$word[37] = "Filter by";
+		$word[38] = "Archive logs";
+		$word[39] = "Time";
+		$word[40] = "Ip Address";
+		$word[41] = "User";
+		$word[42] = "Action Type";
+		$word[43] = "Table Modified";
+		$word[44] = "Result";
+		$word[45] = "Domain quotas management";
+		$word[46] = "Update";
+		$word[47] = "Quotas";
+		$word[48] = "Available";
+		$word[49] = "Add Number";
+		$word[50] = "Telephone Number";
+		$word[51] = "Owner";
+		$word[52] = "Type";
+		$word[53] = "Status";
+		$word[54] = "Number management";
+		$word[55] = "Report Domains";
+		$word[56] = "Search for date";
+		$word[57] = "Domain ";
+		$word[58] = "Time Registred";
+		$word[59] = "Action";
+		$word[60] = "Telephone quotas management";
+		$word[61] = "Quota ";
+		$word[62] = "History logs";
+		$word[63] = "Export Records";
+		$word[64] = "Process";
+		$word[65] = "Select Month";
+		$word[66] = "Import Records";
+		$word[67] = "Import Register";
+		$word[68] = "Upload";
+		$word[69] = "Select date range";
+		$word[70] = "To";
+		$word[71] = "Update Records From Api";
+		$word[72] = "Date";
+		$word[73] = "Source";
+		$word[74] = "Minutes";
+		$word[75] = "Callerid";
+		$word[76] = "Filter records with no clients";
+		return $word[$id];
+	}
+	
+	function words_menu_customer($id){
+		$word = Array();
+		$word[1] = "Users";
+		$word[2] = "Domains";
+		$word[3] = "Lookup";
+		$word[4] = "Manage";
+		$word[5] = "Telephone";
+		$word[6] = "Billings per telephone";
+		$word[7] = "Manage Service";
+		$word[8] = "Transfer phone number";
+		$word[9] = "User Portals";
+		$word[10] = "VDI";
+		$word[11] = "FAX";
+		$word[12] = "Help Desk";
+		$word[13] = "PBX";
+		$word[14] = "Support";
+		$word[15] = "New Ticket";
 		return $word[$id];
 	}
 	

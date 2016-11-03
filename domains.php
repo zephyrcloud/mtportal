@@ -14,6 +14,7 @@
 
 		</script>
 		<!-- JQuery UI -->
+		<script type="text/javascript" language="javascript" src="TableFilter/tablefilter.js"></script>
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 		<script src="config/sorttable.js"></script>
@@ -35,11 +36,9 @@
 								<div class="clear">&nbsp;</div>
 							</div>   
 					<div id="content">
-							<div id="principal">
-								Search for Customer: <input type="text" id="clients" onkeyup="myFunction1()">	
-								Search for date: <input type="text" id="myInput" onkeyup="myFunction()" onchange="myFunction()" >
+							<div id="principal">								
 								
-									<table class="sortable" id="myTable">
+									 <table id="table1" cellspacing="0" class="sortable" > 
 										<col width="300px">
 										<col width="300px">
 										<col width="300px">
@@ -176,3 +175,14 @@
 		
 	</body>
 </html>
+<script language="javascript" type="text/javascript">  
+    var table3Filters = {
+		col_0: "select",
+		col_1: "select",
+        col_3: "select",		
+		col_4: "select",
+		col_5: "select",
+        btn: false  
+    }  
+    var tf03 = setFilterGrid("table1",1,table3Filters);  
+</script>

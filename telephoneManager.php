@@ -17,6 +17,7 @@ $dict= new dictionary();
 		</script>
 		
 		<!-- JQuery UI -->
+		<script type="text/javascript" language="javascript" src="TableFilter/tablefilter.js"></script>
 		<link rel="stylesheet" href="style/jquery-ui/jquery-ui.css">
 		<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 		<script src="config/sorttable.js"></script>
@@ -58,7 +59,7 @@ $dict= new dictionary();
 					}
 						
 					?>
-					<table class="sortable">
+					 <table id="table1" cellspacing="0" class="sortable" > 
                                 <tr>
                                     <th style="border: 1px solid;">	<?php echo $dict->words("157");?> </th>
 									<th style="border: 1px solid;">	<?php echo $dict->words("158");?> </th>
@@ -238,3 +239,13 @@ $dict= new dictionary();
 
 </script>
 
+<script language="javascript" type="text/javascript">  
+    var table3Filters = {
+		col_1: "select",
+        col_2: "select",		
+		col_3: "select",
+		col_4: "none",
+        btn: false  
+    }  
+    var tf03 = setFilterGrid("table1",1,table3Filters);  
+</script>

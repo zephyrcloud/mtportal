@@ -5,8 +5,8 @@ class api_vetality{
 	
 	function authentication($id){
 		$a = Array();
-		$a[0] = "scorpico";
-		$a[1] = "moore8";
+		$a[0] = "scor_api";
+		$a[1] = "MooreMoore8$$";
 		return $a[$id];
 	}
 	
@@ -55,8 +55,10 @@ class api_vetality{
 	}
 
 	function billingpernumber($begindate,$enddate,$name){
+		$login = $this->authentication("0");
+		$password = $this->authentication("1"); 
 		$ch = curl_init();
-		$cmd = "http://api.vitelity.net/api.php?login=scorpico&pass=moore8&cmd=getcdr&startdate=$begindate&enddate=$enddate&addsub=yes"; // url
+		$cmd = "http://api.vitelity.net/api.php?login=$login&pass=$password&cmd=getcdr&startdate=$begindate&enddate=$enddate&addsub=yes"; // url
 		curl_setopt($ch,CURLOPT_URL, "$cmd");
 		curl_setopt($ch,CURLOPT_HEADER, 0);
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER, 1);

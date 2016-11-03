@@ -50,11 +50,11 @@
 			// here all it's ok
 			
 			$a=0;
-				$select_customers_query = 'SELECT `id`, `telephone` FROM `created_telephone`';
+				$select_customers_query = "SELECT id, number FROM voipclient where type= 1";
 				$select_customers_result = mysql_query($select_customers_query) or die();
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 					$id[$a] = $line['id'];
-					$telephone[$a] = $line['telephone'];
+					$telephone[$a] = $line['number'];
 					$a++;
 				}
 				//look for in the registrer and retreive id and source
@@ -62,15 +62,15 @@
 				
 				//echo nl2br(count($date) . " - - " . count($date_r) ."\n" );/// archive vs query
 					for($i=0; $i < count($date); $i++ ){						
-						$select_customers_query = "SELECT count(*) as count FROM `billings_history_test` 
-						WHERE `date` LIKE '".$date[$i]."' 
-						AND `source` LIKE '".$source[$i]."' 
-						AND `destination` LIKE '".$destination[$i]."' 
-						AND `seconds` LIKE ".$seconds[$i]." 
-						AND `callerid` LIKE '".$callerid[$i]."' 
-						AND `disposition` LIKE '".$disposition[$i]."' 
-						AND `peer` LIKE '%".$peer[$i]."%'
-						AND `cost` LIKE '".$cost[$i]."'";
+						$select_customers_query = "SELECT count(*) as count FROM billings_history_test 
+						WHERE date LIKE '".$date[$i]."' 
+						AND source LIKE '".$source[$i]."' 
+						AND destination LIKE '".$destination[$i]."' 
+						AND seconds LIKE ".$seconds[$i]." 
+						AND callerid LIKE '".$callerid[$i]."' 
+						AND disposition LIKE '".$disposition[$i]."' 
+						AND peer LIKE '%".$peer[$i]."%'
+						AND cost LIKE '".$cost[$i]."'";
 						$select_customers_result = mysql_query($select_customers_query);
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 							$count=$line['count'];							
@@ -79,17 +79,17 @@
 						if($count == 0){
 							$different++;
 							//add on db	
-							$insert_query = "INSERT INTO `billings_history_test`(`date`, `source`, `destination`, `seconds`, `callerid`, `disposition`, `cost`, `peer`)
+							$insert_query = "INSERT INTO billings_history_test(date, source, destination, seconds, callerid, disposition, cost, peer)
 							VALUES ('".$date[$i]."','".$source[$i]."','".$destination[$i]."',".$seconds[$i].",'".$callerid[$i]."','".$disposition[$i]."',".$cost[$i].",'".$peer[$i]."');";
 							$insert_result = mysql_query($insert_query);
 							
-							for($j=0;$j< count($telephone); $j++){
+							/*for($j=0;$j< count($telephone); $j++){
 								if(strpos($source[$i], $telephone[$j]) !== false){
-								 $insert_query = "INSERT INTO `telephone_billing_customer`(`id_telephone`, `id_billing`)
+								 $insert_query = "INSERT INTO telephone_billing_customer(id_telephone, id_billing)
 								 VALUES (".$id[$j].",".mysql_insert_id().");";
 								 $insert_result = mysql_query($insert_query);
 								}
-							}
+							}*/
 						}		
 					}
 			
@@ -99,13 +99,16 @@
 			
 			if(($beg[0] == $end[0]) && ($beg[2] == $end[2])){
 				//delete data from the billings.
-				$select_customers_query =  "DELETE FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+				$select_customers_query =  "DELETE FROM inboundbilling_test WHERE date LIKE '%".$monthly."%'";
 				$select_customers_result = mysql_query($select_customers_query) or die();
-							
-				$select_customers_query =  "DELETE FROM `inboundbillingreport_test` WHERE `date` LIKE '%".$monthly."%'";
+									
+				$select_customers_query =  "DELETE FROM inboundbillingreport_test WHERE date LIKE '%".$monthly."%'";
+				$select_customers_result = mysql_query($select_customers_query) or die();
+								
+				$select_customers_query =  "DELETE FROM outboundbilling_test WHERE date LIKE '%".$monthly."%'";
 				$select_customers_result = mysql_query($select_customers_query) or die();
 						
-				$select_customers_query =  "DELETE FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+				$select_customers_query =  "DELETE FROM outboundbillingreport_test WHERE date LIKE '%".$monthly."%'";
 				$select_customers_result = mysql_query($select_customers_query) or die();
 				echo $this->generate_inbounds($monthly);
 			}else{
@@ -113,14 +116,18 @@
 				for($i= $beg[2] ; $i < ($end[2])+1 ; $i++ ){
 					for($j=$beg[0] ; $j<($end[0])+1 ; $j++ ){
 						$monthly = $i."-".$j;
-						$select_customers_query =  "DELETE FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+						$select_customers_query =  "DELETE FROM inboundbilling_test WHERE date LIKE '%".$monthly."%'";
 						$select_customers_result = mysql_query($select_customers_query) or die();
 									
-						$select_customers_query =  "DELETE FROM `inboundbillingreport_test` WHERE `date` LIKE '%".$monthly."%'";
+						$select_customers_query =  "DELETE FROM inboundbillingreport_test WHERE date LIKE '%".$monthly."%'";
 						$select_customers_result = mysql_query($select_customers_query) or die();
 								
-						$select_customers_query =  "DELETE FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+						$select_customers_query =  "DELETE FROM outboundbilling_test WHERE date LIKE '%".$monthly."%'";
 						$select_customers_result = mysql_query($select_customers_query) or die();
+						
+						$select_customers_query =  "DELETE FROM outboundbillingreport_test WHERE date LIKE '%".$monthly."%'";
+						$select_customers_result = mysql_query($select_customers_query) or die();
+						
 						echo $this->generate_inbounds($monthly);
 					}
 				}
@@ -160,7 +167,7 @@
 			
 			if(strpos($date[0],"Date") !== false && strpos($source[0],"Source") !== false && strpos($destination[0],"Destination") !== false &&  strpos($seconds[0],"Seconds") !== false && strpos($callerid[0],"CallerID") !== false && strpos($disposition[0],"Disposition") !== false && strpos($cost[0],"Cost") !== false && strpos($peer[0],"Peer") !== false ){
 				$i=0;
-				$select_customers_query = 'SELECT `id`, `telephone` FROM `created_telephone`';
+				$select_customers_query = "SELECT id, telephone FROM created_telephone";
 				$select_customers_result = mysql_query($select_customers_query) or die();
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 					$id[$i] = $line['id'];
@@ -174,15 +181,15 @@
 				//echo nl2br(count($date) . " - - " . count($date_r) ."\n" );/// archive vs query
 					for($i=1; $i < count($date); $i++ ){
 						 
-						$select_customers_query = "SELECT count(*) as count FROM `billings_history_test` 
-						WHERE `date` LIKE '".$date[$i]."' 
-						AND `source` LIKE '".$source[$i]."' 
-						AND `destination` LIKE '".$destination[$i]."' 
-						AND `seconds` LIKE ".$seconds[$i]." 
-						AND `callerid` LIKE '".$callerid[$i]."' 
-						AND `disposition` LIKE '".$disposition[$i]."' 
-						AND `cost` LIKE '".$cost[$i]."' 
-						AND `peer` LIKE '%".$peer[$i]."%'";
+						$select_customers_query = "SELECT count(*) as count FROM billings_history_test 
+						WHERE date LIKE '".$date[$i]."' 
+						AND source LIKE '".$source[$i]."' 
+						AND destination LIKE '".$destination[$i]."' 
+						AND seconds LIKE ".$seconds[$i]." 
+						AND callerid LIKE '".$callerid[$i]."' 
+						AND disposition LIKE '".$disposition[$i]."' 
+						AND cost LIKE '".$cost[$i]."' 
+						AND peer LIKE '%".$peer[$i]."%'";
 						$select_customers_result = mysql_query($select_customers_query) or die();
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 								$cont = $line['count'];
@@ -191,17 +198,17 @@
 						if($cont == 0){
 							$different++;
 							//add on db	
-							$insert_query = "INSERT INTO `billings_history_test`(`date`, `source`, `destination`, `seconds`, `callerid`, `disposition`, `cost`, `peer`)
+							$insert_query = "INSERT INTO billings_history_test(date, source, destination, seconds, callerid, disposition, cost, peer)
 							VALUES ('".$date[$i]."','".$source[$i]."','".$destination[$i]."',".$seconds[$i].",'".$callerid[$i]."','".$disposition[$i]."',".$cost[$i].",'".$peer[$i]."');";
 							$insert_result = mysql_query($insert_query);
 							
-							for($j=0;$j< count($telephone); $j++){
+							/*for($j=0;$j< count($telephone); $j++){
 								if(strpos($source[$i], $telephone[$j]) !== false){
-								 $insert_query = "INSERT INTO `telephone_billing_customer`(`id_telephone`, `id_billing`)
+								 $insert_query = "INSERT INTO telephone_billing_customer(id_telephone, id_billing)
 								 VALUES (".$id[$j].",".mysql_insert_id().");";
 								 $insert_result = mysql_query($insert_query);
 								}
-							}							
+							}*/							
 							
 						}							
 
@@ -221,7 +228,7 @@
 
 			$numbersOut= Array();
 			//calling from the database the registered numbers.
-			$select_customers_query = 'SELECT `number` FROM `outboundnumber_test`  ';
+			$select_customers_query = "SELECT id, number FROM voipclient where type <> 1 ";
 			$select_customers_result = mysql_query($select_customers_query);
 			$i=0;					
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -229,7 +236,7 @@
 					$i++;
 				}
 				
-				$select_customers_query = "SELECT date,source,destination,seconds FROM `billings_history_test` WHERE `date` LIKE '%".$monthly."%' AND `peer` LIKE '%66.241.106.107%'";
+				$select_customers_query = "SELECT date,source,destination,seconds FROM billings_history_test WHERE date LIKE '%".$monthly."%' AND peer LIKE '%66.241.106.107%'";
 				$select_customers_result = mysql_query($select_customers_query);
 				
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -318,8 +325,25 @@
 			}
 			//echo nl2br("International = " .$sumInternational."\n");
 			// sum of columns 
+			for($i=0; $i < count($numbersOut); $i++){
+				$select_customers_query ="SELECT date, source , seconds, disposition FROM billings_history_test WHERE destination LIKE '".$numbersOut[$i]."' and date LIKE '%".$monthly."%' AND seconds <> 0 AND peer LIKE '%66.241.106.107%'";
+				$select_customers_result = mysql_query($select_customers_query) or die('Something wrong 11');
+				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
+					$insert_query = "INSERT INTO outboundbillingreport_test( source, destination, minutes, date,status,seconds)
+								VALUES ('".$numbersOut[$i]."','".$line['source']."','".ceil($line['seconds']/60)."','".$line['date']."','".$line['disposition']."','".$line['seconds']."')";
+								$insert_result = mysql_query($insert_query);
+								$id_inb = mysql_insert_id();
+								$select_query ="SELECT customer_id FROM voipclient WHERE number = '".$numbersOut[$i]."'";
+								$select_result = mysql_query($select_query);
+								while ($line1 = mysql_fetch_array($select_result, MYSQL_ASSOC)) {
+									$customer_id = $line1['customer_id'];
+								}
+								$update_query = "UPDATE outboundbillingreport_test SET customer_id = ".$customer_id."  WHERE id= ".$id_inb;
+								$update_result = mysql_query($update_query);
+				}
+			}
 			
-			$select_customers_query =  "SELECT count(*) as count FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+			$select_customers_query =  "SELECT count(*) as count FROM outboundbilling_test WHERE date LIKE '%".$monthly."%'";
 			$select_customers_result = mysql_query($select_customers_query) or die();
 			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 				$count = $line['count'];
@@ -335,15 +359,31 @@
 								 if($count == "0"){
 									if($numbersOut[$j]{0} == "1"){
 										$num=substr($numbersOut[$j],"1");
-										$insert_query = "INSERT INTO `outboundbilling_test`(`number`, `minutes`, `date`) 
+										$insert_query = "INSERT INTO outboundbilling_test(number, minutes, date) 
 														 VALUES ('".$num."','".$sumVer."','".$monthly."')";
 										$insert_result = mysql_query($insert_query);
 										//echo nl2br("[".$num."] = " .$sumVer ."\n");
+										$id_out = mysql_insert_id();
+										$select_query ="SELECT customer_id FROM voipclient WHERE number = '".$numbersOut[$j]."'";
+										$select_result = mysql_query($select_query);
+										while ($line1 = mysql_fetch_array($select_result, MYSQL_ASSOC)) {
+											$customer_id = $line1['customer_id'];
+										}
+										$update_query = "UPDATE outboundbilling_test SET customer_id = ".$customer_id."  WHERE id= ".$id_out;
+										$update_result = mysql_query($update_query);
 									}else{
-										$insert_query = "INSERT INTO `outboundbilling_test`(`number`, `minutes`, `date`) 
+										$insert_query = "INSERT INTO outboundbilling_test(number, minutes, date) 
 														 VALUES ('".$numbersOut[$j]."','".$sumVer."','".$monthly."')";
 										$insert_result = mysql_query($insert_query);
 										//echo nl2br("[".$numbersOut[$j]."] = " .$sumVer ."\n");
+										$id_out = mysql_insert_id();
+										$select_query ="SELECT customer_id FROM voipclient WHERE number = '".$numbersOut[$j]."'";
+										$select_result = mysql_query($select_query);
+										while ($line1 = mysql_fetch_array($select_result, MYSQL_ASSOC)) {
+											$customer_id = $line1['customer_id'];
+										}
+										$update_query = "UPDATE outboundbilling_test SET customer_id = ".$customer_id."  WHERE id= ".$id_out;
+										$update_result = mysql_query($update_query);
 									}
 									$succes++;
 								}
@@ -366,18 +406,18 @@
 	
 		function generate_inbounds($monthly){
 			
-			$select_customers_query =  "DELETE FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+			/*$select_customers_query =  "DELETE FROM inboundbilling_test WHERE date LIKE '%".$monthly."%'";
 			$select_customers_result = mysql_query($select_customers_query) or die();
 						
-			$select_customers_query =  "DELETE FROM `inboundbillingreport_test` WHERE `date` LIKE '%".$monthly."%'";
+			$select_customers_query =  "DELETE FROM inboundbillingreport_test WHERE date LIKE '%".$monthly."%'";
 			$select_customers_result = mysql_query($select_customers_query) or die();
 					
-			$select_customers_query =  "DELETE FROM `outboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
-			$select_customers_result = mysql_query($select_customers_query) or die();
+			$select_customers_query =  "DELETE FROM outboundbilling_test WHERE date LIKE '%".$monthly."%'";
+			$select_customers_result = mysql_query($select_customers_query) or die();*/
 			
 			$numbers= Array();			
 			//calling from the database the registered numbers.
-			$select_customers_query = 'SELECT `number` FROM `inboundnumber_test` ';
+			$select_customers_query = "SELECT id, number FROM voipclient where type= 1";
 			$select_customers_result = mysql_query($select_customers_query);
 			$i=0;					
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -386,7 +426,7 @@
 				}
 			//look for in the registrer and retreive id and source
 				$i=0;
-				$select_customers_query = "SELECT `id`, `date`, `source`, `destination`, `seconds`, `callerid`, `disposition`, `cost`, `peer` FROM `billings_history_test` WHERE `date` like '%".$monthly."%'";
+				$select_customers_query = "SELECT id, date, source, destination, seconds, callerid, disposition, cost, peer FROM billings_history_test WHERE date like '%".$monthly."%'";
 				$select_customers_result = mysql_query($select_customers_query) or die();
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 					$id[$i] = $line['id'];
@@ -440,24 +480,32 @@
 				$sum =0;
 			}
 			
-			$select_customers_query =  "SELECT count(*) as count FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+			$select_customers_query =  "SELECT count(*) as count FROM inboundbilling_test WHERE date LIKE '%".$monthly."%'";
 			$select_customers_result = mysql_query($select_customers_query) or die();
 			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 				$count = $line['count'];
 			}
-			$select_customers_query =  "SELECT count(*) as count FROM `inboundbilling_test` WHERE `date` LIKE '%".$monthly."%'";
+			$select_customers_query =  "SELECT count(*) as count FROM inboundbilling_test WHERE date LIKE '%".$monthly."%'";
 			$select_customers_result = mysql_query($select_customers_query) or die();
 			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 				$count = $line['count'];
 			}
 			
 			for($i=0; $i < count($numbers); $i++){
-				$select_customers_query ="SELECT date, source , seconds, disposition FROM `billings_history_test` WHERE `destination` LIKE '".$numbers[$i]."' and `date` LIKE '%".$monthly."%' AND seconds <> 0";
+				$select_customers_query ="SELECT date, source , seconds, disposition FROM billings_history_test WHERE destination LIKE '".$numbers[$i]."' and date LIKE '%".$monthly."%' AND seconds <> 0";
 				$select_customers_result = mysql_query($select_customers_query) or die('Something wrong 11');
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
-					$insert_query = "INSERT INTO `inboundbillingreport_test`( `source`, `destination`, `seconds`, `date`,`status`)
-								VALUES ('".$numbers[$i]."','".$line['source']."','".ceil($line['seconds']/60)."','".$line['date']."','".$line['disposition']."')";
+					$insert_query = "INSERT INTO inboundbillingreport_test( source, destination, minutes, date,status,seconds)
+								VALUES ('".$numbers[$i]."','".$line['source']."','".ceil($line['seconds']/60)."','".$line['date']."','".$line['disposition']."','".$line['seconds']."')";
 								$insert_result = mysql_query($insert_query);
+								$id_inb = mysql_insert_id();
+								$select_query ="SELECT customer_id FROM voipclient WHERE number = '".$numbers[$i]."'";
+								$select_result = mysql_query($select_query);
+								while ($line1 = mysql_fetch_array($select_result, MYSQL_ASSOC)) {
+									$customer_id = $line1['customer_id'];
+								}
+								$update_query = "UPDATE inboundbillingreport_test SET customer_id = ".$customer_id."  WHERE id= ".$id_inb;
+								$update_result = mysql_query($update_query);
 				}
 			}
 			// sum of columns for inbound
@@ -466,7 +514,7 @@
 				 $sumVer= $sumVer + $matriz[$i][$j];
 				 if($matriz[$i][$j] != 0){
 				 	//echo nl2br("[".$numbers[$j]."] = " .$matriz[$i][$j]. " - ".$monthly. "\n");
-					/*$insert_query = "INSERT INTO `inboundbillingreport_test`( `source`, `destination`, `seconds`, `date`,status)
+					/*$insert_query = "INSERT INTO inboundbillingreport_test( source, destination, seconds, date,status)
 								VALUES ('".$numbers[$j]."','".$telephone[$j]."','".$matriz[$i][$j]."','".$date[$i]."','".$disposition[$i]."')";
 								$insert_result = mysql_query($insert_query);*/
 				 }
@@ -478,9 +526,17 @@
 						
 							// save this on DB for billing total , include the timestamp //
 							if($count == "0"){
-								$insert_query = "INSERT INTO `inboundbilling_test`(`number`, `minutes`, `date`) 
+								$insert_query = "INSERT INTO inboundbilling_test(number, minutes, date) 
 								VALUES ('".$numbers[$j]."','".$sumVer."','".$monthly."')";
 								$insert_result = mysql_query($insert_query);
+								$id_inb = mysql_insert_id();
+								$select_query ="SELECT customer_id FROM voipclient WHERE number = '".$numbers[$j]."'";
+								$select_result = mysql_query($select_query);
+								while ($line1 = mysql_fetch_array($select_result, MYSQL_ASSOC)) {
+									$customer_id = $line1['customer_id'];
+								}
+								$update_query = "UPDATE inboundbilling_test SET customer_id = ".$customer_id."  WHERE id= ".$id_inb;
+								$update_result = mysql_query($update_query);
 							}					
 						
 						//database for inbound
@@ -515,7 +571,7 @@
 			//Array with DID registered
 			$numbers= Array();			
 			//calling from the database the registered numbers.
-			$select_customers_query = 'SELECT `number` FROM `inboundnumber_test` ';
+			$select_customers_query = "SELECT number FROM inboundnumber_test ";
 			$select_customers_result = mysql_query($select_customers_query);
 			$i=0;					
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -543,7 +599,7 @@
 			
 			
 				$j=0;
-				$select_customers_query = "SELECT `id`, `date`, `source`, `destination`, `seconds`, `callerid`, `disposition`, `cost`, `peer` FROM `billings_history_test` WHERE `date` like '%".$monthly."%'";
+				$select_customers_query = "SELECT id, date, source, destination, seconds, callerid, disposition, cost, peer FROM billings_history_test WHERE date like '%".$monthly."%'";
 				$select_customers_result = mysql_query($select_customers_query) or die();
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 					$date[$j] = $line['date'];
@@ -566,7 +622,7 @@
 				}
 		
 			$i=0;
-			$select_customers_query = 'SELECT `id`, `telephone` FROM `created_telephone`';
+			$select_customers_query = "SELECT id, telephone FROM created_telephone";
 			$select_customers_result = mysql_query($select_customers_query) or die();
 			while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 				$id[$i] = $line['id'];
@@ -575,7 +631,7 @@
 			}
 				//look for in the registrer and retreive id and source
 				$i=0;
-				$select_customers_query = "SELECT `id`, `date`, `source`, `destination`, `seconds`, `callerid`, `disposition`, `cost`, `peer` FROM `billings_history_test` WHERE `date` like '%".$monthly."%'";
+				$select_customers_query = "SELECT id, date, source, destination, seconds, callerid, disposition, cost, peer FROM billings_history_test WHERE date like '%".$monthly."%'";
 				$select_customers_result = mysql_query($select_customers_query) or die();
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 					$id_r[$i] = $line['id'];
@@ -702,7 +758,7 @@
 
 			$numbersOut= Array();
 			//calling from the database the registered numbers.
-			$select_customers_query = 'SELECT `number` FROM `outboundnumber_test`  ';
+			$select_customers_query = "SELECT number FROM outboundnumber_test  ";
 			$select_customers_result = mysql_query($select_customers_query);
 			$i=0;					
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -713,7 +769,7 @@
 				
 				
 				$j=0;
-				$select_customers_query = "SELECT * FROM `billings_history_test` WHERE `date` LIKE '%".$monthly."%' AND `peer` LIKE '%66.241.106.107%'; ";
+				$select_customers_query = "SELECT * FROM billings_history_test WHERE date LIKE '%".$monthly."%' AND peer LIKE '%66.241.106.107%'; ";
 				$select_customers_result = mysql_query($select_customers_query);
 				
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -826,7 +882,7 @@
 			// Rename 2nd sheet
 			$objPHPExcel->getActiveSheet()->setTitle('Main');
 			
-			$select_customers_query = 'SELECT DISTINCT ct.customer_id as idCustom, c.name as nameCustom FROM `telephone_billing_customer` tbc, created_telephone ct, customer c WHERE tbc.`id_telephone` = ct.id AND c.id = ct.customer_id  ';
+			$select_customers_query = "SELECT DISTINCT ct.customer_id as idCustom, c.name as nameCustom FROM telephone_billing_customer tbc, created_telephone ct, customer c WHERE tbc.id_telephone = ct.id AND c.id = ct.customer_id ";
 			$select_customers_result = mysql_query($select_customers_query);
 				$i=0;					
 				while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
@@ -853,7 +909,7 @@
 					$k++;
 					$l=0;
 					$numbers_customer = Array();$price = Array();
-					$select_customers_query = 'SELECT ct.`telephone` as tel , c.pricePerMinute as pricePerMinute FROM `created_telephone` ct , customer c WHERE c.id = ct.`customer_id` AND ct.`customer_id` = '.$idCustomer[$j];								
+					$select_customers_query = "SELECT ct.telephone as tel , c.pricePerMinute as pricePerMinute FROM created_telephone ct , customer c WHERE c.id = ct.customer_id AND ct.customer_id = ".$idCustomer[$j];								
 					//echo nl2br($select_customers_query. " \n ");
 					$select_customers_result = mysql_query($select_customers_query);
 					while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {						
@@ -876,7 +932,7 @@
 						
 						$n=0;$m=0;
 						$inbound1=array(); $inbound2=array();
-						$select_customers_query = 'SELECT `minutes` as min1 ,`date` as date1 FROM `inboundbilling_test` WHERE date LIKE "%'.$monthly.'%" AND `number` ='.$numbers_customer[$i];
+						$select_customers_query = "SELECT minutes as min1 ,date as date1 FROM inboundbilling_test WHERE date LIKE '%".$monthly."%' AND number =".$numbers_customer[$i];
 						$select_customers_result = mysql_query($select_customers_query) or die();
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 							$inbound1[$n] =$line['date1'];
@@ -884,7 +940,7 @@
 							$n++;
 						}
 						$o=0;
-						$select_customers_query ='SELECT `source`, sum(`seconds`) as minutes FROM `inboundbillingreport_test` WHERE `source` = "'.$numbers_customer[$i].'" group by destination';						
+						$select_customers_query ="SELECT source, sum(seconds) as minutes FROM inboundbillingreport_test WHERE source = '".$numbers_customer[$i]."' group by destination";						
 						$select_customers_result = mysql_query($select_customers_query) or die();
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {
 							$destination_req[$o] =$line['source'];
@@ -892,7 +948,7 @@
 							$o++;
 						}
 						$outbound1=array(); $outbound2=array();
-						$select_customers_query = 'SELECT `minutes` as min2 ,`date` as date2 FROM `outboundbilling_test` WHERE date LIKE "%'.$monthly.'%" AND `number` ='.$numbers_customer[$i];
+						$select_customers_query = "SELECT minutes as min2 ,date as date2 FROM outboundbilling_test WHERE date LIKE '%".$monthly."%' AND number =".$numbers_customer[$i];
 						//echo nl2br($select_customers_query."\n");
 						$select_customers_result = mysql_query($select_customers_query) or die();
 						while ($line = mysql_fetch_array($select_customers_result, MYSQL_ASSOC)) {

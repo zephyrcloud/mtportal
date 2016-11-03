@@ -106,13 +106,13 @@
 				
 				
 				
-				//echo "idAppUser -> " . $idAppUser . ", endDate -> " . $endDate . ", check -> " . isset($_POST["aAssignApp" . $line["id"]]);
+				//////echo "idAppUser -> " . $idAppUser . ", endDate -> " . $endDate . ", check -> " . isset($_POST["aAssignApp" . $line["id"]]);
 				
 				if($idAppUser == "") {
 					// Si está checked
 					if(isset($_POST[ $line['id']])) {
 						// Asignacion de una aplicacion 
-						//$insert_app_query = 'INSERT INTO appuser (app, user, initDate, endDate) VALUES (' . $line['id'] . ', ' . $user . ', NOW(), NULL)';
+						//$insert_app_query = 'INSERT INTO appcustomer (app, user, initDate, endDate) VALUES (' . $line['id'] . ', ' . $user . ', NOW(), NULL)';
 						$insert_app_query = "INSERT INTO customer_category( customer_id, tu_id,beginTime) VALUES (".$_POST['idUserFld'].",".$_POST[ $line['id']].",NOW())";
 						$insert_app_result = mysql_query($insert_app_query); 			
 						// Insertar el registro de que checkeo una asignacion de la lista apps
@@ -126,7 +126,7 @@
 						
 						// Quitar asignacion de una aplicacion 
 						$update_app_query = "UPDATE customer_category SET endTime = NOW() WHERE id = " . $idAppUser;
-						//echo nl2br($update_app_query."\n");
+						//////echo nl2br($update_app_query."\n");
 						$update_app_result = mysql_query($update_app_query) ;
 						
 						$not_selected++;
@@ -140,7 +140,7 @@
 						// Asignacion de una aplicacion 
 						$insert_app_query = "INSERT INTO customer_category( customer_id, tu_id,beginTime,endTime) VALUES (".$_POST['idUserFld'].",".$_POST[ $line['id']].",NOW(), NULL)";
 						$insert_app_result = mysql_query($insert_app_query);
-						//echo nl2br($insert_app_query."\n");
+						//////echo nl2br($insert_app_query."\n");
 					}
 					
 				} 
@@ -148,6 +148,105 @@
 			} catch(Exception $e) {}
 		}		
 	}
+
+	if(isset($_POST["saveAppsPerCustomerBtn"])){
+		    /*////echo '<pre>';
+			print_r($_POST);
+			//echo '</pre>'; */
+		/*$j=0;$prices = Array();
+		foreach($_POST['price'] as $val) { // Recorremos los valores que nos llegan
+			$prices[$j] = $val;
+			$j++;
+		}*/
+		$user = $_POST["idUserFld"];
+		$id_user = $_POST["idUserLog"];
+		
+		// Lista toas las apps 
+		$select_apps_query = "SELECT id FROM app";
+		$select_apps_result = mysql_query($select_apps_query) or die($dict->words("6").' '. mysql_error());
+		
+		$selected = 0;
+		$not_selected =0;
+		
+		// Por cada app
+		$i=0;
+		while ($line = mysql_fetch_array($select_apps_result, MYSQL_ASSOC)) {
+			try {
+				// Busca en la BD si la app esta signada al usuario
+				$select_appuser_query = "SELECT id, endDate FROM appcustomer WHERE app = " . $line['id'] . " AND user = " . $user . " AND initDate = (SELECT MAX(initDate) FROM appcustomer WHERE app = " . $line['id'] . " AND user = " . $user . ")";
+				//echo nl2br($select_appuser_query."\n");	
+				//$select_appuser_result = mysql_query($select_appuser_query);				
+				$row = mysql_fetch_assoc($select_appuser_result);
+				$idAppUser = $row["id"];
+				$endDate = $row["endDate"];
+				
+				//////echo "idAppUser -> " . $idAppUser . ", endDate -> " . $endDate . ", check -> " . isset($_POST["aAssignApp" . $line["id"]]);
+				
+				if($idAppUser == "") {
+					
+					// Si está checked
+					if(isset($_POST["aAssignApp" . $line["id"]])) {
+						//echo nl2br( "I am the i " .$i ."\n");
+						// Asignacion de una aplicacion 
+						$insert_app_query = "INSERT INTO appcustomer (app, customer, initDate, endDate , price) VALUES (" . $line['id'] . ", " . $user . ", NOW(), NULL,".$_POST["price_".$line['id']].")";
+						//$insert_app_result = mysql_query($insert_app_query) or die($dict->words("7").' ' . mysql_error());						
+						// Insertar el registro de que checkeo una asignacion de la lista apps
+						//echo nl2br($insert_app_query."\n");				
+						
+						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,1,5,".$_SESSION['user'].")";
+						//$insert_result = mysql_query($insert_query);
+						//echo nl2br($insert_result."\n");
+						$selected++;
+						$i++;
+					}
+						
+				} else if($idAppUser != "" && $endDate == "") {
+					
+					// Si no está checked
+					if(!isset($_POST["aAssignApp" . $line["id"]])) {
+						
+						// Quitar asignacion de una aplicacion 
+						$update_app_query = "UPDATE appcustomer SET endDate = NOW() WHERE id = " . $idAppUser;
+						//$update_app_result = mysql_query($update_app_query) or die($dict->words("8").' ' . mysql_error());
+						//echo nl2br($update_app_result."\n");
+						$insert_query = "INSERT INTO log (ipAddress,id_actionType,id_result,id_tableModified,id_user) VALUES('".$ip_capture->getRealIP()."',6,1,5,".$_SESSION['user'].")";
+						//$insert_result = mysql_query($insert_query);
+						//echo nl2br($insert_result."\n");
+						$not_selected++;
+					}
+						
+				} else if($idAppUser != "" && $endDate != "") {
+						
+					// Si está checked
+					if(isset($_POST["aAssignApp" . $line["id"]])) {
+						
+						// Asignacion de una aplicacion 
+						$insert_app_query = "INSERT INTO appcustomer (app, customer, initDate, endDate) VALUES (" . $line['id'] . ", " . $user . ", NOW(), NULL)";
+						//echo nl2br($insert_app_query."\n");
+						//$insert_app_result = mysql_query($insert_app_query) or die('Creación de la asignación fallida: ' . mysql_error());
+						
+					}
+					
+				}
+					
+			
+			} catch(Exception $e) {}
+			
+		}
+	
+	}
+
+	if(isset($_POST["saveGroupsBtn"])){
+		$i = 0;
+		foreach($_POST['groups'] as $val) { // Recorremos los valores que nos llegan
+			if($val != "" ){
+				$insert_query = "INSERT INTO customer_group(customer_id, name_group, beginTime) VALUES (".$_POST["idUserFld"].",'".$val."',NOW())";
+				$insert_result = mysql_query($insert_query);
+			}			
+		}
+		echo "<script>location.href='customers.php';</script>";
+	}
+
 ?>
 
 <html>
@@ -195,7 +294,7 @@
 									?>
 										<div id="messagePnl" class="modalDialog" title="Notice">
 											<div id="post">
-												<?php echo $message; ?><br /><br />
+												<?php //echo $message; ?><br /><br />
 												<input id="accetMessageBtn" name="accetMessageBtn" type="button" value="OK">
 											</div>
 										</div>
@@ -215,7 +314,7 @@
 										$vfaxPrice= $line['priceVfax'];
 									}								
 									?>
-										Price: <input id="priceVfaxFld" name="priceVfaxFld" type="text" required="required" value="<?php echo $vfaxPrice; ?>"><br />									
+										Price: <input id="priceVfaxFld" name="priceVfaxFld" type="text" required="required" value="<?php //echo $vfaxPrice; ?>"><br />									
 										<input id="saveNewPriceBtn" name="saveNewPriceBtn" type="submit" value="Update">
 										<input id="cancelNewPriceBtn" name="cancelNewPriceBtn" type="button" value="Cancel">
 									</form>
@@ -266,7 +365,7 @@
 									<th style="border: 1px solid;">Name</th>
 									<th style="border: 1px solid;">Username</th>
 									<th style="border: 1px solid;">Password</th>
-									<th colspan="3" style="border: 3px solid;">Actions</th>
+									<th colspan="4" style="border: 3px solid;">Actions</th>
 								</tr>
 								
 								<?php 
@@ -283,8 +382,9 @@
 										echo "<td style='border: 1px solid;'><span id='spanUserName" . $line['id'] . "'>" . $line['username'] . "</span></td>";
 										echo "<td style='border: 1px solid;'><span id='spanPassword" . $line['id'] . "'>" . $line['password'] . "</span></td>";
 										echo "<td style='border: 1px solid;'><a id='aEdit" . $line['id'] . "' href='#'>Edit</a></td>";
+										echo "<td style='border: 1px solid;'><a id='aApps" . $line['id'] . "' href='#'>Apps</a></td>";
+										echo "<td style='border: 1px solid;'><a id='aGroups" . $line['id'] . "' href='#'>Groups</a></td>";
 										echo "<td style='border: 1px solid;'><a id='aDelete" . $line['id'] . "' href='#'>Delete</a></td>";
-										echo "<td style='border: 1px solid;'><a id='aGroups" . $line['id'] . "' href='#'>Assign to groups</a></td>";
 										echo "</tr>";
 										}
 									}
@@ -294,9 +394,16 @@
 							</table>
 						</div>
 						
+
 						
 						<div id="groupPerUserPnl" style="display: none;">
 							<div id="groupPerUserUpdate">
+							 
+							</div>
+						</div>
+						
+						<div id="appsPerUserPnl" style="display: none;">
+							<div id="appsPerUserUpdate">
 							 
 							</div>
 						</div>
@@ -319,31 +426,10 @@
 <script>
 	
 	$( document ).ready(function() {
-		
+						
 		$("a[id^='aGroups']").click(function(event) {
-			$("#groupPerUserPnl").show();
-			$("#tables").hide();
-			$("#emailsPerUserPnl").hide();
-			
 			$id = event.target.id.toString().split("aGroups")[1];
-			$user = $("#spanName".concat($id)).text();
-			
-			if (window.XMLHttpRequest) {
-				// code for IE7+, Firefox, Chrome, Opera, Safari
-				xmlhttp = new XMLHttpRequest();
-			} else {
-				// code for IE6, IE5
-				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-			}
-			
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-					document.getElementById("groupPerUserUpdate").innerHTML = xmlhttp.responseText;
-				}
-			}
-			xmlhttp.open("GET","groupsPerCustomer.php?id=" + $id + "&user=" + $user, true);
-			xmlhttp.send(); 
-			
+			location.href="groupManager.php?id=" + $id ;
 		});
 		
 		// Dialog message
@@ -477,6 +563,14 @@
 			$("#deleteCustomerPnl").dialog( "close" );
 		});
 		
-	});
+		$("a[id^='aApps']").click(function(event) {						
+			$id = event.target.id.toString().split("aApps")[1];
+			location.href="appspercustomermanager.php?id=" + $id;			
+		});		
+				
+		
+	});	
+	
+	
 	
 </script>
